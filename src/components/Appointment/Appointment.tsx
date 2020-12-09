@@ -1,72 +1,85 @@
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import styled from 'styled-components';
 
 import GrayText from '../GrayText/GrayText';
 import Badge from '../Badge/Badge';
 
+import {getAvatarColor} from '../../utils/getAvacolor';
+
 interface IUser {
-  fullName: string,
-  avatar: string,
+    fullName: string,
+    phone: number
 }
 
-interface IItem {
-  time: string,
-  diagnosis: string,
-  isActive: boolean,
-  user: IUser,
+export interface IItem {
+    time: string,
+    procedure: string,
+    isActive: boolean,
+    user: IUser,
 }
 
 export interface IProps {
-  item: IItem
-  navigate: any
+    item: IItem
+    navigate: any
 }
 
-const Appointment = ({ item, navigate }: IProps) => {
-  return (
-    <GroupItem onPress={() => navigate('Patient', item)}>
-      <Avatar
-        source={{
-          uri: item.user.avatar,
-        }}
-      />
-      <View style={{ flex: 1 }}>
-        <FullName>{item.user.fullName}</FullName>
-        <GrayText>{item.diagnosis}</GrayText>
-      </View>
-      <View style={{ borderRadius: 18, overflow: 'hidden' }}>
-        <Badge isActive={item.isActive}>{item.time}</Badge>
-      </View>
-    </GroupItem>
-  );
+const Appointment = ({item, navigate}: IProps) => {
+    const avatarColors = getAvatarColor(item.user.fullName[0].toUpperCase());
+
+    return (
+        <GroupItem onPress={() => navigate('Patient', item)}>
+            <Avatar
+                style={{
+                    backgroundColor: avatarColors.background
+                }}
+            >
+                <Letter style={{color: avatarColors.color}}>
+                    {item.user.fullName[0].toUpperCase()}
+                </Letter>
+            </Avatar>
+            <View style={{flex: 1}}>
+                <FullName>{item.user.fullName}</FullName>
+                <GrayText>{item.procedure}</GrayText>
+            </View>
+            <View style={{borderRadius: 18, overflow: 'hidden'}}>
+                <Badge isActive={item.isActive}>{item.time}</Badge>
+            </View>
+        </GroupItem>
+    );
 };
 
 Appointment.defaultProps = {
-  time: '',
-  diagnosis: '',
-  isActive: false,
-  user: {},
+    title: '',
+    item: []
 };
 
-
-const FullName = styled(Text)`
-font-weight: 600;
-font-size: 16px;
+const Letter = styled(Text)`
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: -1px;
 `;
 
-const Avatar = styled(Image)`
-border-radius: 50px;
-height: 40px;
-width: 40px;
-margin-right: 15px;
+const FullName = styled(Text)`
+  font-weight: 600;
+  font-size: 16px;
+`;
+
+const Avatar = styled(View)`
+  align-items: center;
+  justify-content: center;
+  border-radius: 50px;
+  width: 60px;
+  height: 60px;
+  margin-right: 15px;
 `;
 
 const GroupItem = styled(TouchableOpacity)`
-align-items:center;
-padding: 20px 20px;
-flex-direction: row;
-border-bottom-width : 1px;
-border-bottom-color:  #f3f3f3;
+  align-items: center;
+  padding: 20px 20px;
+  flex-direction: row;
+  border-bottom-width: 1px;
+  border-bottom-color: #f3f3f3;
 `;
 
 
