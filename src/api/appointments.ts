@@ -6,24 +6,29 @@ const settings = {
 };
 
 const instance = axios.create({
-    baseURL: 'http://localhost:6666/',
+    baseURL: 'https://tranquil-sea-21110.herokuapp.com/',
 });
 
 export const appointmentAPI = {
     getAppointments() {
-        return axios.get<ResponseType>(`http://localhost:6666/appointments/`).then(res => res.data)
+        return instance.get<ResponseType>(`appointments/`)
+    },
+    removeAppointments(id: string) {
+        return instance.delete<any>(`appointments/${id}`)
     }
 }
 
-type ResponseType = {
+interface ResponseType {
     status: string,
-    items: {
+    items: [{
         title: string,
         data: IAppointment[]
-    }
+    }]
+}
 
-
-
+export interface AppointmentsType  {
+    title: string,
+    data: IAppointment[]
 }
 
 

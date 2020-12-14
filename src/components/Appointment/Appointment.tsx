@@ -15,7 +15,8 @@ interface IUser {
 export interface IItem {
     time: string,
     procedure: string,
-    isActive: boolean,
+    preporation: string,
+    isActive?: boolean,
     user: IUser,
 }
 

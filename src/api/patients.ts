@@ -5,15 +5,18 @@ const settings = {
 };
 
 const instance = axios.create({
-    baseURL: 'http://localhost:6666/',
+    baseURL: 'https://tranquil-sea-21110.herokuapp.com/',
 });
 
 export const patientAPI = {
-    getPatient(patientId: string) {
-        return instance.get<IResponse>(`patients/${patientId}`)
+    getPatients() {
+        return instance.get<IUser>(`patients/`)
     },
     addPatient(data: any) {
         return instance.post<any>(`patients`, data)
+    },
+    showAppointments(id: string) {
+        return instance.get<IResponseUser>(`patients/${id}`)
     }
 }
 
@@ -23,20 +26,21 @@ export interface IUser {
 }
 
 interface IResponseUser {
-    _id: string,
-    fullName: string,
-    phone: number,
-    __v: number,
-}
-
-interface IResponse extends IResponseUser {
-    appointments: IAppointment[]
+    status: string,
+    data: {
+        _id: string,
+        fullName: string,
+        phone: number,
+        __v: number,
+        appointments: IAppointment[]
+    }
 }
 
 export interface IAppointment {
     _id: string,
     user: any,
     procedure: string,
+    preporation: string,
     price: number,
     date: string,
     time: string,

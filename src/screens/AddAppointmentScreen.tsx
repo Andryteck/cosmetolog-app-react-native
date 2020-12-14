@@ -5,10 +5,10 @@ import {Item, Input, Label} from 'native-base';
 import styled from 'styled-components';
 import Button from '../components/Buttons/Button';
 import Container from "../components/Container/Container";
-import {IUser, patientAPI} from "../api/patients";
+import {patientAPI} from "../api/patients";
 
 
-export const AddPatientScreen = ({navigation}: any) => {
+export const AddAppointmentScreen = ({navigation}: any) => {
     const [values, setValues] = useState<any>({});
 
     const handleChange = (name: string, e: any) => {
@@ -33,21 +33,44 @@ export const AddPatientScreen = ({navigation}: any) => {
     return (
         <Container>
             <Item style={{marginLeft: 0}} floatingLabel>
-                <Label>Имя и Фамилия</Label>
+                <Label>Процедура</Label>
                 <Input
-                    onChange={handleChange.bind(null, 'fullName')}
+                    onChange={handleChange.bind(null, 'procedure')}
                     value={values.fullName}
                     style={{marginTop: 5}}
                     autoFocus
                 />
             </Item>
             <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel>
-                <Label>Номер телефона</Label>
+                <Label>Препарат</Label>
                 <Input
-                    onChange={handleChange.bind(null, 'phone')}
-                    value={values.phone}
+                    onChange={handleChange.bind(null, 'preporation')}
+                    value={values.preporation}
+                    style={{marginTop: 5}}
+                />
+            </Item>
+            <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel>
+                <Label>Цена</Label>
+                <Input
+                    onChange={handleChange.bind(null, 'price')}
+                    value={values.price}
                     keyboardType="numeric"
-                    dataDetectorTypes="phoneNumber"
+                    style={{marginTop: 5}}
+                />
+            </Item>
+            <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel>
+                <Label>Дата приема</Label>
+                <Input
+                    onChange={handleChange.bind(null, 'date')}
+                    value={values.date}
+                    style={{marginTop: 5}}
+                />
+            </Item>
+            <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel>
+                <Label>Время приема</Label>
+                <Input
+                    onChange={handleChange.bind(null,  'time')}
+                    value={values.time}
                     style={{marginTop: 5}}
                 />
             </Item>
@@ -68,12 +91,4 @@ const ButtonView = styled(View)`
 `;
 
 
-// AddPatientScreen.navigationOptions = {
-//     title: 'Добавить пациента',
-//     headerTintColor: '#2A86FF',
-//     headerStyle: {
-//         elevation: 0.8,
-//         shadowOpacity: 0.8,
-//     },
-// };
 

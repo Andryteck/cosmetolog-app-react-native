@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 
 import {AddPatientScreen, HomeScreen, PatientScreen} from './src/screens';
+import {AddAppointmentScreen} from "./src/screens/AddAppointmentScreen";
 
 const Stack = createStackNavigator();
 
@@ -21,6 +22,7 @@ function App() {
         />
         <Stack.Screen name="Patient" component={PatientScreen} options={{title: 'Карта пациента', headerTintColor: '#2A86FF' }} />
         <Stack.Screen name="AddPatient" component={AddPatientScreen} options={{title: 'Добавить пациента', headerTintColor: '#2A86FF' }} />
+        <Stack.Screen name="AddAppointment" component={AddAppointmentScreen} options={{title: 'Добавить прием', headerTintColor: '#2A86FF' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
