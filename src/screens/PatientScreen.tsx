@@ -23,6 +23,7 @@ export const PatientScreen = ({route, navigation}: any) => {
     useEffect(() => {
         setIsLoading(true)
         patientAPI.showAppointments(user._id).then(({data}) => {
+            // @ts-ignore
             setAppointments(data.data.appointments)
             setIsLoading(false)
         })

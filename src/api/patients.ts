@@ -29,11 +29,12 @@ export interface IUser {
     fullName: string,
     phone: number,
     __v: number,
+    appointments?: IAppointment[]
 }
 
 interface IResponseUser {
     status: boolean,
-    data: IUser[]
+    data: IUser
 }
 
 export interface IAppointment {

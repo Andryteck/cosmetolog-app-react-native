@@ -7,7 +7,6 @@ import Swipeable from 'react-native-swipeable-row';
 import {Item, Input} from 'native-base';
 import {IUser, patientAPI} from "../api/patients";
 import Appointment from "../components/Appointment/Appointment";
-import SectionTitle from "../components/SectionTitle/SectionTitle";
 import {PlusButton} from "../components/Buttons/PlusButton";
 import phoneFormat from "../utils/phoneFormat";
 
@@ -40,7 +39,7 @@ export const PatientsScreen = ({navigation, route}: any) => {
     const removePatient = (id: string) => {
         Alert.alert(
             'Удаление приема',
-            'Вы действительно хотите удалить прием?',
+            'Вы действительно хотите удалить пациента?',
             [
                 {
                     text: 'Отмена',

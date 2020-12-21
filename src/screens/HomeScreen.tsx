@@ -8,11 +8,20 @@ import {Ionicons} from '@expo/vector-icons';
 import styled from 'styled-components';
 import {appointmentAPI, AppointmentsType} from "../api/appointments";
 import {PlusButton} from "../components/Buttons/PlusButton";
+import {Users} from "../components/Users/Users";
 
 
 export const HomeScreen = ({navigation, route}: any) => {
     const [data, setData] = useState<AppointmentsType[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
+
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <Users navigation={navigation}/>
+            ),
+        });
+    }, [navigation]);
 
     const fetchAppointments = () => {
         setIsLoading(true)
@@ -92,6 +101,8 @@ export const HomeScreen = ({navigation, route}: any) => {
         </Container>
     );
 };
+
+
 
 const SwipeViewButton = styled(TouchableOpacity)`
   width: 100px;
