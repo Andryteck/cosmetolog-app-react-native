@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity, ActivityIndicator, Linking} from 'react-native';
 import styled from 'styled-components';
-
+import { useFonts, Roboto_500Medium, Roboto_400Regular } from '@expo-google-fonts/roboto';
 import GrayText from '../components/GrayText/GrayText';
 import ButtonFormula from '../components/Buttons/ButtonFormula';
 import ButtonCall from '../components/Buttons/ButtonCall';
@@ -13,12 +13,12 @@ import {PlusButton} from "../components/Buttons/PlusButton";
 export const PatientScreen = ({route, navigation}: any) => {
     const [appointments, setAppointments] = useState<IAppointment[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [loaded] = useFonts({
+        Roboto_400Regular,
+        Roboto_500Medium
+    });
 
     const {user} = route.params;
-    // const args = {
-    //     number: `${user.phone}`, // String value with the number to call
-    //     prompt: false // Optional boolean property. Determines if the user should be prompt prior to the call
-    // }
 
     useEffect(() => {
         setIsLoading(true)
@@ -34,8 +34,10 @@ export const PatientScreen = ({route, navigation}: any) => {
                 <PatientFullName>{user.fullName}</PatientFullName>
                 <GrayText>{user.phone}</GrayText>
                 <PatientButtonsWrapper>
-                    <ButtonFormula>Формула зубов</ButtonFormula>
-                    <ButtonCall onPress={()=>{Linking.openURL(`tel:${user.phone}`).then((value) => console.log(value)).catch((e) => console.log(e));}}>
+                    <ButtonFormula>Препарат</ButtonFormula>
+                    <ButtonCall onPress={() => {
+                        Linking.openURL(`tel:${user.phone}`).then((value) => console.log(value)).catch((e) => console.log(e));
+                    }}>
                         <Foundation name="telephone" size={24} color="white"/>
                     </ButtonCall>
                 </PatientButtonsWrapper>
@@ -50,7 +52,7 @@ export const PatientScreen = ({route, navigation}: any) => {
                                                                                           shadowColor: '#808080',
                                                                                           shadowOpacity: 0.4,
                                                                                           shadowRadius: 10,
-                                                                                          marginTop: 20
+                                                                                          marginTop: 16
                                                                                       }}>
                             <MoreButton>
                                 <Ionicons name="md-more" size={24} style={{color: '#000000'}}/>
@@ -58,15 +60,15 @@ export const PatientScreen = ({route, navigation}: any) => {
                             <AppointmentCardRow>
                                 <Ionicons name="md-medical" size={16} color="#A3A3A3"/>
                                 <AppointmentCardLabel>
-                                    <Text>Препарат:</Text>
-                                    <Text style={{fontWeight: '600', marginLeft: 10}}>{appointment.preporation}</Text>
+                                    <Text style={{fontSize: 16,fontWeight: '600',fontFamily: 'Roboto_500Medium'}}>Препарат:</Text>
+                                    <Text style={{marginLeft: 10, fontSize: 16,fontFamily: 'Roboto_400Regular' }}>{appointment.preporation}</Text>
                                 </AppointmentCardLabel>
                             </AppointmentCardRow>
                             <AppointmentCardRow>
                                 <Foundation name="clipboard-notes" size={16} color="#A3A3A3"/>
                                 <AppointmentCardLabel>
-                                    <Text>Процедура:</Text>
-                                    <Text style={{fontWeight: '600', marginLeft: 10}}>{appointment.procedure}</Text>
+                                    <Text style={{fontSize: 16,fontWeight: '600',fontFamily: 'Roboto_500Medium'}}>Процедура:</Text>
+                                    <Text style={{marginLeft: 10,fontSize: 16,fontFamily: 'Roboto_400Regular'}}>{appointment.procedure}</Text>
                                 </AppointmentCardLabel>
                             </AppointmentCardRow>
                             <AppointmentCardRow style={{justifyContent: 'space-between', marginTop: 15}}>
@@ -81,7 +83,7 @@ export const PatientScreen = ({route, navigation}: any) => {
                     )}
                 </Container>
             </PatientAppointments>
-            <PlusButton onPress={() => navigation.navigate('AddAppointment')}/>
+            <PlusButton onPress={() => navigation.navigate('AddAppointment', user)}/>
         </View>
     );
 };

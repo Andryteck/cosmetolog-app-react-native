@@ -10,9 +10,7 @@ import {appointmentAPI, AppointmentsType} from "../api/appointments";
 import {PlusButton} from "../components/Buttons/PlusButton";
 
 
-
-export const HomeScreen = (props: any) => {
-    const {navigation} = props
+export const HomeScreen = ({navigation, route}: any) => {
     const [data, setData] = useState<AppointmentsType[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -21,15 +19,19 @@ export const HomeScreen = (props: any) => {
         appointmentAPI.getAppointments()
             .then(data => {
                 setData(data.data.items)
-                setIsLoading(false)
-            }).catch(e => setIsLoading(false))
+            })
+            .finally(() => {
+                return setIsLoading(false)
+            })
     }
 
     useEffect(() => {
         fetchAppointments()
     }, [])
 
-    const removeAppointment = (id:string) => {
+    useEffect(fetchAppointments, [route.params]);
+
+    const removeAppointment = (id: string) => {
         Alert.alert(
             'Удаление приема',
             'Вы действительно хотите удалить прием?',
@@ -54,7 +56,7 @@ export const HomeScreen = (props: any) => {
                     }
                 }
             ],
-            { cancelable: false }
+            {cancelable: false}
         );
     }
 

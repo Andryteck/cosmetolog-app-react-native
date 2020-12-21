@@ -10,9 +10,13 @@ const instance = axios.create({
 
 export const patientAPI = {
     getPatients() {
-        return instance.get<IUser>(`patients/`)
+        return instance.get<any>(`patients/`)
+    },
+    removePatient(id: string) {
+        return instance.delete<IResponseUser>(`patients/${id}`)
     },
     addPatient(data: any) {
+        console.log(data)
         return instance.post<any>(`patients`, data)
     },
     showAppointments(id: string) {
@@ -21,19 +25,15 @@ export const patientAPI = {
 }
 
 export interface IUser {
+    _id: string,
     fullName: string,
-    phone: number
+    phone: number,
+    __v: number,
 }
 
 interface IResponseUser {
-    status: string,
-    data: {
-        _id: string,
-        fullName: string,
-        phone: number,
-        __v: number,
-        appointments: IAppointment[]
-    }
+    status: boolean,
+    data: IUser[]
 }
 
 export interface IAppointment {
@@ -44,7 +44,7 @@ export interface IAppointment {
     price: number,
     date: string,
     time: string,
-    createdAt: string,
-    updatedAt: string,
-    __v: number
+    createdAt?: string,
+    updatedAt?: string,
+    __v?: number
 }

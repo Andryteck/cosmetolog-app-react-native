@@ -1,32 +1,67 @@
 import React, {useState} from 'react';
 import {Text, View} from 'react-native';
-import {Ionicons} from '@expo/vector-icons';
 import {Item, Input, Label} from 'native-base';
 import styled from 'styled-components';
 import Button from '../components/Buttons/Button';
 import Container from "../components/Container/Container";
-import {patientAPI} from "../api/patients";
+import DatePicker from 'react-native-datepicker';
+import {appointmentAPI} from "../api/appointments";
 
+export interface IValues {
+    date: Date | string,
+    preporation: string,
+    price: number | string,
+    procedure: string,
+    time: string | null,
+    user?: string,
+}
 
-export const AddAppointmentScreen = ({navigation}: any) => {
-    const [values, setValues] = useState<any>({});
+export const AddAppointmentScreen = ({navigation, route}: any) => {
+    const {_id} = route.params
 
-    const handleChange = (name: string, e: any) => {
-        const text = e.nativeEvent.text;
+    const [values, setValues] = useState<any>({
+        date: null,
+        preporation: "",
+        price: 0,
+        procedure: "",
+        time: null,
+        user: _id,
+    });
+
+    const setFieldValue = (name: string, value: string) => {
         setValues({
             ...values,
-            [name]: text,
+            [name]: value
         });
     };
 
+    const handleInputChange = (name: string, e: any) => {
+        const text = e.nativeEvent.text;
+        setFieldValue(name, text);
+    };
+
+    const fieldsName: IValues = {
+        preporation: 'Препарат',
+        price: 'Цена',
+        date: "Дата",
+        time: 'Время',
+        procedure: 'Процедура'
+    };
+
     const onSubmit = () => {
-        patientAPI
-            .addPatient(values)
+        appointmentAPI
+            .creatAppointment(values)
             .then(() => {
-                navigation.navigate('Home');
+                navigation.navigate('Home', {lastUpdate: new Date()});
             })
-            .catch((e: any) => {
-                alert('BAD');
+            .catch(e => {
+                if (e.response.data && e.response.data.message) {
+                    e.response.data.message.forEach((err: any) => {
+                        const fieldName = err.param;
+                        // @ts-ignore
+                        alert(`Ошибка! Поле "${fieldsName[fieldName]}" указано неверно.`);
+                    });
+                }
             });
     };
 
@@ -35,59 +70,96 @@ export const AddAppointmentScreen = ({navigation}: any) => {
             <Item style={{marginLeft: 0}} floatingLabel>
                 <Label>Процедура</Label>
                 <Input
-                    onChange={handleChange.bind(null, 'procedure')}
+                    onChange={handleInputChange.bind(null, 'procedure')}
                     value={values.fullName}
-                    style={{marginTop: 5}}
+                    style={{marginTop: 12}}
                     autoFocus
                 />
             </Item>
             <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel>
                 <Label>Препарат</Label>
                 <Input
-                    onChange={handleChange.bind(null, 'preporation')}
+                    onChange={handleInputChange.bind(null, 'preporation')}
                     value={values.preporation}
-                    style={{marginTop: 5}}
+                    style={{marginTop: 12}}
                 />
             </Item>
             <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel>
                 <Label>Цена</Label>
                 <Input
-                    onChange={handleChange.bind(null, 'price')}
+                    onChange={handleInputChange.bind(null, 'price')}
                     value={values.price}
                     keyboardType="numeric"
-                    style={{marginTop: 5}}
+                    style={{marginTop: 12}}
                 />
             </Item>
-            <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel>
-                <Label>Дата приема</Label>
-                <Input
-                    onChange={handleChange.bind(null, 'date')}
-                    value={values.date}
-                    style={{marginTop: 5}}
-                />
-            </Item>
-            <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel>
-                <Label>Время приема</Label>
-                <Input
-                    onChange={handleChange.bind(null,  'time')}
-                    value={values.time}
-                    style={{marginTop: 5}}
-                />
+            <Item style={{marginTop: 20, marginLeft: 0}}>
+                <TimeRow>
+                    <View style={{flex: 1}}>
+                        <DatePicker
+                            // date={new Date()}
+                            mode="date"
+                            placeholder="Дата"
+                            format="YYYY-MM-DD"
+                            minDate={new Date()}
+                            confirmBtnText="Сохранить"
+                            cancelBtnText="Отмена"
+                            showIcon={false}
+                            customStyles={{
+                                dateInput: {
+                                    borderWidth: 0
+                                },
+                                dateText: {
+                                    fontSize: 18
+                                }
+                            }}
+                            date={values.date}
+                            onDateChange={setFieldValue.bind(null, 'date')}
+                        />
+                    </View>
+                    <View style={{flex: 1, marginTop: 10,}}>
+                        <DatePicker
+                            mode="time"
+                            placeholder="Время"
+                            format="HH:mm"
+                            minDate={new Date()}
+                            confirmBtnText="Сохранить"
+                            cancelBtnText="Отмена"
+                            showIcon={false}
+                            customStyles={{
+                                dateInput: {
+                                    borderWidth: 0,
+                                },
+                                dateText: {
+                                    fontSize: 18
+                                }
+                            }}
+                            date={values.time}
+                            onDateChange={setFieldValue.bind(null, 'time')}
+                        />
+                    </View>
+                </TimeRow>
             </Item>
             <ButtonView>
                 <Button onPress={onSubmit} color='#87CC6F'>
                     {/*fix icon margins*/}
-                    <Ionicons name="ios-add" size={24} color="white"/>
-                    <Text style={{marginTop: -10}}>Добавить пациента</Text>
+                    {/*<Ionicons name="ios-add" size={24} color="white"/>*/}
+                    <Text>Добавить пациента</Text>
                 </Button>
             </ButtonView>
         </Container>
     );
 };
 
+const TimeRow = styled(View)`
+  flex-direction: row;
+`;
+
+
 const ButtonView = styled(View)`
   flex: 1;
   margin-top: 30px;
+  position: relative;
 `;
 
 

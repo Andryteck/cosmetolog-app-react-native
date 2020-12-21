@@ -1,5 +1,6 @@
 import axios from '../core/axios';
 import {IAppointment} from "./patients";
+import {IValues} from "../screens/AddAppointmentScreen";
 
 const settings = {
     headers: {},
@@ -15,6 +16,9 @@ export const appointmentAPI = {
     },
     removeAppointments(id: string) {
         return instance.delete<any>(`appointments/${id}`)
+    },
+    creatAppointment(values: IValues) {
+        return instance.post<any>(`appointments/`, values)
     }
 }
 

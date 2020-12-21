@@ -13,9 +13,9 @@ interface IUser {
 }
 
 export interface IItem {
-    time: string,
+    time?: string,
     procedure: string,
-    preporation: string,
+    preporation?: string,
     isActive?: boolean,
     user: IUser,
 }
@@ -44,7 +44,7 @@ const Appointment = ({item, navigate}: IProps) => {
                 <GrayText>{item.procedure}</GrayText>
             </View>
             <View style={{borderRadius: 18, overflow: 'hidden'}}>
-                <Badge isActive={item.isActive}>{item.time}</Badge>
+                {item.time && <Badge isActive={item.isActive}>{item.time}</Badge>}
             </View>
         </GroupItem>
     );
