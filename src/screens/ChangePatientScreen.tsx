@@ -2,14 +2,13 @@ import React, {useState} from 'react';
 import {Text, View} from 'react-native';
 import {Item, Input, Label} from 'native-base';
 import styled from 'styled-components';
-import Button from '../components/Buttons/Button';
 import Container from "../components/Container/Container";
-import {patientAPI} from "../api/patients";
 
 
-export const AddPatientScreen = ({navigation}: any) => {
+export const ChangePatientScreen = ({navigation,route}: any) => {
     const [values, setValues] = useState<any>({});
 
+    // const {_id} = route.params;
     const handleChange = (name: string, e: any) => {
         const text = e.nativeEvent.text;
         setValues({
@@ -18,16 +17,16 @@ export const AddPatientScreen = ({navigation}: any) => {
         });
     };
 
-    const onSubmit = () => {
-        patientAPI
-            .addPatient(values)
-            .then(() => {
-                navigation.navigate('Home');
-            })
-            .catch((e: any) => {
-                alert('BAD');
-            });
-    };
+    // const onSubmit = () => {
+    //     patientAPI
+    //         .changePatient(_id,values)
+    //         .then(() => {
+    //             navigation.navigate('Home');
+    //         })
+    //         .catch((e: any) => {
+    //             alert('BAD');
+    //         });
+    // };
 
     return (
         <Container>
@@ -51,9 +50,9 @@ export const AddPatientScreen = ({navigation}: any) => {
                 />
             </Item>
             <ButtonView>
-                <Button onPress={onSubmit} color='#87CC6F'>
-                    <Text style={{marginTop: -10}}>Добавить пациента</Text>
-                </Button>
+                {/*<Button onPress={onSubmit} color='#2A86FF'>*/}
+                    <Text style={{marginTop: -10}}>Сохранить</Text>
+                {/*</Button>*/}
             </ButtonView>
         </Container>
     );
@@ -65,12 +64,5 @@ const ButtonView = styled(View)`
 `;
 
 
-// AddPatientScreen.navigationOptions = {
-//     title: 'Добавить пациента',
-//     headerTintColor: '#2A86FF',
-//     headerStyle: {
-//         elevation: 0.8,
-//         shadowOpacity: 0.8,
-//     },
-// };
+
 

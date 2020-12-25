@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {SectionList, TouchableOpacity, View, Text, Alert} from 'react-native';
+import {SectionList, TouchableOpacity, View, Alert} from 'react-native';
 // @ts-ignore
 import Swipeable from 'react-native-swipeable-row';
 import Appointment from '../components/Appointment/Appointment';
@@ -38,7 +38,9 @@ export const HomeScreen = ({navigation, route}: any) => {
         fetchAppointments()
     }, [])
 
-    useEffect(fetchAppointments, [route.params]);
+    useEffect(() => {
+        fetchAppointments()
+    }, [route.params]);
 
     const removeAppointment = (id: string) => {
         Alert.alert(
@@ -90,7 +92,7 @@ export const HomeScreen = ({navigation, route}: any) => {
                                 <Ionicons name="ios-close" size={48} color="white"/>
                             </SwipeViewButton>
                         ]}>
-                        <Appointment navigate={navigation.navigate} item={item}/>
+                        <Appointment navigate={navigation.navigate} item={item} removeAppointment={removeAppointment}/>
                     </Swipeable>
                 }
                 renderSectionHeader={({section: {title}}) => (
@@ -101,7 +103,6 @@ export const HomeScreen = ({navigation, route}: any) => {
         </Container>
     );
 };
-
 
 
 const SwipeViewButton = styled(TouchableOpacity)`

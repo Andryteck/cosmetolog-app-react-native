@@ -4,8 +4,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 console.disableYellowBox = true;
 
-import {AddPatientScreen, HomeScreen, PatientScreen, AddAppointmentScreen, PatientsScreen} from './src/screens';
-import { Users } from './src/components/Users/Users';
+import {
+  AddPatientScreen,
+  HomeScreen,
+  PatientScreen,
+  AddAppointmentScreen,
+  PatientsScreen,
+  ChangePatientScreen
+} from './src/screens';
+
 
 
 
@@ -25,6 +32,7 @@ function App() {
         <Stack.Screen name="AddPatient" component={AddPatientScreen} options={{title: 'Добавить пациента', headerTintColor: '#2A86FF' }} />
         <Stack.Screen name="AddAppointment" component={AddAppointmentScreen} options={{title: 'Добавить прием', headerTintColor: '#2A86FF' }} />
         <Stack.Screen name="Patients" component={PatientsScreen} options={{title: 'Пациенты', headerTintColor: '#2A86FF'  }} />
+        <Stack.Screen name="ChangePatient" component={ChangePatientScreen} options={{title: 'Изменить пациента', headerTintColor: '#2A86FF'  }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

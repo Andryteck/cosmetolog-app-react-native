@@ -22,14 +22,15 @@ export interface IItem {
 
 export interface IProps {
     item: IItem
-    navigate: any
+    navigate: any,
+    removeAppointment: (id:string) => void
 }
 
-const Appointment = ({item, navigate}: IProps) => {
+const Appointment = ({item, navigate,removeAppointment}: IProps) => {
     const avatarColors = getAvatarColor(item.user.fullName[0].toUpperCase());
 
     return (
-        <GroupItem onPress={() => navigate('Patient', item)}>
+        <GroupItem onPress={() => navigate('Patient', item, removeAppointment)} >
             <Avatar
                 style={{
                     backgroundColor: avatarColors.background
@@ -80,7 +81,7 @@ const GroupItem = styled(TouchableOpacity)`
   padding: 20px 20px;
   flex-direction: row;
   border-bottom-width: 1px;
-  border-bottom-color: #f3f3f3;
+  border-color: #E0E0E0;
 `;
 
 

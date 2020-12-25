@@ -3,3 +3,4 @@ export { PatientScreen } from './PatientScreen';
 export { AddPatientScreen } from './AddPatientScreen';
 export { PatientsScreen } from './PatientsScreen';
 export { AddAppointmentScreen } from './AddAppointmentScreen';
+export {ChangePatientScreen} from "./ChangePatientScreen";

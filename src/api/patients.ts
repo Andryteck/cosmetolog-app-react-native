@@ -16,12 +16,14 @@ export const patientAPI = {
         return instance.delete<IResponseUser>(`patients/${id}`)
     },
     addPatient(data: any) {
-        console.log(data)
         return instance.post<any>(`patients`, data)
     },
     showAppointments(id: string) {
         return instance.get<IResponseUser>(`patients/${id}`)
-    }
+    },
+    changePatient(id: string, title: string) {
+        return instance.patch<IResponseUser>(`patients/${id}`, title)
+    },
 }
 
 export interface IUser {
