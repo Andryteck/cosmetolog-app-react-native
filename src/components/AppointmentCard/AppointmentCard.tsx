@@ -1,21 +1,20 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Foundation, Ionicons} from "@expo/vector-icons";
 import {Alert, Text, TouchableOpacity, View} from "react-native";
 import Badge from "../Badge/Badge";
 import styled from "styled-components";
-import {Roboto_400Regular, Roboto_500Medium, useFonts} from "@expo-google-fonts/roboto";
 import {appointmentAPI} from "../../api/appointments";
 
-export const AppointmentCard = ({item, setShow,  showAppointments, show}: any) => {
 
+export const AppointmentCard = ({item, showAppointments, navigation}: any) => {
+    const [show, setIsShow] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [loaded] = useFonts({
-        Roboto_400Regular,
-        Roboto_500Medium
-    });
+
     const handleChange = () => {
-        // navigation.navigate('')
+        navigation.navigate('ChangeAppointment', item)
+        setIsShow(false)
     }
+    const toggling = () => setIsShow(!show);
 
     const removeAppointment = (id: string) => {
         Alert.alert(
@@ -46,11 +45,13 @@ export const AppointmentCard = ({item, setShow,  showAppointments, show}: any) =
         );
     }
 
+    useEffect(() => {
+
+    }, [])
+
     return (
         <AppointmentCardContainer>
-            <MoreButton onPress={() => {
-                setShow(true)
-            }}>
+            <MoreButton onPress={toggling}>
                 <Ionicons name="md-more" size={24} style={{color: '#000000'}}/>
             </MoreButton>
 
@@ -59,11 +60,11 @@ export const AppointmentCard = ({item, setShow,  showAppointments, show}: any) =
                 shadowOpacity: 0.4,
                 shadowRadius: 10
             }}>
-                <TouchableOpacity style={{paddingBottom: 10}} onPress={() => handleChange()}><Text
+                <TouchableOpacity style={{paddingBottom: 10}} onPress={handleChange}><Text
                     style={{fontSize: 20}}>Изменить</Text></TouchableOpacity>
                 <TouchableOpacity onPress={() => removeAppointment(item._id)}><Text
                     style={{fontSize: 20}}>Удалить</Text></TouchableOpacity>
-            </Popup> }
+            </Popup>}
 
             <AppointmentCardRow>
                 <Ionicons name="md-medical" size={16} color="#A3A3A3"/>
@@ -71,12 +72,10 @@ export const AppointmentCard = ({item, setShow,  showAppointments, show}: any) =
                     <Text style={{
                         fontSize: 16,
                         fontWeight: '600',
-                        fontFamily: 'Roboto_500Medium'
                     }}>Препарат:</Text>
                     <Text style={{
                         marginLeft: 10,
                         fontSize: 16,
-                        fontFamily: 'Roboto_400Regular'
                     }}>{item.preporation}</Text>
                 </AppointmentCardLabel>
             </AppointmentCardRow>
@@ -86,12 +85,10 @@ export const AppointmentCard = ({item, setShow,  showAppointments, show}: any) =
                     <Text style={{
                         fontSize: 16,
                         fontWeight: '600',
-                        fontFamily: 'Roboto_500Medium'
                     }}>Процедура:</Text>
                     <Text style={{
                         marginLeft: 10,
                         fontSize: 16,
-                        fontFamily: 'Roboto_400Regular'
                     }}>{item.procedure}</Text>
                 </AppointmentCardLabel>
             </AppointmentCardRow>
@@ -104,11 +101,12 @@ export const AppointmentCard = ({item, setShow,  showAppointments, show}: any) =
                 </View>
             </AppointmentCardRow>
         </AppointmentCardContainer>
+
     );
 };
 
+
 const MoreButton = styled(TouchableOpacity)`
-  display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
@@ -147,7 +145,7 @@ const AppointmentCardContainer = styled(View)`
   padding: 15px 25px;
   border-radius: 10px;
   background: white;
-  position: relative;
+  
   z-index: 1;
   margin-top: 16px;
   margin-bottom: 15px;

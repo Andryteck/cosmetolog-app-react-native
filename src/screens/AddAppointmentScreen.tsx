@@ -4,8 +4,9 @@ import {Item, Input, Label} from 'native-base';
 import styled from 'styled-components';
 import Button from '../components/Buttons/Button';
 import Container from "../components/Container/Container";
-import DatePicker from 'react-native-datepicker';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {appointmentAPI} from "../api/appointments";
+import moment from "moment";
 
 export interface IValues {
     date: Date | string,
@@ -17,16 +18,19 @@ export interface IValues {
 }
 
 export const AddAppointmentScreen = ({navigation, route}: any) => {
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [commonDate, setCommonDate] = useState(new Date());
     const {_id} = route.params
 
     const [values, setValues] = useState<any>({
-        date: null,
+        date: "",
         preporation: "",
         price: 0,
         procedure: "",
-        time: null,
+        time: "",
         user: _id,
     });
+    const toggling = () => setDatePickerVisibility(!isDatePickerVisible)
 
     const setFieldValue = (name: string, value: string) => {
         setValues({
@@ -38,8 +42,17 @@ export const AddAppointmentScreen = ({navigation, route}: any) => {
     const handleInputChange = (name: string, e: any) => {
         const text = e.nativeEvent.text;
         setFieldValue(name, text);
+    }
+
+    const hideDatePicker = () => {
+        toggling()
     };
 
+    const handleConfirm = (date: any) => {
+        console.warn("A date has been picked: ", date);
+        setCommonDate(new Date(Date.parse(date)))
+        hideDatePicker();
+    };
     const fieldsName: IValues = {
         preporation: 'Препарат',
         price: 'Цена',
@@ -49,8 +62,13 @@ export const AddAppointmentScreen = ({navigation, route}: any) => {
     };
 
     const onSubmit = () => {
+        const newValues = {
+            ...values,
+            date: moment(commonDate).format('YYYY-MM-DD'),
+            time: moment(commonDate).format('HH:mm')
+        }
         appointmentAPI
-            .creatAppointment(values)
+            .creatAppointment(newValues)
             .then(() => {
                 navigation.navigate('Home', {lastUpdate: new Date()});
             })
@@ -71,7 +89,7 @@ export const AddAppointmentScreen = ({navigation, route}: any) => {
                 <Label>Процедура</Label>
                 <Input
                     onChange={handleInputChange.bind(null, 'procedure')}
-                    value={values.fullName}
+                    value={values.procedure}
                     style={{marginTop: 12}}
                     autoFocus
                 />
@@ -93,58 +111,24 @@ export const AddAppointmentScreen = ({navigation, route}: any) => {
                     style={{marginTop: 12}}
                 />
             </Item>
-            <Item style={{marginTop: 20, marginLeft: 0}}>
-                <TimeRow>
-                    <View style={{flex: 1}}>
-                        <DatePicker
-                            // date={new Date()}
-                            mode="date"
-                            placeholder="Дата"
-                            format="YYYY-MM-DD"
-                            minDate={new Date()}
-                            confirmBtnText="Сохранить"
-                            cancelBtnText="Отмена"
-                            showIcon={false}
-                            customStyles={{
-                                dateInput: {
-                                    borderWidth: 0
-                                },
-                                dateText: {
-                                    fontSize: 18
-                                }
-                            }}
-                            date={values.date}
-                            onDateChange={setFieldValue.bind(null, 'date')}
-                        />
-                    </View>
-                    <View style={{flex: 1, marginTop: 10,}}>
-                        <DatePicker
-                            mode="time"
-                            placeholder="Время"
-                            format="HH:mm"
-                            minDate={new Date()}
-                            confirmBtnText="Сохранить"
-                            cancelBtnText="Отмена"
-                            showIcon={false}
-                            customStyles={{
-                                dateInput: {
-                                    borderWidth: 0,
-                                },
-                                dateText: {
-                                    fontSize: 18
-                                }
-                            }}
-                            date={values.time}
-                            onDateChange={setFieldValue.bind(null, 'time')}
-                        />
-                    </View>
-                </TimeRow>
-            </Item>
+            <>
+                <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel onPress={toggling}>
+                    <Label>Дата и Время</Label>
+                    <Input value={moment(commonDate).format('YYYY-MM-DD-HH:mm')}/>
+                </Item>
+            </>
+            <DateTimePickerModal
+                mode={'datetime'}
+                date={commonDate}
+                isVisible={isDatePickerVisible}
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
+
+            />
+
             <ButtonView>
                 <Button onPress={onSubmit} color='#87CC6F'>
-                    {/*fix icon margins*/}
-                    {/*<Ionicons name="ios-add" size={24} color="white"/>*/}
-                    <Text>Добавить пациента</Text>
+                    <Text>Добавить</Text>
                 </Button>
             </ButtonView>
         </Container>

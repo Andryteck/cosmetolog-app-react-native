@@ -23,14 +23,13 @@ export interface IItem {
 export interface IProps {
     item: IItem
     navigate: any,
-    removeAppointment: (id:string) => void
 }
 
-const Appointment = ({item, navigate,removeAppointment}: IProps) => {
+const Appointment = ({item, navigate}: IProps) => {
     const avatarColors = getAvatarColor(item.user.fullName[0].toUpperCase());
 
     return (
-        <GroupItem onPress={() => navigate('Patient', item, removeAppointment)} >
+        <GroupItem onPress={() => navigate('Patient', item )} >
             <Avatar
                 style={{
                     backgroundColor: avatarColors.background

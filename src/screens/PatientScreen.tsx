@@ -1,5 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Linking, FlatList, ActivityIndicator, SectionList} from 'react-native';
+import {
+    View,
+    Text,
+    Linking,
+    FlatList,
+} from 'react-native';
 import styled from 'styled-components';
 import GrayText from '../components/GrayText/GrayText';
 import ButtonCall from '../components/Buttons/ButtonCall';
@@ -10,11 +15,14 @@ import phoneFormat from "../utils/phoneFormat";
 import {AppointmentCard} from '../components/AppointmentCard/AppointmentCard';
 
 
-export const PatientScreen = ({route, navigation}: any) => {
+export type TComponentProps = {
+    route: any,
+    navigation: any
+}
+
+export const PatientScreen: React.FC<TComponentProps> = ({route, navigation}) => {
     const [appointments, setAppointments] = useState<IAppointment[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [show, setShow] = useState<boolean>(false)
-
     const {user} = route.params;
 
     const showAppointments = () => {
@@ -34,32 +42,33 @@ export const PatientScreen = ({route, navigation}: any) => {
 
 
     return (
-        <View style={{flex: 1, backgroundColor: 'white'}}>
-            <PatientDetails>
-                <PatientFullName>{user.fullName}</PatientFullName>
-                <GrayText>{phoneFormat(user.phone)}</GrayText>
-                <PatientButtonsWrapper>
-                    <ButtonCall onPress={() => {
-                        Linking.openURL(`tel:${user.phone}`)
-                    }}>
-                        <Foundation name="telephone" size={24} color="white"/>
-                    </ButtonCall>
-                </PatientButtonsWrapper>
-            </PatientDetails>
+            <View style={{flex: 1, backgroundColor: 'white'}}>
+                <PatientDetails>
+                    <PatientFullName>{user.fullName}</PatientFullName>
+                    <GrayText>{phoneFormat(user.phone)}</GrayText>
+                    <PatientButtonsWrapper>
+                        <ButtonCall onPress={() => {
+                            Linking.openURL(`tel:${user.phone}`)
+                        }}>
+                            <Foundation name="telephone" size={24} color="white"/>
+                        </ButtonCall>
+                    </PatientButtonsWrapper>
+                </PatientDetails>
 
-            <PatientAppointments>
-                <Container>
-                    <FlatList
-                        data={appointments}
-                        onRefresh={showAppointments}
-                        refreshing={isLoading}
-                        renderItem={({item}) => <AppointmentCard item={item} show={show} setShow={setShow}  showAppointments={ showAppointments} />}
-                        keyExtractor={(item: IAppointment) => item._id}
-                    />
-                </Container>
-            </PatientAppointments>
-            <PlusButton onPress={() => navigation.navigate('AddAppointment', user)}/>
-        </View>
+                <PatientAppointments>
+                    <Container>
+                        <FlatList
+                            data={appointments}
+                            keyExtractor={(item: IAppointment) => item._id}
+                            onRefresh={showAppointments}
+                            refreshing={isLoading}
+                            renderItem={({item}) => <AppointmentCard item={item} showAppointments={showAppointments}
+                                                                     navigation={navigation}/>}
+                        />
+                    </Container>
+                </PatientAppointments>
+                <PlusButton onPress={() => navigation.navigate('AddAppointment', user)}/>
+            </View>
     );
 };
 
@@ -71,7 +80,6 @@ const Container = styled(View)`
 
 const PatientDetails = styled(Container)`
   flex: 0.1;
-  position: relative;
 `;
 const PatientAppointments = styled(View)`
   flex: 1;

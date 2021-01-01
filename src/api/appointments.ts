@@ -2,6 +2,7 @@ import axios from '../core/axios';
 import {IAppointment} from "./patients";
 import {IValues} from "../screens/AddAppointmentScreen";
 
+
 const settings = {
     headers: {},
 };
@@ -19,7 +20,10 @@ export const appointmentAPI = {
     },
     creatAppointment(values: IValues) {
         return instance.post<any>(`appointments/`, values)
-    }
+    },
+    changeAppointments(id: string, data: IAppointment) {
+        return instance.patch<any>(`appointments/${id}`, data)
+    },
 }
 
 interface ResponseType {

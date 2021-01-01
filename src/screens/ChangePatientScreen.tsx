@@ -3,12 +3,19 @@ import {Text, View} from 'react-native';
 import {Item, Input, Label} from 'native-base';
 import styled from 'styled-components';
 import Container from "../components/Container/Container";
+import Button from '../components/Buttons/Button';
+import {patientAPI} from "../api/patients";
 
 
-export const ChangePatientScreen = ({navigation,route}: any) => {
-    const [values, setValues] = useState<any>({});
+export const ChangePatientScreen = ({navigation, route}: any) => {
+    const {item} = route.params;
+    console.log(item)
+    const [values, setValues] = useState<any>({
+        fullName: item.fullName,
+        phone: item.phone,
+    });
 
-    // const {_id} = route.params;
+
     const handleChange = (name: string, e: any) => {
         const text = e.nativeEvent.text;
         setValues({
@@ -17,16 +24,16 @@ export const ChangePatientScreen = ({navigation,route}: any) => {
         });
     };
 
-    // const onSubmit = () => {
-    //     patientAPI
-    //         .changePatient(_id,values)
-    //         .then(() => {
-    //             navigation.navigate('Home');
-    //         })
-    //         .catch((e: any) => {
-    //             alert('BAD');
-    //         });
-    // };
+    const onSubmit = () => {
+        patientAPI
+            .changePatient(item._id, values)
+            .then(() => {
+                navigation.navigate('Home');
+            })
+            .catch((e: any) => {
+                alert('BAD');
+            });
+    };
 
     return (
         <Container>
@@ -50,9 +57,9 @@ export const ChangePatientScreen = ({navigation,route}: any) => {
                 />
             </Item>
             <ButtonView>
-                {/*<Button onPress={onSubmit} color='#2A86FF'>*/}
-                    <Text style={{marginTop: -10}}>Сохранить</Text>
-                {/*</Button>*/}
+                <Button color='#87CC6F' onPress={onSubmit}>
+                    <Text>Изменить</Text>
+                </Button>
             </ButtonView>
         </Container>
     );

@@ -71,7 +71,7 @@ export const PatientsScreen = ({navigation, route}: any) => {
                 <>
                     <View style={{padding: 20}}>
                         <Item style={{paddingLeft: 15, borderRadius: 30}} regular>
-                            <Input onChange={onSearch} placeholder="Поиск..."/>
+                            <Input onChange={onSearch} placeholder="Поиск..." style={{paddingBottom:15}}/>
                         </Item>
                     </View>
                     <FlatList
@@ -87,7 +87,9 @@ export const PatientsScreen = ({navigation, route}: any) => {
                         renderItem={({item}) => (
                             <Swipeable
                                 rightButtons={[
-                                    <SwipeViewButton style={{backgroundColor: '#B4C1CB'}}>
+                                    <SwipeViewButton
+                                        onPress={() => navigation.navigate('ChangePatient', {item})}
+                                        style={{backgroundColor: '#B4C1CB'}}>
                                         <Ionicons name="md-create" size={28} color="white"/>
                                     </SwipeViewButton>,
                                     <SwipeViewButton
@@ -107,9 +109,6 @@ export const PatientsScreen = ({navigation, route}: any) => {
                                 />
                             </Swipeable>
                         )}
-                        // renderSectionHeader={({section: {title}}) => (
-                        //     <SectionTitle>{title}</SectionTitle>
-                        // )}
                     />
                 </>
             )}

@@ -23,6 +23,7 @@ export const HomeScreen = ({navigation, route}: any) => {
         });
     }, [navigation]);
 
+
     const fetchAppointments = () => {
         setIsLoading(true)
         appointmentAPI.getAppointments()
@@ -75,14 +76,15 @@ export const HomeScreen = ({navigation, route}: any) => {
         <Container>
             <SectionList
                 sections={data}
-                // @ts-ignore
                 keyExtractor={(item: any) => item._id}
                 onRefresh={fetchAppointments}
                 refreshing={isLoading}
                 renderItem={({item}) =>
                     <Swipeable
                         rightButtons={[
-                            <SwipeViewButton style={{backgroundColor: '#B4C1CB'}}>
+                            <SwipeViewButton style={{backgroundColor: '#B4C1CB'}}
+                            onPress={() => navigation.navigate('ChangeAppointment', item)}
+                            >
                                 <Ionicons name="md-create" size={28} color="white"/>
                             </SwipeViewButton>,
                             <SwipeViewButton
@@ -92,7 +94,7 @@ export const HomeScreen = ({navigation, route}: any) => {
                                 <Ionicons name="ios-close" size={48} color="white"/>
                             </SwipeViewButton>
                         ]}>
-                        <Appointment navigate={navigation.navigate} item={item} removeAppointment={removeAppointment}/>
+                        <Appointment navigate={navigation.navigate} item={item} />
                     </Swipeable>
                 }
                 renderSectionHeader={({section: {title}}) => (
