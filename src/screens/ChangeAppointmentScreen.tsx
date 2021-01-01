@@ -19,7 +19,6 @@ export const ChangeAppointmentScreen = ({navigation, route}: any) => {
         price: route.params.price.toString(),
         procedure: route.params.procedure,
         time: route.params.time,
-        user: route.params.user,
     });
 
     const toggling = () => setDatePickerVisibility(!isDatePickerVisible)

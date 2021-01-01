@@ -1,20 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import {Foundation, Ionicons} from "@expo/vector-icons";
-import {Alert, Text, TouchableOpacity, View} from "react-native";
+import {Alert, Text, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
 import Badge from "../Badge/Badge";
 import styled from "styled-components";
 import {appointmentAPI} from "../../api/appointments";
-
+import {Picker} from 'native-base';
+import {ratesApi} from "../../api/rates";
 
 export const AppointmentCard = ({item, showAppointments, navigation}: any) => {
     const [show, setIsShow] = useState<boolean>(false)
+    const [rate, setRate] = useState<number | undefined | null>(null)
+    const [disabled, setDisabled] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const handleChange = () => {
         navigation.navigate('ChangeAppointment', item)
         setIsShow(false)
     }
-    const toggling = () => setIsShow(!show);
 
     const removeAppointment = (id: string) => {
         Alert.alert(
@@ -44,27 +46,53 @@ export const AppointmentCard = ({item, showAppointments, navigation}: any) => {
             {cancelable: false}
         );
     }
-
     useEffect(() => {
-
+        ratesApi.getUSDRates().then(({data}) => {
+            const rate = data.rates.map(i => i.buyRate).pop()
+            setRate(rate)
+        })
     }, [])
+
+    const handlePick = (value: string) => {
+        setTimeout(() => {
+            if (value === "Изменить") handleChange()
+            if (value === "Удалить") removeAppointment(item._id)
+        }, 800)
+
+    }
+    const getCurrentRate = () => {
+        setIsShow(true)
+        // @ts-ignore
+        setRate(rate * item.price)
+        setDisabled(true)
+    }
 
     return (
         <AppointmentCardContainer>
-            <MoreButton onPress={toggling}>
+            <MoreButton>
                 <Ionicons name="md-more" size={24} style={{color: '#000000'}}/>
             </MoreButton>
 
-            {show && <Popup style={{
-                shadowColor: '#808080',
-                shadowOpacity: 0.4,
-                shadowRadius: 10
-            }}>
-                <TouchableOpacity style={{paddingBottom: 10}} onPress={handleChange}><Text
-                    style={{fontSize: 20}}>Изменить</Text></TouchableOpacity>
-                <TouchableOpacity onPress={() => removeAppointment(item._id)}><Text
-                    style={{fontSize: 20}}>Удалить</Text></TouchableOpacity>
-            </Popup>}
+            <Picker
+                mode="dropdown"
+                style={{width: '20%', position: 'absolute', right: -30}}
+                onValueChange={handlePick}
+            >
+                <Picker.Item label="Изменить" value="Изменить"/>
+                <Picker.Item label="Удалить" value="Удалить"/>
+            </Picker>
+
+            {/*{show && <Popup style={{*/}
+            {/*    shadowColor: '#808080',*/}
+            {/*    shadowOpacity: 0.4,*/}
+            {/*    shadowRadius: 10*/}
+            {/*}}>*/}
+            {/*    <TouchableOpacity style={{paddingBottom: 10}} onPress={handleChange}><Text*/}
+            {/*        style={{fontSize: 20}}>Изменить</Text></TouchableOpacity>*/}
+            {/*    <TouchableOpacity onPress={() => removeAppointment(item._id)}><Text*/}
+            {/*        style={{fontSize: 20}}>Удалить</Text></TouchableOpacity>*/}
+            {/*</Popup>*/}
+            {/*    }*/}
 
             <AppointmentCardRow>
                 <Ionicons name="md-medical" size={16} color="#A3A3A3"/>
@@ -96,12 +124,13 @@ export const AppointmentCard = ({item, showAppointments, navigation}: any) => {
                 <View style={{borderRadius: 18, overflow: 'hidden'}}>
                     <Badge isActive style={{width: 155}}>{item.date} - {item.time}</Badge>
                 </View>
-                <View style={{borderRadius: 18, overflow: 'hidden'}}>
+                {show && <View><Text>{rate} BYN</Text></View>}
+                <TouchableOpacity style={{borderRadius: 18, overflow: 'hidden'}} onPress={getCurrentRate}
+                                  disabled={disabled}>
                     <Badge color={'green'}>{item.price} USD</Badge>
-                </View>
+                </TouchableOpacity>
             </AppointmentCardRow>
         </AppointmentCardContainer>
-
     );
 };
 
@@ -145,7 +174,7 @@ const AppointmentCardContainer = styled(View)`
   padding: 15px 25px;
   border-radius: 10px;
   background: white;
-  
+
   z-index: 1;
   margin-top: 16px;
   margin-bottom: 15px;
