@@ -30,7 +30,7 @@ export const PatientScreen: React.FC<TComponentProps> = ({route, navigation}) =>
         patientAPI.showAppointments(user._id)
             .then(({data}) => {
                 //@ts-ignore
-                setAppointments(data.data.appointments)
+                setAppointments(data.data.appointments.reverse())
             }).finally(() => {
             return setIsLoading(false)
         })

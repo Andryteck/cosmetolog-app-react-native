@@ -1,5 +1,6 @@
-import styled from 'styled-components';
-import { Text } from 'react-native';
+import styled, {ThemedStyledProps} from 'styled-components';
+import {Text, TextProps} from 'react-native';
+import {RefAttributes} from "react";
 
 export interface Props {
   isActive?: boolean | undefined,
@@ -35,8 +36,8 @@ const getColor = ({ isActive, color }: Props) => {
 };
 
 export default styled(Text)<Props>`
-background: ${(props: any) => getColor(props).background};
-color: ${(props: any) => getColor(props).color};
+background: ${(props: ThemedStyledProps<TextProps & RefAttributes<Text> & Props, any>) => getColor(props).background};
+color: ${(props: ThemedStyledProps<TextProps & RefAttributes<Text> & Props, any>) => getColor(props).color};
 font-weight: 600;
 font-size: 14px;
 width: 70px;

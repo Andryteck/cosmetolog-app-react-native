@@ -2,7 +2,7 @@ import axios from 'axios';
 
 
 const instance = axios.create({
-    baseURL: 'https://developerhub.alfabank.by:8273/partner/1.0.0/public/',
+    baseURL: 'https://developerhub.alfabank.by:8273/partner/1.0.1/public/',
 });
 
 export const ratesApi = {

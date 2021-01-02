@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Foundation, Ionicons} from "@expo/vector-icons";
-import {Alert, Text, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
+import {Alert, Text, TouchableOpacity, View} from "react-native";
 import Badge from "../Badge/Badge";
 import styled from "styled-components";
 import {appointmentAPI} from "../../api/appointments";
@@ -63,10 +63,13 @@ export const AppointmentCard = ({item, showAppointments, navigation}: any) => {
     const getCurrentRate = () => {
         setIsShow(true)
         // @ts-ignore
-        setRate(rate * item.price)
+        setRate(Math.ceil(rate * item.price))
         setDisabled(true)
     }
-
+    const handleShow = () => {
+        setIsShow(false)
+        setDisabled(false)
+    }
     return (
         <AppointmentCardContainer>
             <MoreButton>
@@ -124,7 +127,9 @@ export const AppointmentCard = ({item, showAppointments, navigation}: any) => {
                 <View style={{borderRadius: 18, overflow: 'hidden'}}>
                     <Badge isActive style={{width: 155}}>{item.date} - {item.time}</Badge>
                 </View>
-                {show && <View><Text>{rate} BYN</Text></View>}
+                {show && <TouchableOpacity style={{borderRadius: 18, overflow: 'hidden'}} onPress={handleShow}>
+                    <Badge color={'default'}>{rate} BYN</Badge>
+                </TouchableOpacity>}
                 <TouchableOpacity style={{borderRadius: 18, overflow: 'hidden'}} onPress={getCurrentRate}
                                   disabled={disabled}>
                     <Badge color={'green'}>{item.price} USD</Badge>

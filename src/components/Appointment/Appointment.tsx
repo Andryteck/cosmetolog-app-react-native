@@ -29,7 +29,7 @@ const Appointment = ({item, navigate}: IProps) => {
     const avatarColors = getAvatarColor(item.user.fullName[0].toUpperCase());
 
     return (
-        <GroupItem onPress={() => navigate('Patient', item )} >
+        <GroupItem onPress={() => navigate('Patient', item)}>
             <Avatar
                 style={{
                     backgroundColor: avatarColors.background
@@ -44,7 +44,7 @@ const Appointment = ({item, navigate}: IProps) => {
                 <GrayText>{item.procedure}</GrayText>
             </View>
             <View style={{borderRadius: 18, overflow: 'hidden'}}>
-                {item.time && <Badge isActive={item.isActive}>{item.time}</Badge>}
+                {item.time && <Badge>{item.time}</Badge>}
             </View>
         </GroupItem>
     );
