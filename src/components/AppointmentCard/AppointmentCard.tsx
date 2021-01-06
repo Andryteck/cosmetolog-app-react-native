@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Foundation, Ionicons} from "@expo/vector-icons";
-import {Alert, Text, TouchableOpacity, View} from "react-native";
+import {Alert, Text, TouchableOpacity, View, StyleSheet} from "react-native";
 import Badge from "../Badge/Badge";
 import styled from "styled-components";
 import {appointmentAPI} from "../../api/appointments";
-import {Picker} from 'native-base';
 import {ratesApi} from "../../api/rates";
+import {Picker} from "native-base";
 
 export const AppointmentCard = ({item, showAppointments, navigation}: any) => {
     const [show, setIsShow] = useState<boolean>(false)
@@ -15,7 +15,6 @@ export const AppointmentCard = ({item, showAppointments, navigation}: any) => {
 
     const handleChange = () => {
         navigation.navigate('ChangeAppointment', item)
-        setIsShow(false)
     }
 
     const removeAppointment = (id: string) => {
@@ -48,8 +47,8 @@ export const AppointmentCard = ({item, showAppointments, navigation}: any) => {
     }
     useEffect(() => {
         ratesApi.getUSDRates().then(({data}) => {
-            const rate = data.rates.map(i => i.buyRate).pop()
-            setRate(rate)
+            const rate = data.map(i => i.USD_out)
+            setRate(+rate[0])
         })
     }, [])
 
@@ -58,29 +57,28 @@ export const AppointmentCard = ({item, showAppointments, navigation}: any) => {
             if (value === "Изменить") handleChange()
             if (value === "Удалить") removeAppointment(item._id)
         }, 800)
-
     }
-    const getCurrentRate = () => {
+    const getCurrentRate = useCallback(() => {
         setIsShow(true)
         // @ts-ignore
         setRate(Math.ceil(rate * item.price))
         setDisabled(true)
-    }
-    const handleShow = () => {
-        setIsShow(false)
-        setDisabled(false)
-    }
+    }, [rate, item.price])
+
     return (
         <AppointmentCardContainer>
-            <MoreButton>
-                <Ionicons name="md-more" size={24} style={{color: '#000000'}}/>
-            </MoreButton>
+            {/*<MoreButton>*/}
+            {/*    <Ionicons name="md-more" size={24} style={{color: '#000000'}}/>*/}
+            {/*</MoreButton>*/}
 
             <Picker
-                mode="dropdown"
-                style={{width: '20%', position: 'absolute', right: -30}}
+                mode="dialog"
+                style={{position: 'absolute', right: 0, width: 40, top: -5}}
+                iosIcon={<Ionicons name="md-more" size={24} style={{position: 'absolute'}}/>}
+                selectedValue={undefined}
                 onValueChange={handlePick}
             >
+                <Picker.Item label="" value="11"/>
                 <Picker.Item label="Изменить" value="Изменить"/>
                 <Picker.Item label="Удалить" value="Удалить"/>
             </Picker>
@@ -127,7 +125,7 @@ export const AppointmentCard = ({item, showAppointments, navigation}: any) => {
                 <View style={{borderRadius: 18, overflow: 'hidden'}}>
                     <Badge isActive style={{width: 155}}>{item.date} - {item.time}</Badge>
                 </View>
-                {show && <TouchableOpacity style={{borderRadius: 18, overflow: 'hidden'}} onPress={handleShow}>
+                {show && <TouchableOpacity style={{borderRadius: 18, overflow: 'hidden'}}>
                     <Badge color={'default'}>{rate} BYN</Badge>
                 </TouchableOpacity>}
                 <TouchableOpacity style={{borderRadius: 18, overflow: 'hidden'}} onPress={getCurrentRate}
@@ -163,8 +161,8 @@ const Popup = styled(View)`
 const AppointmentCardRow = styled(View)`
   flex-direction: row;
   align-items: center;
-  margin-top: 6.5px;
-  margin-bottom: 3.5px;
+  margin-top: 6px;
+  margin-bottom: 6px;
 `;
 
 const AppointmentCardLabel = styled(View)`
@@ -176,7 +174,7 @@ const AppointmentCardLabel = styled(View)`
 
 const AppointmentCardContainer = styled(View)`
   box-shadow: 5px 3px 5px rgba(0, 0, 0, 0.03);
-  padding: 15px 25px;
+  padding: 10px 20px;
   border-radius: 10px;
   background: white;
 

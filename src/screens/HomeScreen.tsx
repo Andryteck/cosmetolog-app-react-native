@@ -79,7 +79,7 @@ export const HomeScreen = ({navigation, route}: any) => {
                 keyExtractor={(item: any) => item._id}
                 onRefresh={fetchAppointments}
                 refreshing={isLoading}
-                renderItem={({item}) =>
+                renderItem={({item, index}) =>
                     <Swipeable
                         rightButtons={[
                             <SwipeViewButton style={{backgroundColor: '#B4C1CB'}}
@@ -94,7 +94,7 @@ export const HomeScreen = ({navigation, route}: any) => {
                                 <Ionicons name="ios-close" size={48} color="white"/>
                             </SwipeViewButton>
                         ]}>
-                        <Appointment navigate={navigation.navigate} item={item} />
+                        <Appointment navigate={navigation.navigate} item={item} index={index}/>
                     </Swipeable>
                 }
                 renderSectionHeader={({section: {title}}) => (

@@ -23,9 +23,10 @@ export interface IItem {
 export interface IProps {
     item: IItem
     navigate: any,
+    index: number
 }
 
-const Appointment = ({item, navigate}: IProps) => {
+const Appointment = ({item, navigate, index}: IProps) => {
     const avatarColors = getAvatarColor(item.user.fullName[0].toUpperCase());
 
     return (
@@ -44,7 +45,7 @@ const Appointment = ({item, navigate}: IProps) => {
                 <GrayText>{item.procedure}</GrayText>
             </View>
             <View style={{borderRadius: 18, overflow: 'hidden'}}>
-                {item.time && <Badge>{item.time}</Badge>}
+                {item.time && <Badge isActive={index === 0}>{item.time}</Badge>}
             </View>
         </GroupItem>
     );

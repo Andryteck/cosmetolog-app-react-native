@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text, View} from 'react-native';
+import {Keyboard, Text, View} from 'react-native';
 import {Item, Input, Label} from 'native-base';
 import styled from 'styled-components';
 import Button from '../components/Buttons/Button';
@@ -30,7 +30,10 @@ export const AddAppointmentScreen = ({navigation, route}: any) => {
         time: "",
         user: _id,
     });
-    const toggling = () => setDatePickerVisibility(!isDatePickerVisible)
+    const openDatePicker = () => {
+        setDatePickerVisibility(!isDatePickerVisible)
+        Keyboard.dismiss()
+    }
 
     const setFieldValue = (name: string, value: string) => {
         setValues({
@@ -45,7 +48,7 @@ export const AddAppointmentScreen = ({navigation, route}: any) => {
     }
 
     const hideDatePicker = () => {
-        toggling()
+        setDatePickerVisibility(!isDatePickerVisible)
     };
 
     const handleConfirm = (date: any) => {
@@ -112,7 +115,7 @@ export const AddAppointmentScreen = ({navigation, route}: any) => {
                 />
             </Item>
             <>
-                <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel onPress={toggling}>
+                <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel onPress={openDatePicker}>
                     <Label>Дата и Время</Label>
                     <Input value={moment(commonDate).format('YYYY-MM-DD-HH:mm')}/>
                 </Item>

@@ -1,5 +1,10 @@
 import React, {useRef, useState} from 'react';
-import {Alert, Platform, ScrollView, Text, View} from 'react-native';
+import {
+    Keyboard,
+    ScrollView,
+    Text,
+    View
+} from 'react-native';
 import {Item, Input, Label} from 'native-base';
 import styled from 'styled-components';
 import Button from '../components/Buttons/Button';
@@ -12,7 +17,7 @@ import moment from 'moment';
 
 export const ChangeAppointmentScreen = ({navigation, route}: any) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [commonDate, setCommonDate] = useState(new Date(Date.parse(route.params.date + 'T' + route.params.time)));
+    const [commonDate, setCommonDate] = useState(new Date(route.params.date + 'T' + route.params.time));
     const [values, setValues] = useState<any>({
         date: route.params.date,
         preporation: route.params.preporation,
@@ -21,7 +26,10 @@ export const ChangeAppointmentScreen = ({navigation, route}: any) => {
         time: route.params.time,
     });
 
-    const toggling = () => setDatePickerVisibility(!isDatePickerVisible)
+    const openDatePicker = () => {
+        setDatePickerVisibility(!isDatePickerVisible)
+        Keyboard.dismiss()
+    }
 
     const setFieldValue = (name: string, value: any) => {
         setValues({
@@ -36,7 +44,7 @@ export const ChangeAppointmentScreen = ({navigation, route}: any) => {
     }
 
     const hideDatePicker = () => {
-        toggling()
+        setDatePickerVisibility(!isDatePickerVisible)
     };
 
     const handleConfirm = (date: any) => {
@@ -104,9 +112,9 @@ export const ChangeAppointmentScreen = ({navigation, route}: any) => {
                     />
                 </Item>
                 <>
-                    <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel onPress={toggling}>
+                    <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel >
                         <Label>Дата и Время</Label>
-                        <Input value={moment(commonDate).format('YYYY-MM-DD-HH:mm')}/>
+                        <Input value={moment(commonDate).format('YYYY-MM-DD-HH:mm')} onFocus={openDatePicker}/>
                     </Item>
                 </>
                 <DateTimePickerModal
@@ -117,7 +125,6 @@ export const ChangeAppointmentScreen = ({navigation, route}: any) => {
                     onCancel={hideDatePicker}
 
                 />
-
                 <ButtonView>
                     <Button onPress={onSubmit} color='#2A86FF'>
                         <Text>Сохранить</Text>

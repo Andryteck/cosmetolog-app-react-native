@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
     View,
     Text,
     Linking,
-    FlatList,
+    FlatList, TouchableOpacity, Alert,
 } from 'react-native';
 import styled from 'styled-components';
 import GrayText from '../components/GrayText/GrayText';
@@ -35,6 +35,20 @@ export const PatientScreen: React.FC<TComponentProps> = ({route, navigation}) =>
             return setIsLoading(false)
         })
     }
+    const handlePress = useCallback(async () => {
+        try {
+            const supported = await Linking.canOpenURL(user.instagramUrl);
+
+            if (supported) {
+                await Linking.openURL(user.instagramUrl);
+            } else {
+                Alert.alert('Введенная ссылка неверная', 'Проверьте ссылку');
+            }
+        } catch (e) {
+            Alert.alert('Инстаграмм не введен');
+        }
+
+    }, [user.instagramUrl]);
 
     useEffect(() => {
         showAppointments()
@@ -42,33 +56,36 @@ export const PatientScreen: React.FC<TComponentProps> = ({route, navigation}) =>
 
 
     return (
-            <View style={{flex: 1, backgroundColor: 'white'}}>
-                <PatientDetails>
-                    <PatientFullName>{user.fullName}</PatientFullName>
-                    <GrayText>{phoneFormat(user.phone)}</GrayText>
-                    <PatientButtonsWrapper>
-                        <ButtonCall onPress={() => {
-                            Linking.openURL(`tel:${user.phone}`)
-                        }}>
-                            <Foundation name="telephone" size={24} color="white"/>
-                        </ButtonCall>
-                    </PatientButtonsWrapper>
-                </PatientDetails>
+        <View style={{flex: 1, backgroundColor: 'white'}}>
+            <PatientDetails>
+                <PatientFullName>{user.fullName}</PatientFullName>
+                <GrayText>{phoneFormat(user.phone)}</GrayText>
+                <PatientButtonsWrapper>
+                    <ButtonCall onPress={() => {
+                        Linking.openURL(`tel:${user.phone}`)
+                    }}>
+                        <Foundation name="telephone" size={24} color="white"/>
+                    </ButtonCall>
+                </PatientButtonsWrapper>
+                <TouchableOpacity onPress={handlePress} style={{marginTop: 5}}>
+                    <PatientLink>Cсылка на инстаграм</PatientLink>
+                </TouchableOpacity>
+            </PatientDetails>
 
-                <PatientAppointments>
-                    <Container>
-                        <FlatList
-                            data={appointments}
-                            keyExtractor={(item: IAppointment) => item._id}
-                            onRefresh={showAppointments}
-                            refreshing={isLoading}
-                            renderItem={({item}) => <AppointmentCard item={item} showAppointments={showAppointments}
-                                                                     navigation={navigation}/>}
-                        />
-                    </Container>
-                </PatientAppointments>
-                <PlusButton onPress={() => navigation.navigate('AddAppointment', user)}/>
-            </View>
+            <PatientAppointments>
+                <Container>
+                    <FlatList
+                        data={appointments}
+                        keyExtractor={(item: IAppointment) => item._id}
+                        onRefresh={showAppointments}
+                        refreshing={isLoading}
+                        renderItem={({item}) => <AppointmentCard item={item} showAppointments={showAppointments}
+                                                                 navigation={navigation}/>}
+                    />
+                </Container>
+            </PatientAppointments>
+            <PlusButton onPress={() => navigation.navigate('AddAppointment', user)}/>
+        </View>
     );
 };
 
@@ -77,6 +94,12 @@ const Container = styled(View)`
   flex: 1;
   padding: 20px;
 `;
+
+const PatientLink = styled(Text)`
+  font-size: 16px;
+  color: #8b979f;
+  text-decoration: underline #8b979f;
+`
 
 const PatientDetails = styled(Container)`
   flex: 0.1;

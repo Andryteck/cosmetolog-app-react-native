@@ -30,6 +30,7 @@ export interface IUser {
     _id: string,
     fullName: string,
     phone: number,
+    instagramUrl: string,
     __v: number,
     appointments?: IAppointment[]
 }
