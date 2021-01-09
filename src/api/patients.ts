@@ -21,7 +21,7 @@ export const patientAPI = {
     showAppointments(id: string) {
         return instance.get<IResponseUser>(`patients/${id}`)
     },
-    changePatient(id: string, title: string) {
+    changePatient(id: string, title: { [key: string]: string | number }) {
         return instance.patch<IResponseUser>(`patients/${id}`, title)
     },
 }
@@ -31,8 +31,9 @@ export interface IUser {
     fullName: string,
     phone: number,
     instagramUrl: string,
+    status: string
     __v: number,
-    appointments?: IAppointment[]
+    appointments: IAppointment[]
 }
 
 interface IResponseUser {

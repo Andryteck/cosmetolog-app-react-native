@@ -1,16 +1,14 @@
 import {Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 
 import GrayText from '../GrayText/GrayText';
 import Badge from '../Badge/Badge';
 
 import {getAvatarColor} from '../../utils/getAvacolor';
+import {Input, Item, Label} from "native-base";
+import {IUser, patientAPI} from '../../api/patients';
 
-interface IUser {
-    fullName: string,
-    phone: number
-}
 
 export interface IItem {
     time?: string,
@@ -23,12 +21,37 @@ export interface IItem {
 export interface IProps {
     item: IItem
     navigate: any,
-    index: number
+    index?: number,
+    fetchPatients?: () => void,
+    show: boolean
 }
 
-const Appointment = ({item, navigate, index}: IProps) => {
+// @TODO  сделать событие ок а не онблур
+// @TODO  сделать красивый UI статуса
+const Appointment = ({item, navigate, index, fetchPatients, show}: IProps) => {
+    const [values, setValues] = useState<{ [key: string]: string | number }>({
+        fullName: item.user.fullName,
+        phone: item.user.phone,
+        instagramUrl: item.user.instagramUrl,
+        status: item.user.status
+    });
+    const handleChange = (name: string, e: any) => {
+        const text = e.nativeEvent.text;
+        setValues({
+            ...values,
+            [name]: text,
+        });
+    };
     const avatarColors = getAvatarColor(item.user.fullName[0].toUpperCase());
 
+    const changeStatus = () => {
+        patientAPI
+            .changePatient(item.user._id, values)
+            .then(() => fetchPatients && fetchPatients() )
+            .catch((e: any) => {
+                alert('BAD');
+            });
+    }
     return (
         <GroupItem onPress={() => navigate('Patient', item)}>
             <Avatar
@@ -43,6 +66,15 @@ const Appointment = ({item, navigate, index}: IProps) => {
             <View style={{flex: 1}}>
                 <FullName>{item.user.fullName}</FullName>
                 <GrayText>{item.procedure}</GrayText>
+                { show && <Item style={{marginLeft: 0, height: 40}}>
+                       <Input
+                        onChange={handleChange.bind(null, 'status')}
+                        value={values.status as string}
+                        style={{color: '#8b979f'}}
+                        onBlur={changeStatus}
+                    />
+                </Item>
+                }
             </View>
             <View style={{borderRadius: 18, overflow: 'hidden'}}>
                 {item.time && <Badge isActive={index === 0}>{item.time}</Badge>}

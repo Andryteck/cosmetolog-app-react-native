@@ -3,3 +3,4 @@ export default (str: string) => {
         return result.replace('X', n);
     }, '+XXX(XX) XXX-XX-XX');
 };
+

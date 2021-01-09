@@ -12,9 +12,9 @@ import phoneFormat from "../utils/phoneFormat";
 
 
 export const PatientsScreen = ({navigation, route}: any) => {
-    const [data, setData] = useState<IUser[] | null>(null);
-    const [searchValue, setSearchValue] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const [data, setData] = useState<Omit<IUser[], 'appointments'> | null>(null);
+    const [searchValue, setSearchValue] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const fetchPatients = () => {
         setIsLoading(true);
@@ -106,6 +106,8 @@ export const PatientsScreen = ({navigation, route}: any) => {
                                         user: item,
                                         procedure: phoneFormat((item.phone).toString())
                                     }}
+                                    fetchPatients={fetchPatients}
+                                    show={true}
                                 />
                             </Swipeable>
                         )}

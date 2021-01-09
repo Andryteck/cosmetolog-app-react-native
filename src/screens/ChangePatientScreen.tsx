@@ -9,10 +9,11 @@ import {patientAPI} from "../api/patients";
 
 export const ChangePatientScreen = ({navigation, route}: any) => {
     const {item} = route.params;
-    console.log(item)
     const [values, setValues] = useState<any>({
         fullName: item.fullName,
         phone: item.phone,
+        status: item.status,
+        instagramUrl: item.instagramUrl
     });
 
 

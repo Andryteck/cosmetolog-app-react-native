@@ -94,7 +94,7 @@ export const HomeScreen = ({navigation, route}: any) => {
                                 <Ionicons name="ios-close" size={48} color="white"/>
                             </SwipeViewButton>
                         ]}>
-                        <Appointment navigate={navigation.navigate} item={item} index={index}/>
+                        <Appointment navigate={navigation.navigate} item={item} index={index} show={false}/>
                     </Swipeable>
                 }
                 renderSectionHeader={({section: {title}}) => (

@@ -4,7 +4,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 console.disableYellowBox = true;
 
-
 import {
   AddPatientScreen,
   HomeScreen,
@@ -14,9 +13,6 @@ import {
   ChangePatientScreen,
   ChangeAppointmentScreen
 } from './src/screens';
-
-
-
 
 
 const Stack = createStackNavigator();
