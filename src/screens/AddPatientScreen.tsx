@@ -6,7 +6,7 @@ import Button from '../components/Buttons/Button';
 import Container from "../components/Container/Container";
 import {patientAPI} from "../api/patients";
 
-
+// изменить автофокус на реальный ивент
 export const AddPatientScreen = ({navigation}: any) => {
     const [values, setValues] = useState<any>({});
 
@@ -21,8 +21,15 @@ export const AddPatientScreen = ({navigation}: any) => {
     const onSubmit = () => {
         patientAPI
             .addPatient(values)
-            .then(() => {
-                navigation.navigate('Home');
+            .then(({data}) => {
+                navigation.navigate('Patient', {
+                    user: {
+                        _id: data.data._id,
+                        fullName: data.data.fullName,
+                        phone: data.data.phone,
+                        instagramUrl: data.data.instagramUrl
+                    }
+                });
             })
             .catch((e: any) => {
                 alert('BAD');
@@ -47,6 +54,14 @@ export const AddPatientScreen = ({navigation}: any) => {
                     value={values.phone}
                     keyboardType="numeric"
                     dataDetectorTypes="phoneNumber"
+                    style={{marginTop: 5}}
+                />
+            </Item>
+            <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel>
+                <Label>Ссылка на инстаграм</Label>
+                <Input
+                    onChange={handleChange.bind(null, 'instagramUrl')}
+                    value={values.instagramUrl}
                     style={{marginTop: 5}}
                 />
             </Item>

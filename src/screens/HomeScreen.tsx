@@ -9,9 +9,13 @@ import styled from 'styled-components';
 import {appointmentAPI, AppointmentsType} from "../api/appointments";
 import {PlusButton} from "../components/Buttons/PlusButton";
 import {Users} from "../components/Users/Users";
+import { StackScreenProps } from '@react-navigation/stack';
+import {RootStackParamList} from "../types/navigate";
 
 
-export const HomeScreen = ({navigation, route}: any) => {
+type Props = StackScreenProps<RootStackParamList, 'Home'>;
+
+export const HomeScreen: React.FC<Props> = ({navigation, route}) => {
     const [data, setData] = useState<AppointmentsType[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
 

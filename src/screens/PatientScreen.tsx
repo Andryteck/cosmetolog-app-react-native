@@ -15,12 +15,12 @@ import phoneFormat from "../utils/phoneFormat";
 import {AppointmentCard} from '../components/AppointmentCard/AppointmentCard';
 
 
-export type TComponentProps = {
+export type Props = {
     route: any,
     navigation: any
 }
 
-export const PatientScreen: React.FC<TComponentProps> = ({route, navigation}) => {
+export const PatientScreen: React.FC<Props> = ({route, navigation}) => {
     const [appointments, setAppointments] = useState<IAppointment[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const {user} = route.params;

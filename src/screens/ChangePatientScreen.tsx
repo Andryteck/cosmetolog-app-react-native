@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import Container from "../components/Container/Container";
 import Button from '../components/Buttons/Button';
 import {patientAPI} from "../api/patients";
+import {appointmentAPI} from "../api/appointments";
 
 
 export const ChangePatientScreen = ({navigation, route}: any) => {
@@ -29,7 +30,7 @@ export const ChangePatientScreen = ({navigation, route}: any) => {
         patientAPI
             .changePatient(item._id, values)
             .then(() => {
-                navigation.navigate('Home');
+                navigation.navigate('Home', values);
             })
             .catch((e: any) => {
                 alert('BAD');
@@ -54,6 +55,14 @@ export const ChangePatientScreen = ({navigation, route}: any) => {
                     value={values.phone}
                     keyboardType="numeric"
                     dataDetectorTypes="phoneNumber"
+                    style={{marginTop: 5}}
+                />
+            </Item>
+            <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel>
+                <Label>Ссылка на инстаграм</Label>
+                <Input
+                    onChange={handleChange.bind(null, 'instagramUrl')}
+                    value={values.instagramUrl}
                     style={{marginTop: 5}}
                 />
             </Item>

@@ -71,7 +71,7 @@ export const PatientsScreen = ({navigation, route}: any) => {
                 <>
                     <View style={{padding: 20}}>
                         <Item style={{paddingLeft: 15, borderRadius: 30}} regular>
-                            <Input onChange={onSearch} placeholder="Поиск..." style={{paddingBottom:15}}/>
+                            <Input onChange={onSearch} placeholder="Поиск..." style={{paddingBottom:0}}/>
                         </Item>
                     </View>
                     <FlatList

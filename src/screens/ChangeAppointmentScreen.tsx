@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {
     Keyboard,
     ScrollView,
@@ -13,12 +13,21 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {appointmentAPI} from "../api/appointments";
 import {IValues} from "./AddAppointmentScreen";
 import moment from 'moment';
+import {RootStackParamList} from "../types/navigate";
+import { RouteProp } from '@react-navigation/native';
+import { Appointment } from '../types/appointment';
 
+type ChangeAppointmentScreen = RouteProp<RootStackParamList, 'ChangeAppointment'>;
 
-export const ChangeAppointmentScreen = ({navigation, route}: any) => {
+type Props = {
+    route: any;
+    navigation: any
+};
+
+export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [commonDate, setCommonDate] = useState(new Date(route.params.date + 'T' + route.params.time));
-    const [values, setValues] = useState<any>({
+    const [values, setValues] = useState<Appointment>({
         date: route.params.date,
         preporation: route.params.preporation,
         price: route.params.price.toString(),
@@ -31,7 +40,7 @@ export const ChangeAppointmentScreen = ({navigation, route}: any) => {
         Keyboard.dismiss()
     }
 
-    const setFieldValue = (name: string, value: any) => {
+    const setFieldValue = (name: string, value: string) => {
         setValues({
             ...values,
             [name]: value
@@ -61,7 +70,7 @@ export const ChangeAppointmentScreen = ({navigation, route}: any) => {
     };
 
     const onSubmit = () => {
-        const newValues = {
+        const newValues: Appointment = {
             ...values,
             date: moment(commonDate).format('YYYY-MM-DD'),
             time: moment(commonDate).format('HH:mm')
@@ -114,7 +123,7 @@ export const ChangeAppointmentScreen = ({navigation, route}: any) => {
                 <>
                     <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel >
                         <Label>Дата и Время</Label>
-                        <Input value={moment(commonDate).format('YYYY-MM-DD-HH:mm')} onFocus={openDatePicker}/>
+                        <Input value={moment(commonDate).subtract(3, 'hours').format('YYYY-MM-DD-HH:mm')} onFocus={openDatePicker}/>
                     </Item>
                 </>
                 <DateTimePickerModal
