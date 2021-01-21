@@ -6,27 +6,20 @@ import GrayText from '../GrayText/GrayText';
 import Badge from '../Badge/Badge';
 
 import {getAvatarColor} from '../../utils/getAvacolor';
-import {Input, Item, Label} from "native-base";
-import {IUser, patientAPI} from '../../api/patients';
+import {Input, Item} from "native-base";
+import {IAppointment, patientAPI} from '../../api/patients';
+import {StackNavigationProp} from "@react-navigation/stack";
+import {RootStackParamList} from "../../types/navigate";
 
-
-export interface IItem {
-    time?: string,
-    procedure: string,
-    preporation?: string,
-    isActive?: boolean,
-    user: IUser,
-}
 
 export interface IProps {
-    item: IItem
+    item: IAppointment
     navigate: any,
     index?: number,
     fetchPatients?: () => void,
     show: boolean
 }
 
-// @TODO  сделать событие ок а не онблур
 // @TODO  сделать красивый UI статуса
 const Appointment = ({item, navigate, index, fetchPatients, show}: IProps) => {
     const [values, setValues] = useState<{ [key: string]: string | number }>({
@@ -47,7 +40,7 @@ const Appointment = ({item, navigate, index, fetchPatients, show}: IProps) => {
     const changeStatus = () => {
         patientAPI
             .changePatient(item.user._id, values)
-            .then(() => fetchPatients && fetchPatients() )
+            .then(() => fetchPatients && fetchPatients())
             .catch((e: any) => {
                 alert('BAD');
             });
@@ -66,8 +59,8 @@ const Appointment = ({item, navigate, index, fetchPatients, show}: IProps) => {
             <View style={{flex: 1}}>
                 <FullName>{item.user.fullName}</FullName>
                 <GrayText>{item.procedure}</GrayText>
-                { show && <Item style={{marginLeft: 0, height: 40}}>
-                       <Input
+                {show && <Item style={{marginLeft: 0, height: 40}}>
+                    <Input
                         onChange={handleChange.bind(null, 'status')}
                         value={values.status as string}
                         style={{color: '#8b979f'}}

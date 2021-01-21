@@ -13,12 +13,18 @@ import {IAppointment, patientAPI} from "../api/patients";
 import {PlusButton} from "../components/Buttons/PlusButton";
 import phoneFormat from "../utils/phoneFormat";
 import {AppointmentCard} from '../components/AppointmentCard/AppointmentCard';
+import {RouteProp} from "@react-navigation/native";
+import {RootStackParamList} from "../types/navigate";
+import {StackNavigationProp} from "@react-navigation/stack";
 
+type PatientScreenRouteProp = RouteProp<RootStackParamList, 'Patient'>;
+type PatientScreenNavigationProp = StackNavigationProp<RootStackParamList,
+    'Patient'>;
 
-export type Props = {
-    route: any,
-    navigation: any
-}
+type Props = {
+    route: PatientScreenRouteProp;
+    navigation: PatientScreenNavigationProp
+};
 
 export const PatientScreen: React.FC<Props> = ({route, navigation}) => {
     const [appointments, setAppointments] = useState<IAppointment[]>([])

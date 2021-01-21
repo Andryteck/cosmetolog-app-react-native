@@ -14,25 +14,28 @@ import {appointmentAPI} from "../api/appointments";
 import {IValues} from "./AddAppointmentScreen";
 import moment from 'moment';
 import {RootStackParamList} from "../types/navigate";
-import { RouteProp } from '@react-navigation/native';
-import { Appointment } from '../types/appointment';
+import {RouteProp} from '@react-navigation/native';
+import {Appointment} from '../types/appointment';
+import {StackNavigationProp} from "@react-navigation/stack";
 
-type ChangeAppointmentScreen = RouteProp<RootStackParamList, 'ChangeAppointment'>;
+type ChangeAppointmentScreenRouteProp = RouteProp<RootStackParamList, 'ChangeAppointment'>;
+type ChangeAppointmentScreenNavigationProp = StackNavigationProp<RootStackParamList,
+    'ChangeAppointment'>;
 
 type Props = {
-    route: any;
-    navigation: any
+    route: ChangeAppointmentScreenRouteProp;
+    navigation: ChangeAppointmentScreenNavigationProp
 };
 
 export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [commonDate, setCommonDate] = useState(new Date(route.params.date + 'T' + route.params.time));
+    const [commonDate, setCommonDate] = useState(new Date(route?.params?.date + 'T' + route?.params?.time));
     const [values, setValues] = useState<Appointment>({
-        date: route.params.date,
-        preporation: route.params.preporation,
-        price: route.params.price.toString(),
-        procedure: route.params.procedure,
-        time: route.params.time,
+        date: route?.params?.date,
+        preporation: route?.params?.preporation,
+        price: route?.params?.price.toString(),
+        procedure: route?.params?.procedure,
+        time: route?.params?.time,
     });
 
     const openDatePicker = () => {
@@ -76,7 +79,7 @@ export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
             time: moment(commonDate).format('HH:mm')
         }
         appointmentAPI
-            .changeAppointments(route.params._id, newValues)
+            .changeAppointments(route?.params?._id, newValues)
             .then(() => {
                 navigation.navigate('Home', {lastUpdate: new Date()});
             })
@@ -121,9 +124,10 @@ export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
                     />
                 </Item>
                 <>
-                    <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel >
+                    <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel>
                         <Label>Дата и Время</Label>
-                        <Input value={moment(commonDate).subtract(3, 'hours').format('YYYY-MM-DD-HH:mm')} onFocus={openDatePicker}/>
+                        <Input value={moment(commonDate).subtract(3, 'hours').format('YYYY-MM-DD-HH:mm')}
+                               onFocus={openDatePicker}/>
                     </Item>
                 </>
                 <DateTimePickerModal

@@ -21,7 +21,7 @@ export const appointmentAPI = {
     creatAppointment(values: IValues) {
         return instance.post<any>(`appointments/`, values)
     },
-    changeAppointments(id: string, data: IAppointment) {
+    changeAppointments(id: string, data: Partial<IAppointment>) {
         return instance.patch<any>(`appointments/${id}`, data)
     },
 }

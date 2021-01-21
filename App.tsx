@@ -12,9 +12,10 @@ import {
   ChangePatientScreen,
   ChangeAppointmentScreen, PatientsScheduleScreen
 } from './src/screens';
+import {RootStackParamList} from "./src/types/navigate";
 
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 
 function App() {
   return (

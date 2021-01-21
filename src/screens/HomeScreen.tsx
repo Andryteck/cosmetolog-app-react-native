@@ -11,6 +11,7 @@ import {PlusButton} from "../components/Buttons/PlusButton";
 import {Users} from "../components/Users/Users";
 import { StackScreenProps } from '@react-navigation/stack';
 import {RootStackParamList} from "../types/navigate";
+import {IAppointment} from "../api/patients";
 
 
 type Props = StackScreenProps<RootStackParamList, 'Home'>;
@@ -80,7 +81,7 @@ export const HomeScreen: React.FC<Props> = ({navigation, route}) => {
         <Container>
             <SectionList
                 sections={data}
-                keyExtractor={(item: any) => item._id}
+                keyExtractor={(item: IAppointment) => item._id}
                 onRefresh={fetchAppointments}
                 refreshing={isLoading}
                 renderItem={({item, index}) =>
