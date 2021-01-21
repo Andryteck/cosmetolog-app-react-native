@@ -20,7 +20,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={'Home'}>
+      <Stack.Navigator initialRouteName={'PatientsSchedule'}>
         <Stack.Screen
           name="Home"
           component={HomeScreen}

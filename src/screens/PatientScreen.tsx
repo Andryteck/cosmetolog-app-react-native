@@ -3,7 +3,7 @@ import {
     View,
     Text,
     Linking,
-    FlatList, TouchableOpacity, Alert,
+    FlatList, TouchableOpacity, Alert, ScrollView,
 } from 'react-native';
 import styled from 'styled-components';
 import GrayText from '../components/GrayText/GrayText';
@@ -29,6 +29,7 @@ type Props = {
 export const PatientScreen: React.FC<Props> = ({route, navigation}) => {
     const [appointments, setAppointments] = useState<IAppointment[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    // @ts-ignore
     const {user} = route.params;
 
     const showAppointments = () => {
