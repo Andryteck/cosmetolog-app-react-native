@@ -12,6 +12,7 @@ import {Users} from "../components/Users/Users";
 import { StackScreenProps } from '@react-navigation/stack';
 import {RootStackParamList} from "../types/navigate";
 import {IAppointment} from "../api/patients";
+import {Schedule} from "../components/Schedule/Schedule";
 
 
 type Props = StackScreenProps<RootStackParamList, 'Home'>;
@@ -25,6 +26,10 @@ export const HomeScreen: React.FC<Props> = ({navigation, route}) => {
             headerRight: () => (
                 <Users navigation={navigation}/>
             ),
+            headerLeft: () => (
+                <Schedule navigation={navigation}/>
+            )
+
         });
     }, [navigation]);
 
