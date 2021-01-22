@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, FlatList} from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import {appointmentAPI, AppointmentsType} from "../api/appointments";
 import Container from '../components/Container/Container';
 import Badge from '../components/Badge/Badge';
 import { locale } from '../utils/locale';
 import { Moment } from 'moment';
+import {IAppointment} from "../api/patients";
+import {AppointmentCard} from "../components/AppointmentCard/AppointmentCard";
 
 export const PatientsScheduleScreen: React.FC<any> = () => {
     const [data, setData] = useState<AppointmentsType[]>([])
@@ -52,11 +54,12 @@ export const PatientsScheduleScreen: React.FC<any> = () => {
                     locale={locale}
                 />
             </View>
-            <Container>
-                {value.map((i: string, index) => {
-                        return <Badge isActive={true} key={index} style={{marginBottom: 15}}>{i}</Badge>
-                    }
-                )}
+            <Container style={{paddingRight: 0}}>
+                <FlatList
+                    data={value}
+                    keyExtractor={(item: string) => item}
+                    renderItem={({item}) =><Badge isActive={true} style={{marginBottom: 15}}>{item}</Badge>}
+                />
             </Container>
         </View>
     );
