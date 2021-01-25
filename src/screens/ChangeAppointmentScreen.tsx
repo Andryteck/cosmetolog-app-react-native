@@ -126,7 +126,7 @@ export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
                 <>
                     <Item style={{marginTop: 20, marginLeft: 0}} floatingLabel>
                         <Label>Дата и Время</Label>
-                        <Input value={moment(commonDate).subtract(3, 'hours').format('YYYY-MM-DD-HH:mm')}
+                        <Input value={moment(commonDate).format('YYYY-MM-DD-HH:mm')}
                                onFocus={openDatePicker}/>
                     </Item>
                 </>
