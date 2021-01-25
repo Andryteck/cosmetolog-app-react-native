@@ -29,7 +29,6 @@ export const HomeScreen: React.FC<Props> = ({navigation, route}) => {
             headerLeft: () => (
                 <Schedule navigation={navigation}/>
             )
-
         });
     }, [navigation]);
 

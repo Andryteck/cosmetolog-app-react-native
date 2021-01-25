@@ -1,27 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Text, FlatList} from 'react-native';
+import {View, StyleSheet, FlatList} from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import {appointmentAPI, AppointmentsType} from "../api/appointments";
 import Container from '../components/Container/Container';
 import Badge from '../components/Badge/Badge';
 import { locale } from '../utils/locale';
 import { Moment } from 'moment';
-import {IAppointment} from "../api/patients";
-import {AppointmentCard} from "../components/AppointmentCard/AppointmentCard";
 
-export const PatientsScheduleScreen: React.FC<any> = () => {
+export const PatientsScheduleScreen = ({navigation}:any) => {
     const [data, setData] = useState<AppointmentsType[]>([])
     const [value, setValue] = useState<string[]>([])
-    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const fetchAppointments = () => {
-        setIsLoading(true)
         appointmentAPI.getAppointments()
             .then(data => {
                 setData(data.data.items)
-            })
-            .finally(() => {
-                return setIsLoading(false)
             })
     }
 
