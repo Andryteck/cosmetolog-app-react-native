@@ -4,10 +4,10 @@ import CalendarStrip from 'react-native-calendar-strip';
 import {appointmentAPI, AppointmentsType} from "../api/appointments";
 import Container from '../components/Container/Container';
 import Badge from '../components/Badge/Badge';
-import { locale } from '../utils/locale';
-import { Moment } from 'moment';
+import {locale} from '../utils/locale';
+import {Moment} from 'moment';
 
-export const PatientsScheduleScreen = ({navigation}:any) => {
+export const PatientsScheduleScreen = ({navigation, route}: any) => {
     const [data, setData] = useState<AppointmentsType[]>([])
     const [value, setValue] = useState<string[]>([])
 
@@ -19,7 +19,7 @@ export const PatientsScheduleScreen = ({navigation}:any) => {
     }
 
     const showTimeBadge = (date: Moment) => {
-     setValue([])
+        setValue([])
         data.forEach(i => {
             i.data.forEach(i => {
                 if (date.format('YYYY-MM-DD') === i.date) {
@@ -29,9 +29,9 @@ export const PatientsScheduleScreen = ({navigation}:any) => {
         })
     }
 
-    useEffect(() => {
-        fetchAppointments()
-    }, [])
+    useEffect(fetchAppointments, [])
+    useEffect(fetchAppointments, [route.params])
+
     return (
         <View style={{flex: 1}}>
             <View style={styles.container}>
@@ -51,7 +51,7 @@ export const PatientsScheduleScreen = ({navigation}:any) => {
                 <FlatList
                     data={value}
                     keyExtractor={(item: string) => item}
-                    renderItem={({item}) =><Badge isActive={true} style={{marginBottom: 15}}>{item}</Badge>}
+                    renderItem={({item}) => <Badge isActive={true} style={{marginBottom: 15}}>{item}</Badge>}
                 />
             </Container>
         </View>
