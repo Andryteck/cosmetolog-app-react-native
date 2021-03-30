@@ -6,9 +6,11 @@ import {
     FlatList, TouchableOpacity, Alert, ScrollView,
 } from 'react-native';
 import styled from 'styled-components';
+// @ts-ignore
+import Swipeable from 'react-native-swipeable-row';
 import GrayText from '../components/GrayText/GrayText';
 import ButtonCall from '../components/Buttons/ButtonCall';
-import {Foundation} from '@expo/vector-icons';
+import {Foundation, Ionicons} from '@expo/vector-icons';
 import {IAppointment, patientAPI} from "../api/patients";
 import {PlusButton} from "../components/Buttons/PlusButton";
 import phoneFormat from "../utils/phoneFormat";
@@ -16,6 +18,7 @@ import {AppointmentCard} from '../components/AppointmentCard/AppointmentCard';
 import {RouteProp} from "@react-navigation/native";
 import {RootStackParamList} from "../types/navigate";
 import {StackNavigationProp} from "@react-navigation/stack";
+import Appointment from "../components/Appointment/Appointment";
 
 type PatientScreenRouteProp = RouteProp<RootStackParamList, 'Patient'>;
 type PatientScreenNavigationProp = StackNavigationProp<RootStackParamList,
@@ -31,7 +34,6 @@ export const PatientScreen: React.FC<Props> = ({route, navigation}) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     // @ts-ignore
     const {user} = route.params;
-
     const showAppointments = () => {
         setIsLoading(true)
         patientAPI.showAppointments(user._id)
@@ -42,6 +44,34 @@ export const PatientScreen: React.FC<Props> = ({route, navigation}) => {
             return setIsLoading(false)
         })
     }
+    const removePatient = (id: string) => {
+        Alert.alert(
+            'Удаление пациента',
+            'Вы действительно хотите удалить пациента?',
+            [
+                {
+                    text: 'Отмена',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel'
+                },
+                {
+                    text: 'Удалить',
+                    onPress: () => {
+                        setIsLoading(true);
+                        patientAPI
+                            .removePatient(id)
+                            .then(() => {
+                                navigation.navigate('Home')
+                            })
+                            .catch(() => {
+                                setIsLoading(false);
+                            });
+                    }
+                }
+            ],
+            {cancelable: false}
+        );
+    };
     const handlePress = useCallback(async () => {
         try {
             const supported = await Linking.canOpenURL(user.instagramUrl);
@@ -61,22 +91,36 @@ export const PatientScreen: React.FC<Props> = ({route, navigation}) => {
         showAppointments()
     }, [user._id])
 
-
     return (
         <View style={{flex: 1, backgroundColor: 'white'}}>
             <PatientDetails>
-                <PatientFullName>{user.fullName}</PatientFullName>
-                <GrayText>{phoneFormat(user.phone)}</GrayText>
-                <PatientButtonsWrapper>
-                    <ButtonCall onPress={() => {
-                        Linking.openURL(`tel:${user.phone}`)
-                    }}>
-                        <Foundation name="telephone" size={24} color="white"/>
-                    </ButtonCall>
-                </PatientButtonsWrapper>
-                <TouchableOpacity onPress={handlePress} style={{marginTop: 5}}>
-                    <PatientLink>Cсылка на инстаграм</PatientLink>
-                </TouchableOpacity>
+                <Swipeable
+                    rightButtons={[
+                        <SwipeViewButton style={{backgroundColor: '#B4C1CB'}}
+                                         onPress={() => navigation.navigate('ChangePatient', {item: user})}
+                        >
+                            <Ionicons name="md-create" size={28} color="white"/>
+                        </SwipeViewButton>,
+                        // <SwipeViewButton
+                        //     onPress={removePatient.bind(null, user._id)}
+                        //     style={{backgroundColor: '#F85A5A'}}
+                        // >
+                        //     <Ionicons name="ios-close" size={48} color="white"/>
+                        // </SwipeViewButton>
+                    ]}>
+                    <PatientFullName>{user.fullName}</PatientFullName>
+                    <GrayText>{phoneFormat(user.phone)}</GrayText>
+                    <PatientButtonsWrapper>
+                        <ButtonCall onPress={() => {
+                            Linking.openURL(`tel:${user.phone}`)
+                        }}>
+                            <Foundation name="telephone" size={24} color="white"/>
+                        </ButtonCall>
+                    </PatientButtonsWrapper>
+                    <TouchableOpacity onPress={handlePress} style={{marginTop: 10}}>
+                        <PatientLink>Cсылка на инстаграм</PatientLink>
+                    </TouchableOpacity>
+                </Swipeable>
             </PatientDetails>
 
             <PatientAppointments>
@@ -99,7 +143,14 @@ export const PatientScreen: React.FC<Props> = ({route, navigation}) => {
 
 const Container = styled(View)`
   flex: 1;
-  padding: 20px;
+  padding: 20px 0 20px 20px;
+`;
+
+const SwipeViewButton = styled(TouchableOpacity)`
+  width: 80px;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
 `;
 
 const PatientLink = styled(Text)`
@@ -109,7 +160,7 @@ const PatientLink = styled(Text)`
 `
 
 const PatientDetails = styled(Container)`
-  flex: 0.1;
+  flex: 0.13;
 `;
 const PatientAppointments = styled(View)`
   flex: 1;

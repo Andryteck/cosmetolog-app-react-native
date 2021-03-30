@@ -38,7 +38,7 @@ export const PatientsScreen = ({navigation, route}: any) => {
 
     const removePatient = (id: string) => {
         Alert.alert(
-            'Удаление приема',
+            'Удаление пациента',
             'Вы действительно хотите удалить пациента?',
             [
                 {
@@ -102,6 +102,7 @@ export const PatientsScreen = ({navigation, route}: any) => {
                             >
                                 <Appointment
                                     navigate={navigation.navigate}
+                                    // @ts-ignore
                                     item={{
                                         user: item,
                                         procedure: phoneFormat((item.phone).toString())

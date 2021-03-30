@@ -44,7 +44,7 @@ export const PatientsScheduleScreen = ({navigation, route}: any) => {
                     dateNameStyle={{color: 'white'}}
                     iconContainer={{flex: 0.1}}
                     onDateSelected={showTimeBadge}
-                    locale={locale}
+                    // locale={locale}
                 />
             </View>
             <Container style={{paddingRight: 0}}>

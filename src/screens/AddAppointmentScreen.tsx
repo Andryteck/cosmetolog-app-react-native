@@ -24,9 +24,9 @@ export const AddAppointmentScreen = ({navigation, route}: any) => {
 
     const [values, setValues] = useState<any>({
         date: "",
-        preporation: "",
-        price: 0,
-        procedure: "",
+        preporation: "Дермарен",
+        price: 160,
+        procedure: "Губы",
         time: "",
         user: _id,
     });
@@ -109,7 +109,7 @@ export const AddAppointmentScreen = ({navigation, route}: any) => {
                 <Label>Цена</Label>
                 <Input
                     onChange={handleInputChange.bind(null, 'price')}
-                    value={values.price}
+                    value={values.price.toString()}
                     keyboardType="numeric"
                     style={{marginTop: 12}}
                 />
