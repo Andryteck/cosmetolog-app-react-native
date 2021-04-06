@@ -1,5 +1,5 @@
 import {Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 
 import GrayText from '../GrayText/GrayText';
@@ -15,9 +15,9 @@ import {RootStackParamList} from "../../types/navigate";
 export interface IProps {
     item: IAppointment
     navigate: any,
-    index?: number,
+    index?: number | undefined,
     fetchPatients?: () => void,
-    show: boolean
+    show: boolean,
 }
 
 // @TODO  сделать красивый UI статуса
@@ -45,6 +45,7 @@ const Appointment = ({item, navigate, index, fetchPatients, show}: IProps) => {
                 alert('BAD');
             });
     }
+
     return (
         <GroupItem onPress={() => navigate('Patient', item)}>
             <Avatar
