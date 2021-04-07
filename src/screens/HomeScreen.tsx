@@ -20,8 +20,6 @@ type Props = StackScreenProps<RootStackParamList, 'Home'>;
 export const HomeScreen: React.FC<Props> = ({navigation, route}) => {
     const [data, setData] = useState<AppointmentsType[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    // const [scrollToIndex, setScrollToIndex] = useState<number>(0)
-    // const [dataSourceCords, setDataSourceCords] = useState<Array<any>>([])
     React.useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
@@ -43,14 +41,14 @@ export const HomeScreen: React.FC<Props> = ({navigation, route}) => {
                 return setIsLoading(false)
             })
     }
-    // const loadAppointments = useCallback(async () => await fetchAppointments(), [fetchAppointments])
-    // useEffect(() => {
-    //     fetchAppointments()
-    // }, [])
-
+    const loadAppointments = useCallback(async () => await fetchAppointments(), [fetchAppointments])
     useEffect(() => {
-        fetchAppointments()
-    }, [route.params]);
+        loadAppointments()
+    }, [])
+
+    // useEffect(() => {
+    //     loadAppointments()
+    // }, [route.params]);
 
     const removeAppointment = (id: string) => {
         Alert.alert(
@@ -81,12 +79,10 @@ export const HomeScreen: React.FC<Props> = ({navigation, route}) => {
         );
     }
     let ref = useRef(null)
-    console.log('dd ')
     useEffect(() => {
         data.map((item,index) => {
             for (let i = 0; i < item.data.length; i++) {
                 if (moment().format('YYYY-MM-DD') === item.data[i].date) {
-                    console.log('data ', item.data[i])
                     console.log('data moment ', moment().format('YYYY-MM-DD'))
                     console.log('index ', index)
                     console.log('log ', ref.current)
@@ -98,10 +94,18 @@ export const HomeScreen: React.FC<Props> = ({navigation, route}) => {
                         viewPosition: 0
                     })
                     break;
+                } else {
+                    //@ts-ignore
+                    ref.current.scrollToLocation({
+                        itemIndex: 0,
+                        sectionIndex: Math.ceil(data.length/2) ,
+                        animated: false,
+                        viewPosition: 0
+                    })
                 }
             }
         })
-    }, [data])
+    }, [])
     const ITEM_HEIGHT = 20;
     const getItemLayout = (data: any, index: any) => ({
         length: ITEM_HEIGHT,

@@ -73,7 +73,7 @@ export const AddAppointmentScreen = ({navigation, route}: any) => {
         appointmentAPI
             .creatAppointment(newValues)
             .then(() => {
-                navigation.navigate('Home', {lastUpdate: new Date()});
+                navigation.push('Home', {lastUpdate: new Date()});
             })
             .catch(e => {
                 if (e.response.data && e.response.data.message) {
