@@ -1,5 +1,15 @@
-import React, {MutableRefObject, useCallback, useEffect, useRef, useState} from 'react';
-import {SectionList, TouchableOpacity, View, Alert, Animated, ScrollView, Text, PixelRatio} from 'react-native';
+import React, {MutableRefObject, useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
+import {
+    SectionList,
+    TouchableOpacity,
+    View,
+    Alert,
+    Animated,
+    ScrollView,
+    Text,
+    PixelRatio,
+    InteractionManager
+} from 'react-native';
 // @ts-ignore
 import Swipeable from 'react-native-swipeable-row';
 import Appointment from '../components/Appointment/Appointment';
@@ -46,9 +56,9 @@ export const HomeScreen: React.FC<Props> = ({navigation, route}) => {
         loadAppointments()
     }, [])
 
-    // useEffect(() => {
-    //     loadAppointments()
-    // }, [route.params]);
+    useEffect(() => {
+        loadAppointments()
+    }, [route.params]);
 
     const removeAppointment = (id: string) => {
         Alert.alert(
@@ -78,34 +88,29 @@ export const HomeScreen: React.FC<Props> = ({navigation, route}) => {
             {cancelable: false}
         );
     }
-    let ref = useRef(null)
+    let refCurrent = useRef<any>(null)
+    const getCurrentScroll = () => {
+
+    }
+
     useEffect(() => {
-        data.map((item,index) => {
-            for (let i = 0; i < item.data.length; i++) {
-                if (moment().format('YYYY-MM-DD') === item.data[i].date) {
-                    console.log('data moment ', moment().format('YYYY-MM-DD'))
-                    console.log('index ', index)
-                    console.log('log ', ref.current)
-                    //@ts-ignore
-                    ref.current.scrollToLocation({
+        let timerId: NodeJS.Timeout
+        data.forEach((item, index) => {
+            if (moment().format('YYYY-MM-DD') <= item.data[0].date) {
+                timerId && clearTimeout(timerId)
+                timerId = setTimeout(() => {
+                    refCurrent.current.scrollToLocation({
                         itemIndex: 0,
                         sectionIndex: index,
                         animated: false,
                         viewPosition: 0
                     })
-                    break;
-                } else {
-                    //@ts-ignore
-                    ref.current.scrollToLocation({
-                        itemIndex: 0,
-                        sectionIndex: Math.ceil(data.length/2) ,
-                        animated: false,
-                        viewPosition: 0
-                    })
-                }
+                    // за 50ms
+                }, 50)
             }
         })
-    }, [])
+    }, [data, refCurrent])
+
     const ITEM_HEIGHT = 20;
     const getItemLayout = (data: any, index: any) => ({
         length: ITEM_HEIGHT,
@@ -116,11 +121,13 @@ export const HomeScreen: React.FC<Props> = ({navigation, route}) => {
         <Container>
             <SectionList
                 sections={data}
-                ref={ref}
+                //@ts-ignore
+                ref={(ref) => (refCurrent.current = ref)}
                 keyExtractor={(item: IAppointment) => item._id}
                 onRefresh={fetchAppointments}
                 refreshing={isLoading}
                 getItemLayout={getItemLayout}
+                // onLayout={scrollToInitialPosition}
                 renderItem={({item, index}) =>
                     <Swipeable
                         rightButtons={[
