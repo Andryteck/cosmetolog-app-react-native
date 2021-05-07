@@ -1,11 +1,12 @@
 import axios from '../core/axios';
+import envs from '../config/env';
 
 const settings = {
     headers: {},
 };
 
 const instance = axios.create({
-    baseURL: 'https://tranquil-sea-21110.herokuapp.com/',
+    baseURL: envs.BACKEND_URL,
 });
 
 export const patientAPI = {
