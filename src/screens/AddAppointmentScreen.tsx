@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Keyboard, Text, View} from 'react-native';
+import {Keyboard, NativeSyntheticEvent, Text, TextInputChangeEventData, View} from 'react-native';
 import {Item, Input, Label} from 'native-base';
 import styled from 'styled-components';
 import Button from '../components/Buttons/Button';
@@ -20,6 +20,8 @@ export interface IValues {
 export const AddAppointmentScreen = ({navigation, route}: any) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [commonDate, setCommonDate] = useState(new Date());
+    const [loading, setLoading] = useState<boolean>(false);
+
     const {_id} = route.params
 
     const [values, setValues] = useState<any>({
@@ -42,7 +44,7 @@ export const AddAppointmentScreen = ({navigation, route}: any) => {
         });
     };
 
-    const handleInputChange = (name: string, e: any) => {
+    const handleInputChange = (name: string, e: NativeSyntheticEvent<TextInputChangeEventData>) => {
         const text = e.nativeEvent.text;
         setFieldValue(name, text);
     }
@@ -65,6 +67,7 @@ export const AddAppointmentScreen = ({navigation, route}: any) => {
     };
 
     const onSubmit = () => {
+        setLoading(true)
         const newValues = {
             ...values,
             date: moment(commonDate).format('YYYY-MM-DD'),
@@ -83,7 +86,9 @@ export const AddAppointmentScreen = ({navigation, route}: any) => {
                         alert(`Ошибка! Поле "${fieldsName[fieldName]}" указано неверно.`);
                     });
                 }
-            });
+            }).finally(() => {
+                return setLoading(false)
+        });
     };
 
     return (
@@ -130,8 +135,8 @@ export const AddAppointmentScreen = ({navigation, route}: any) => {
             />
 
             <ButtonView>
-                <Button onPress={onSubmit} color='#87CC6F'>
-                    <Text>Добавить</Text>
+                <Button onPress={onSubmit} color='#87CC6F' loading={loading} disabled={loading}>
+                    Добавить
                 </Button>
             </ButtonView>
         </Container>

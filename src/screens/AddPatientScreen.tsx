@@ -1,16 +1,25 @@
 import React, {useState} from 'react';
-import {Text, View} from 'react-native';
+import {NativeSyntheticEvent, Text, TextInputChangeEventData, View} from 'react-native';
 import {Item, Input, Label} from 'native-base';
 import styled from 'styled-components';
 import Button from '../components/Buttons/Button';
 import Container from "../components/Container/Container";
 import {patientAPI} from "../api/patients";
+import {useNavigation} from "@react-navigation/native";
 
+type IForm = {
+    _id: string,
+    fullName: string,
+    phone: string,
+    instagramUrl: string
+}
 // изменить автофокус на реальный ивент
-export const AddPatientScreen = ({navigation}: any) => {
-    const [values, setValues] = useState<any>({});
+export const AddPatientScreen = () => {
+    const navigation = useNavigation()
+    const [values, setValues] = useState<IForm>({} as IForm);
+    const [loading, setLoading] = useState<boolean>(false);
 
-    const handleChange = (name: string, e: any) => {
+    const handleChange = (name: string, e: NativeSyntheticEvent<TextInputChangeEventData>) => {
         const text = e.nativeEvent.text;
         setValues({
             ...values,
@@ -19,6 +28,7 @@ export const AddPatientScreen = ({navigation}: any) => {
     };
 
     const onSubmit = () => {
+        setLoading(true)
         patientAPI
             .addPatient(values)
             .then(({data}) => {
@@ -33,7 +43,7 @@ export const AddPatientScreen = ({navigation}: any) => {
             })
             .catch((e: any) => {
                 alert('BAD');
-            });
+            }).finally(() => setLoading(false));
     };
 
     return (
@@ -66,8 +76,8 @@ export const AddPatientScreen = ({navigation}: any) => {
                 />
             </Item>
             <ButtonView>
-                <Button onPress={onSubmit} color='#87CC6F'>
-                    <Text style={{marginTop: -10}}>Добавить пациента</Text>
+                <Button onPress={onSubmit} color='#87CC6F' disabled={loading} loading={loading}>
+                   Добавить пациента
                 </Button>
             </ButtonView>
         </Container>

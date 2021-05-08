@@ -1,4 +1,5 @@
 import axios from '../core/axios';
+// @ts-ignore
 import envs from '../config/env';
 
 const settings = {

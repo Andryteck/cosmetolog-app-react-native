@@ -33,7 +33,7 @@ export const HomeScreen: React.FC<Props> = ({navigation, route}) => {
     React.useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <Users navigation={navigation}/>
+                <Users />
             ),
             headerLeft: () => (
                 <Schedule navigation={navigation}/>

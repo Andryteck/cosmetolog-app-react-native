@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {FlatList, Alert, View, TouchableOpacity} from 'react-native';
+import {FlatList, Alert, View, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import styled from 'styled-components/native';
 // @ts-ignore
@@ -9,9 +9,12 @@ import {IUser, patientAPI} from "../api/patients";
 import Appointment from "../components/Appointment/Appointment";
 import {PlusButton} from "../components/Buttons/PlusButton";
 import phoneFormat from "../utils/phoneFormat";
+import {useNavigation, useRoute} from "@react-navigation/native";
 
 
-export const PatientsScreen = ({navigation, route}: any) => {
+export const PatientsScreen: React.FC = () => {
+    const navigation = useNavigation()
+    const route = useRoute()
     const [data, setData] = useState<Omit<IUser[], 'appointments'> | null>(null);
     const [searchValue, setSearchValue] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -67,15 +70,15 @@ export const PatientsScreen = ({navigation, route}: any) => {
 
     return (
         <Container>
-            {data && (
+            <View style={{padding: 20}}>
+                <Item style={{paddingLeft: 15, borderRadius: 30}} regular>
+                    <Input onChange={onSearch} placeholder="Поиск..." style={{paddingBottom: 0}}/>
+                </Item>
+            </View>
+
                 <>
-                    <View style={{padding: 20}}>
-                        <Item style={{paddingLeft: 15, borderRadius: 30}} regular>
-                            <Input onChange={onSearch} placeholder="Поиск..." style={{paddingBottom:0}}/>
-                        </Item>
-                    </View>
                     <FlatList
-                        data={data.filter(
+                        data={data && data.filter(
                             item =>
                                 item.fullName
                                     .toLowerCase()
@@ -114,7 +117,6 @@ export const PatientsScreen = ({navigation, route}: any) => {
                         )}
                     />
                 </>
-            )}
             <PlusButton onPress={() => navigation.navigate('AddPatient')}/>
         </Container>
     );

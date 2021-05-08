@@ -9,6 +9,7 @@ import {appointmentAPI} from "../api/appointments";
 
 
 export const ChangePatientScreen = ({navigation, route}: any) => {
+    const [loading, setLoading] = useState<boolean>(false);
     const {item} = route.params;
     const [values, setValues] = useState<any>({
         fullName: item.fullName,
@@ -67,7 +68,7 @@ export const ChangePatientScreen = ({navigation, route}: any) => {
                 />
             </Item>
             <ButtonView>
-                <Button color='#87CC6F' onPress={onSubmit}>
+                <Button color='#87CC6F' onPress={onSubmit} disabled={loading} loading={loading}>
                     <Text>Изменить</Text>
                 </Button>
             </ButtonView>

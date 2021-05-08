@@ -30,6 +30,7 @@ type Props = {
 export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [commonDate, setCommonDate] = useState(new Date(route?.params?.date + 'T' + route?.params?.time));
+    const [loading, setLoading] = useState<boolean>(false);
     const [values, setValues] = useState<Appointment>({
         date: route?.params?.date,
         preporation: route?.params?.preporation,
@@ -139,7 +140,7 @@ export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
 
                 />
                 <ButtonView>
-                    <Button onPress={onSubmit} color='#2A86FF'>
+                    <Button onPress={onSubmit} color='#2A86FF' disabled={loading} loading={loading}>
                         <Text>Сохранить</Text>
                     </Button>
                 </ButtonView>
