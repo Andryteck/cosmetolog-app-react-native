@@ -5,7 +5,7 @@ import {appointmentAPI, AppointmentsType} from "../api/appointments";
 import Container from '../components/Container/Container';
 import Badge from '../components/Badge/Badge';
 import {locale} from '../utils/locale';
-import {Moment} from 'moment';
+import moment, {Moment} from 'moment';
 
 export const PatientsScheduleScreen = ({navigation, route}: any) => {
     const [data, setData] = useState<AppointmentsType[]>([])
@@ -44,7 +44,7 @@ export const PatientsScheduleScreen = ({navigation, route}: any) => {
                     dateNameStyle={{color: 'white'}}
                     iconContainer={{flex: 0.1}}
                     onDateSelected={showTimeBadge}
-                    // locale={locale}
+                    // locale={ruLocale}
                 />
             </View>
             <Container style={{paddingRight: 0}}>

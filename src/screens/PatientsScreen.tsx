@@ -24,7 +24,7 @@ export const PatientsScreen: React.FC = () => {
         patientAPI
             .getPatients()
             .then(({data}) => {
-                setData(data.data);
+                setData(data.data.sort((a: { fullName: { localeCompare: (arg0: any) => IUser[]; }; }, b: { fullName: any; }): IUser[] => a.fullName.localeCompare(b.fullName)));
             })
             .finally(() => {
                 setIsLoading(false);

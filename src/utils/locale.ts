@@ -7,7 +7,7 @@ export const locale = {
         monthsShort: 'Янв__Февр_Март_Апр_Май_Июль_Июнь_Авг_Сент_Окт_Нояб_Дек'.split(
             '_'
         ),
-        weekdays: 'Dimanche_Lundi_Mardi_Mercredi_Jeudi_Vendredi_Samedi'.split('_'),
+        weekdays: 'Воскресенье_Понедельник_Вторник_Среда_Четверг_Пятница_Суббота'.split('_'),
         weekdaysShort: 'Воскр_Пон_Втор_Сред_Четв_Пят_Суб'.split('_'),
         weekdaysMin: 'Di_Lu_Ma_Me_Je_Ve_Sa'.split('_'),
         longDateFormat: {
@@ -41,6 +41,25 @@ export const locale = {
             y: 'une année',
             yy: '%d années'
         },
-
+        ordinalParse: /\d{1,2}(er|ème)/,
+        ordinal: function(number: number) {
+            return number + (number === 1 ? 'er' : 'ème');
+        },
+        meridiemParse: /PD|MD/,
+        isPM: function(input: any) {
+            return input.charAt(0) === 'M';
+        },
+        // in case the meridiem units are not separated around 12, then implement
+        // this function (look at locale/id.js for an example)
+        // meridiemHour : function (hour, meridiem) {
+        //     return /* 0-23 hour, given meridiem token and hour 1-12 */
+        // },
+        meridiem: function(hours: number, minutes: number, isLower: number) {
+            return hours < 12 ? 'PD' : 'MD';
+        },
+        week: {
+            dow: 1, // Monday is the first day of the week.
+            doy: 4 // The week that contains Jan 4th is the first week of the year.
+        }
     }
 };
