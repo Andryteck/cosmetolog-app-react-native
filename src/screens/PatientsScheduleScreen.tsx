@@ -5,25 +5,54 @@ import {appointmentAPI, AppointmentsType} from "../api/appointments";
 import Container from '../components/Container/Container';
 import Badge from '../components/Badge/Badge';
 import {locale} from '../utils/locale';
-import moment, {Moment} from 'moment';
+import {Moment} from 'moment';
+import 'moment/locale/ru';
+import {useNavigation, useRoute} from "@react-navigation/native";
+import {IUser} from "../api/patients";
 
-export const PatientsScheduleScreen = ({navigation, route}: any) => {
+interface IUserWithTime {
+    id: string,
+    time: string,
+    user: IUser | undefined
+}
+
+export const PatientsScheduleScreen: React.FC = () => {
     const [data, setData] = useState<AppointmentsType[]>([])
-    const [value, setValue] = useState<string[]>([])
-
+    const [value, setValue] = useState<IUserWithTime[]>([])
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const navigation = useNavigation()
+    const route = useRoute()
     const fetchAppointments = () => {
+        setIsLoading(true)
         appointmentAPI.getAppointments()
             .then(data => {
                 setData(data.data.items)
-            })
+            }).finally(() => {
+            return setIsLoading(false)
+        })
     }
 
-    const showTimeBadge = (date: Moment) => {
-        setValue([])
+    // const showTimeBadge = (date: Moment) => {
+    //     setValue([])
+    //     data.forEach(i => {
+    //         i.data.forEach(i => {
+    //             if (date.format('YYYY-MM-DD') === i.date) {
+    //                 setValue(value => [...value, i.time])
+    //             }
+    //         })
+    //     })
+    // }
+    console.log('value', value)
+    const showTimeWithUsers = (date: Moment) => {
+        setValue([{id: '0', time: '0', user: undefined}])
         data.forEach(i => {
             i.data.forEach(i => {
                 if (date.format('YYYY-MM-DD') === i.date) {
-                    setValue(value => [...value, i.time])
+                    setValue(value => [...value, {
+                        id: i._id,
+                        time: i.time,
+                        user: i.user
+                    }])
                 }
             })
         })
@@ -43,15 +72,16 @@ export const PatientsScheduleScreen = ({navigation, route}: any) => {
                     dateNumberStyle={{color: 'white'}}
                     dateNameStyle={{color: 'white'}}
                     iconContainer={{flex: 0.1}}
-                    onDateSelected={showTimeBadge}
-                    // locale={ruLocale}
+                    onDateSelected={showTimeWithUsers}
+                    locale={locale}
                 />
             </View>
             <Container style={{paddingRight: 0}}>
                 <FlatList
-                    data={value}
-                    keyExtractor={(item: string) => item}
-                    renderItem={({item}) => <Badge isActive={true} style={{marginBottom: 15}}>{item}</Badge>}
+                    data={value.slice(1)}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({item}) => <Badge isActive={true} style={{marginBottom: 15}}
+                                                   onPress={() => navigation.navigate('Patient', {user: item.user})}>{item.time}</Badge>}
                 />
             </Container>
         </View>

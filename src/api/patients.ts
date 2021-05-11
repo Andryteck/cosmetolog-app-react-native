@@ -45,7 +45,7 @@ interface IResponseUser {
 
 export interface IAppointment {
     _id: string,
-    user?: any,
+    user?: IUser,
     procedure: string,
     preporation: string,
     price: number | string,

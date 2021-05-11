@@ -34,6 +34,7 @@ export const PatientScreen: React.FC<Props> = ({route, navigation}) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     // @ts-ignore
     const {user} = route.params;
+    console.log(user)
     const showAppointments = () => {
         setIsLoading(true)
         patientAPI.showAppointments(user._id)

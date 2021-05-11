@@ -54,7 +54,7 @@ export const locale = {
         // meridiemHour : function (hour, meridiem) {
         //     return /* 0-23 hour, given meridiem token and hour 1-12 */
         // },
-        meridiem: function(hours: number, minutes: number, isLower: number) {
+        meridiem: function(hours: number, minutes: number, isLower: boolean) {
             return hours < 12 ? 'PD' : 'MD';
         },
         week: {
