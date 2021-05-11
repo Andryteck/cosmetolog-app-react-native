@@ -66,7 +66,7 @@ export const PatientsScheduleScreen: React.FC = () => {
             <View style={styles.container}>
                 <CalendarStrip
                     scrollable
-                    style={{height: 200, paddingTop: 20, paddingBottom: 10}}
+                    style={{height: 200, paddingTop: 20}}
                     calendarColor={'#3343CE'}
                     calendarHeaderStyle={{color: 'white'}}
                     dateNumberStyle={{color: 'white'}}
@@ -76,11 +76,12 @@ export const PatientsScheduleScreen: React.FC = () => {
                     locale={locale}
                 />
             </View>
-            <Container style={{paddingRight: 0}}>
+            <Container style={{paddingRight: 10, paddingLeft: 10}}>
                 <FlatList
+                    horizontal={true}
                     data={value.slice(1)}
                     keyExtractor={(item) => item.id}
-                    renderItem={({item}) => <Badge isActive={true} style={{marginBottom: 15}}
+                    renderItem={({item}) => <Badge isActive={true} style={{marginLeft: 20}}
                                                    onPress={() => navigation.navigate('Patient', {user: item.user})}>{item.time}</Badge>}
                 />
             </Container>
@@ -89,5 +90,5 @@ export const PatientsScheduleScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {flex: 0.4}
+    container: {flex: 0.45}
 });
