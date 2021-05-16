@@ -42,6 +42,7 @@ export const AddPatientScreen = () => {
                 });
             })
             .catch((e: any) => {
+                console.log(e.message)
                 alert('BAD');
             }).finally(() => setLoading(false));
     };

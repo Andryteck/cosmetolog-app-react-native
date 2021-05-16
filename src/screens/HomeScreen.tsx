@@ -24,10 +24,13 @@ import {RootStackParamList} from "../types/navigate";
 import {IAppointment} from "../api/patients";
 import {Schedule} from "../components/Schedule/Schedule";
 import moment from "moment"
+import {useNavigation, useRoute} from "@react-navigation/native";
 
 type Props = StackScreenProps<RootStackParamList, 'Home'>;
 
-export const HomeScreen: React.FC<Props> = ({navigation, route}) => {
+export const HomeScreen: React.FC<Props> = () => {
+    const navigation = useNavigation()
+    const route = useRoute()
     const [data, setData] = useState<AppointmentsType[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
     React.useLayoutEffect(() => {
