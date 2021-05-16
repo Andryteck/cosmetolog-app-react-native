@@ -5,7 +5,7 @@ import styled from 'styled-components/native';
 // @ts-ignore
 import Swipeable from 'react-native-swipeable-row';
 import {Item, Input} from 'native-base';
-import {IUser, patientAPI} from "../api/patients";
+import {patientAPI} from "../api/patients";
 import Appointment from "../components/Appointment/Appointment";
 import {PlusButton} from "../components/Buttons/PlusButton";
 import phoneFormat from "../utils/phoneFormat";
@@ -19,7 +19,6 @@ export const PatientsScreen: React.FC = () => {
     const route = useRoute()
 
     const {
-        // @ts-ignore
         patientsDispatch,
         // @ts-ignore
         patientsState: {
@@ -27,29 +26,16 @@ export const PatientsScreen: React.FC = () => {
         },
     } = useContext(GlobalContext);
 
-
-    // const [data, setData] = useState<Omit<IUser[], 'appointments'> | null>(null);
     const [searchValue, setSearchValue] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const fetchPatients = () => {
-        // setIsLoading(true);
-        // patientAPI
-        //     .getPatients()
-        //     .then(({data}) => {
-        //         setData(data.data.sort((a: { fullName: { localeCompare: (arg0: any) => IUser[]; }; }, b: { fullName: any; }): IUser[] => a.fullName.localeCompare(b.fullName)));
-        //     })
-        //     .finally(() => {
-        //         setIsLoading(false);
-        //     });
-
-
-    };
-
-    // @ts-ignore
-    useEffect(getPatients()(patientsDispatch), []);
-    // @ts-ignore
-    useEffect(getPatients()(patientsDispatch), [route.params]);
+    useEffect(() => {
+        getPatients()(patientsDispatch)
+    }, []);
+    useEffect(
+        () => {
+            getPatients()(patientsDispatch)
+        }, [route.params]);
 
     const onSearch = (e: any) => {
         setSearchValue(e.nativeEvent.text);
@@ -101,8 +87,7 @@ export const PatientsScreen: React.FC = () => {
                                 .indexOf(searchValue.toLowerCase()) >= 0
                     )}
                     keyExtractor={item => item._id}
-                    // @ts-ignore
-                    onRefresh={getPatients()(patientsDispatch)}
+                    onRefresh={() => getPatients()(patientsDispatch)}
                     refreshing={loading}
                     renderItem={({item}) => (
                         <Swipeable
@@ -120,17 +105,17 @@ export const PatientsScreen: React.FC = () => {
                                 </SwipeViewButton>
                             ]}
                         >
-                            {/*<Appointment*/}
-                            {/*    navigate={navigation.navigate}*/}
-                            {/*    // @ts-ignore*/}
-                            {/*    item={{*/}
-                            {/*        user: item,*/}
-                            {/*        procedure: phoneFormat((item.phone).toString())*/}
-                            {/*    }}*/}
-                            {/*    // @ts-ignore*/}
-                            {/*    fetchPatients={getPatients()(patientsDispatch)}*/}
-                            {/*    show={true}*/}
-                            {/*/>*/}
+                            <Appointment
+                                navigate={navigation.navigate}
+                                // @ts-ignore
+                                item={{
+                                    user: item,
+                                    procedure: phoneFormat((item.phone).toString())
+                                }}
+                                // @ts-ignore
+                                fetchPatients={() => getPatients()(patientsDispatch)}
+                                show={true}
+                            />
                         </Swipeable>
                     )}
                 />

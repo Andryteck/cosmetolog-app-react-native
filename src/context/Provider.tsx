@@ -2,7 +2,16 @@ import React, {createContext, useReducer} from 'react';
 import patientsInitialState from './initialStates/patiensInitialState'
 import patients from "./reducers/patients";
 
-export const GlobalContext = createContext({});
+type TState = {
+
+}
+
+type TContextProps  = {
+    state: TState;
+    patientsDispatch: ({type}:{type:string}) => void;
+}
+
+export const GlobalContext = createContext({} as TContextProps);
 type TProps = {}
 const GlobalProvider:React.FC<TProps> = ({children}) => {
     const [patientsState, patientsDispatch] = useReducer(

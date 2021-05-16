@@ -9,9 +9,9 @@ import GlobalProvider from './src/context/Provider';
 
 function App() {
     return (
-        // <GlobalProvider>
+        <GlobalProvider>
             <AppNavContainer/>
-        // </GlobalProvider>
+        </GlobalProvider>
     );
 }
 

@@ -23,10 +23,10 @@ export interface IProps {
 // @TODO  сделать красивый UI статуса
 const Appointment = ({item, navigate, index, fetchPatients, show}: IProps) => {
     const [values, setValues] = useState<{ [key: string]: string | number }>({
-        fullName: item?.user?.fullName,
-        phone: item?.user?.phone,
-        instagramUrl: item?.user?.instagramUrl,
-        status: item?.user?.status
+        fullName: item?.user?.fullName || '',
+        phone: item?.user?.phone || '',
+        instagramUrl: item.user?.instagramUrl || '',
+        status: item?.user?.status || ''
     });
     const handleChange = (name: string, e: any) => {
         const text = e.nativeEvent.text;
@@ -38,8 +38,9 @@ const Appointment = ({item, navigate, index, fetchPatients, show}: IProps) => {
     const avatarColors = getAvatarColor(item.user.fullName[0].toUpperCase());
 
     const changeStatus = () => {
+
         patientAPI
-            .changePatient(item.user._id, values)
+            .changePatient(item.user._id, values || 'надежный клиент')
             .then(() => fetchPatients && fetchPatients())
             .catch((e: any) => {
                 alert('BAD');
