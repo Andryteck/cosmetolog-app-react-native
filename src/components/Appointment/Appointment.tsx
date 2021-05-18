@@ -35,16 +35,17 @@ const Appointment = ({item, navigate, index, fetchPatients, show}: IProps) => {
             [name]: text,
         });
     };
-    const avatarColors = getAvatarColor(item.user.fullName[0].toUpperCase());
+    const avatarColors = getAvatarColor(item?.user?.fullName[0].toUpperCase());
 
     const changeStatus = () => {
-
-        patientAPI
-            .changePatient(item.user._id, values || 'надежный клиент')
-            .then(() => fetchPatients && fetchPatients())
-            .catch((e: any) => {
-                alert('BAD');
-            });
+        if (item) {
+            patientAPI
+                .changePatient(item.user._id, values || 'надежный клиент')
+                .then(() => fetchPatients && fetchPatients())
+                .catch((e: any) => {
+                    alert('BAD');
+                });
+        }
     }
 
     return (

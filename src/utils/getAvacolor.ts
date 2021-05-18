@@ -1,4 +1,4 @@
-export const getAvatarColor = (letter: string) => {
+export const getAvatarColor = (letter: string | undefined): {background: string, color: string} => {
     // @ts-ignore
     const charCode = letter.charCodeAt();
     if (charCode >= 1048 && charCode <= 1055) {

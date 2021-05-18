@@ -4,11 +4,11 @@
     "slug": "cosmetologApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/sveta.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#787878"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

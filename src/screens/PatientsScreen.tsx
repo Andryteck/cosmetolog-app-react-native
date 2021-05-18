@@ -20,7 +20,6 @@ export const PatientsScreen: React.FC = () => {
 
     const {
         patientsDispatch,
-        // @ts-ignore
         patientsState: {
             getPatients: {data, loading, error},
         },

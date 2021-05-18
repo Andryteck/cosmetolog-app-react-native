@@ -1,46 +1,40 @@
 import {
+    GET_APPOINTMENTS_FAIL,
+    GET_APPOINTMENTS_LOADING, GET_APPOINTMENTS_SUCCESS,
     GET_PATIENTS_FAIL,
     GET_PATIENTS_LOADING, GET_PATIENTS_SUCCESS
 
 } from '../../constants/actionTypes';
-import {IUser} from "../../api/patients";
 
-export type TPatientsState = {
-    getPatients: {
-        data: Omit<IUser[], 'appointments'>;
-        loading: boolean;
-        error: boolean ;
-    }
-};
 
-const patients = (state: TPatientsState, {type, payload}: any) => {
+const appointments = (state: any, {type, payload}: any) => {
     switch (type) {
-        case GET_PATIENTS_LOADING:
+        case GET_APPOINTMENTS_LOADING:
             return {
                 ...state,
-                getPatients: {
-                    ...state.getPatients,
+                getAppointments: {
+                    ...state.getAppointments,
                     loading: true,
                     error: null,
                 },
             };
 
-        case GET_PATIENTS_SUCCESS:
+        case GET_APPOINTMENTS_SUCCESS:
             return {
                 ...state,
-                getPatients: {
-                    ...state.getPatients,
+                getAppointments: {
+                    ...state.getAppointments,
                     loading: false,
                     data: payload,
                     error: null,
                 },
             };
 
-        case GET_PATIENTS_FAIL:
+        case GET_APPOINTMENTS_FAIL:
             return {
                 ...state,
-                getPatients: {
-                    ...state.getPatients,
+                getAppointments: {
+                    ...state.getAppointments,
                     loading: false,
                     error: payload,
                 },
@@ -50,4 +44,4 @@ const patients = (state: TPatientsState, {type, payload}: any) => {
     }
 };
 
-export default patients;
+export default appointments;

@@ -1,27 +1,35 @@
 import React, {createContext, useReducer} from 'react';
 import patientsInitialState from './initialStates/patiensInitialState'
-import patients from "./reducers/patients";
+import appointmentInitialState from './initialStates/appointmentsInitialState'
+import patients, {TPatientsState} from "./reducers/patients";
+import appointments from "./reducers/appointments";
 
 type TState = {
 
 }
 
 type TContextProps  = {
-    state: TState;
-    patientsDispatch: ({type}:{type:string}) => void;
+    patientsState: TPatientsState,
+    appointmentState,
+    patientsDispatch: ({type}:{type:string}) => void,
+    appointmentDispatch: ({type}:{type:string}) => void,
 }
 
-export const GlobalContext = createContext({} as TContextProps);
+export const GlobalContext = createContext<Partial<TContextProps>>({})
 type TProps = {}
 const GlobalProvider:React.FC<TProps> = ({children}) => {
     const [patientsState, patientsDispatch] = useReducer(
         patients,
         patientsInitialState,
     );
+    const [appointmentState, appointmentDispatch] = useReducer(
+        appointments,
+        appointmentInitialState,
+    );
 
     return (
         <GlobalContext.Provider
-            value={{patientsState, patientsDispatch}}>
+            value={{patientsState,appointmentState,appointmentDispatch, patientsDispatch}}>
             {children}
         </GlobalContext.Provider>
     );

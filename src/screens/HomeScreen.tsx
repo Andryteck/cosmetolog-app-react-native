@@ -36,7 +36,7 @@ export const HomeScreen: React.FC<Props> = () => {
     React.useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <Users />
+                <Users/>
             ),
             headerLeft: () => (
                 <Schedule navigation={navigation}/>
@@ -97,22 +97,26 @@ export const HomeScreen: React.FC<Props> = () => {
     }
 
     useEffect(() => {
-        let timerId: NodeJS.Timeout
+        // let timerId: NodeJS.Timeout
         data.forEach((item, index) => {
-            if (moment().format('YYYY-MM-DD') <= item.data[0].date) {
-                timerId && clearTimeout(timerId)
-                timerId = setTimeout(() => {
-                    refCurrent.current.scrollToLocation({
-                        itemIndex: 0,
-                        sectionIndex: index,
-                        animated: false,
-                        viewPosition: 0
-                    })
-                    // за 50ms
-                }, 50)
+            console.log('index1', index)
+            if (moment().format('YYYY-MM-DD') < item.data[0].date) {
+                // timerId = setTimeout(() => {
+                console.log('index2', index)
+                refCurrent.current.scrollToLocation({
+                    itemIndex: 0,
+                    sectionIndex: index,
+                    animated: true,
+                    viewPosition: 0
+                })
+                // за 50ms
+                // }, 0)
             }
         })
-    }, [data, refCurrent])
+        return () => {
+            // timerId && clearTimeout(timerId)
+        }
+    }, [data])
 
     const ITEM_HEIGHT = 20;
     const getItemLayout = (data: any, index: any) => ({
@@ -120,9 +124,34 @@ export const HomeScreen: React.FC<Props> = () => {
         offset: ITEM_HEIGHT * index,
         index,
     });
+
+    const renderItem = useCallback(({item, index}: { item: IAppointment, index: number }): JSX.Element => {
+        const {_id,} = item
+        return (
+            <Swipeable
+                rightButtons={[
+                    <SwipeViewButton style={{backgroundColor: '#B4C1CB'}}
+                                     onPress={() => navigation.navigate('ChangeAppointment', item)}
+                    >
+                        <Ionicons name="md-create" size={28} color="white"/>
+                    </SwipeViewButton>,
+                    <SwipeViewButton
+                        onPress={() => removeAppointment(_id)}
+                        style={{backgroundColor: '#F85A5A'}}
+                    >
+                        <Ionicons name="ios-close" size={48} color="white"/>
+                    </SwipeViewButton>
+                ]}>
+                <Appointment navigate={navigation.navigate} item={item} index={index} show={false}/>
+            </Swipeable>
+        )
+    }, [data])
+
     return (
         <Container>
             <SectionList
+                // @ts-ignore
+                renderItem={renderItem}
                 sections={data}
                 //@ts-ignore
                 ref={(ref) => (refCurrent.current = ref)}
@@ -130,36 +159,19 @@ export const HomeScreen: React.FC<Props> = () => {
                 onRefresh={fetchAppointments}
                 refreshing={isLoading}
                 getItemLayout={getItemLayout}
-                // onLayout={scrollToInitialPosition}
-                renderItem={({item, index}) =>
-                    <Swipeable
-                        rightButtons={[
-                            <SwipeViewButton style={{backgroundColor: '#B4C1CB'}}
-                                             onPress={() => navigation.navigate('ChangeAppointment', item)}
-                            >
-                                <Ionicons name="md-create" size={28} color="white"/>
-                            </SwipeViewButton>,
-                            <SwipeViewButton
-                                onPress={() => removeAppointment(item._id)}
-                                style={{backgroundColor: '#F85A5A'}}
-                            >
-                                <Ionicons name="ios-close" size={48} color="white"/>
-                            </SwipeViewButton>
-                        ]}>
-                        <Appointment navigate={navigation.navigate} item={item} index={index} show={false}/>
-                    </Swipeable>
-                }
-                renderSectionHeader={({section: {title}}) => (
+                renderSectionFooter={() => <View style={{height: 30}}></View>}
+                    // onLayout={scrollToInitialPosition}
+                    renderSectionHeader={({section: {title}}) => (
                     <SectionTitle>{title}</SectionTitle>
-                )}
-            />
-            <PlusButton onPress={() => navigation.navigate('AddPatient')}/>
-        </Container>
-    );
-};
+                    )}
+                    />
+                    <PlusButton onPress={() => navigation.navigate('AddPatient')}/>
+                    </Container>
+                    );
+                };
 
 
-const SwipeViewButton = styled(TouchableOpacity)`
+                    const SwipeViewButton = styled(TouchableOpacity)`
   width: 100px;
   height: 100%;
   display: flex;
@@ -168,7 +180,7 @@ const SwipeViewButton = styled(TouchableOpacity)`
 `;
 
 
-const Container = styled(View)`
+                    const Container = styled(View)`
   flex: 1;
 `;
 
