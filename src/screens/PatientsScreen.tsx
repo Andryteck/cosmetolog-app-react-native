@@ -6,7 +6,7 @@ import styled from 'styled-components/native';
 import Swipeable from 'react-native-swipeable-row';
 import {Item, Input} from 'native-base';
 import {patientAPI} from "../api/patients";
-import Appointment from "../components/Appointment/Appointment";
+import Appointment from "../components/SectionAppointment/Appointment/Appointment";
 import {PlusButton} from "../components/Buttons/PlusButton";
 import phoneFormat from "../utils/phoneFormat";
 import {useNavigation, useRoute} from "@react-navigation/native";

@@ -1,4 +1,4 @@
-import React, {MutableRefObject, useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {
     SectionList,
     TouchableOpacity,
@@ -10,11 +10,8 @@ import {
     PixelRatio,
     InteractionManager
 } from 'react-native';
-// @ts-ignore
-import Swipeable from 'react-native-swipeable-row';
-import Appointment from '../components/Appointment/Appointment';
+import sectionListGetItemLayout from 'react-native-section-list-get-item-layout'
 import SectionTitle from '../components/SectionTitle/SectionTitle';
-import {Ionicons} from '@expo/vector-icons';
 import styled from 'styled-components';
 import {appointmentAPI, AppointmentsType} from "../api/appointments";
 import {PlusButton} from "../components/Buttons/PlusButton";
@@ -25,6 +22,7 @@ import {IAppointment} from "../api/patients";
 import {Schedule} from "../components/Schedule/Schedule";
 import moment from "moment"
 import {useNavigation, useRoute} from "@react-navigation/native";
+import {SectionAppointment} from "../components/SectionAppointment";
 
 type Props = StackScreenProps<RootStackParamList, 'Home'>;
 
@@ -55,12 +53,9 @@ export const HomeScreen: React.FC<Props> = () => {
             })
     }
     const loadAppointments = useCallback(async () => await fetchAppointments(), [fetchAppointments])
-    useEffect(() => {
-        loadAppointments()
-    }, [])
 
     useEffect(() => {
-        loadAppointments()
+        loadAppointments();
     }, [route.params]);
 
     const removeAppointment = (id: string) => {
@@ -92,95 +87,84 @@ export const HomeScreen: React.FC<Props> = () => {
         );
     }
     let refCurrent = useRef<any>(null)
-    const getCurrentScroll = () => {
-
-    }
 
     useEffect(() => {
-        // let timerId: NodeJS.Timeout
-        data.forEach((item, index) => {
-            console.log('index1', index)
-            if (moment().format('YYYY-MM-DD') < item.data[0].date) {
-                // timerId = setTimeout(() => {
-                console.log('index2', index)
+        const currentDateSectionIndex = data.findIndex((item) => (
+           moment().isSame(item.data[0].date, 'day')
+        ));
+        let timer: NodeJS.Timeout;
+        if (currentDateSectionIndex > 0) {
+            timer = setTimeout(() => {
                 refCurrent.current.scrollToLocation({
                     itemIndex: 0,
-                    sectionIndex: index,
+                    sectionIndex: currentDateSectionIndex,
                     animated: true,
-                    viewPosition: 0
-                })
-                // за 50ms
-                // }, 0)
-            }
-        })
-        return () => {
-            // timerId && clearTimeout(timerId)
+                    viewPosition: 0,
+                });
+            }, 500);
         }
+        return () => clearTimeout(timer);
     }, [data])
 
-    const ITEM_HEIGHT = 20;
-    const getItemLayout = (data: any, index: any) => ({
-        length: ITEM_HEIGHT,
-        offset: ITEM_HEIGHT * index,
-        index,
+    // const ITEM_HEIGHT = 101;
+
+    const getItemLayout = sectionListGetItemLayout({
+        getItemHeight: () => 101,
+        getSectionHeaderHeight: () => 86.7,
     });
 
+
     const renderItem = useCallback(({item, index}: { item: IAppointment, index: number }): JSX.Element => {
-        const {_id,} = item
+        const {_id} = item
+        // const swipeableItemRefs = useRef([]);
+        // const toggleSwipeable = (key) => {
+        //     swipeableItemRefs.current.forEach((ref, i) => {
+        //         if (ref.id !== key) {
+        //             swipeableItemRefs.current?.[i]?.swipeable?.close();
+        //         }
+        //     });
+        // };
         return (
-            <Swipeable
-                rightButtons={[
-                    <SwipeViewButton style={{backgroundColor: '#B4C1CB'}}
-                                     onPress={() => navigation.navigate('ChangeAppointment', item)}
-                    >
-                        <Ionicons name="md-create" size={28} color="white"/>
-                    </SwipeViewButton>,
-                    <SwipeViewButton
-                        onPress={() => removeAppointment(_id)}
-                        style={{backgroundColor: '#F85A5A'}}
-                    >
-                        <Ionicons name="ios-close" size={48} color="white"/>
-                    </SwipeViewButton>
-                ]}>
-                <Appointment navigate={navigation.navigate} item={item} index={index} show={false}/>
-            </Swipeable>
+           <SectionAppointment id={_id} removeAppointment={removeAppointment} item={item} index={index} />
         )
     }, [data])
 
+//     const viewabilityConfig = {
+//         waitForInteraction: true,
+//         // At least one of the viewAreaCoveragePercentThreshold or itemVisiblePercentThreshold is required.
+//         viewAreaCoveragePercentThreshold: 95,
+//         // itemVisiblePercentThreshold: 75
+//     }
+// const onViewableItemsChanged = ({viewableItems, changed}) => {
+//     console.log("Visible items are", viewableItems);
+//     console.log("Changed in this iteration", changed);
+// };
     return (
         <Container>
             <SectionList
-                // @ts-ignore
                 renderItem={renderItem}
                 sections={data}
-                //@ts-ignore
                 ref={(ref) => (refCurrent.current = ref)}
+                // viewabilityConfig={viewabilityConfig}
+                // onViewableItemsChanged={onViewableItemsChanged}
                 keyExtractor={(item: IAppointment) => item._id}
-                onRefresh={fetchAppointments}
+                onRefresh={loadAppointments}
                 refreshing={isLoading}
+                // @ts-ignore
                 getItemLayout={getItemLayout}
-                renderSectionFooter={() => <View style={{height: 30}}></View>}
-                    // onLayout={scrollToInitialPosition}
-                    renderSectionHeader={({section: {title}}) => (
+                renderSectionHeader={({section: {title}}) => (
                     <SectionTitle>{title}</SectionTitle>
-                    )}
-                    />
-                    <PlusButton onPress={() => navigation.navigate('AddPatient')}/>
-                    </Container>
-                    );
-                };
+                )}
+                contentContainerStyle={{ paddingBottom: 30 }}
+            />
+            <PlusButton onPress={() => navigation.navigate('AddPatient')}/>
+        </Container>
+    );
+};
 
 
-                    const SwipeViewButton = styled(TouchableOpacity)`
-  width: 100px;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
-
-                    const Container = styled(View)`
+const Container = styled(View)`
   flex: 1;
 `;
 

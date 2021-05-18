@@ -53,6 +53,7 @@
     "react-native-swipeable-row": "^0.8.1",
     "react-native-text-avatar": "^1.0.7",
     "react-native-web": "~0.13.12",
+    "sectionlist-get-itemlayout": "^1.0.8",
     "styled-components": "^5.2.1"
   },
   "devDependencies": {

@@ -2,14 +2,14 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 
-import GrayText from '../GrayText/GrayText';
-import Badge from '../Badge/Badge';
+import GrayText from '../../GrayText/GrayText';
+import Badge from '../../Badge/Badge';
 
-import {getAvatarColor} from '../../utils/getAvacolor';
+import {getAvatarColor} from '../../../utils/getAvacolor';
 import {Input, Item} from "native-base";
-import {IAppointment, patientAPI} from '../../api/patients';
+import {IAppointment, patientAPI} from '../../../api/patients';
 import {StackNavigationProp} from "@react-navigation/stack";
-import {RootStackParamList} from "../../types/navigate";
+import {RootStackParamList} from "../../../types/navigate";
 
 
 export interface IProps {
@@ -49,7 +49,9 @@ const Appointment = ({item, navigate, index, fetchPatients, show}: IProps) => {
     }
 
     return (
-        <GroupItem onPress={() => navigate('Patient', item)}>
+        <GroupItem onPress={() => navigate('Patient', item)} onLayout={(event) => {
+            const {height} = event.nativeEvent.layout;
+        }}>
             <Avatar
                 style={{
                     backgroundColor: avatarColors.background

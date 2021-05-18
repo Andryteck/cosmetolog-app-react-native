@@ -12285,6 +12285,11 @@ schema-utils@^3.0.0:
     ajv "^6.12.5"
     ajv-keywords "^3.5.2"
 
+sectionlist-get-itemlayout@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/sectionlist-get-itemlayout/-/sectionlist-get-itemlayout-1.0.8.tgz#83a131b7029b83d43fba86f195a84ee6d2a6216d"
+  integrity sha512-Oq/ds5IYuje7yIOVfwRE/D8jLYA7DUSbXqyRVvhEw1EADbJdJuwBEriMfe3EBFnLi8TZGk8AyFoAReGLKdeHMQ==
+
 select-hose@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"

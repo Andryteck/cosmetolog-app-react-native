@@ -18,7 +18,7 @@ import {AppointmentCard} from '../components/AppointmentCard/AppointmentCard';
 import {RouteProp} from "@react-navigation/native";
 import {RootStackParamList} from "../types/navigate";
 import {StackNavigationProp} from "@react-navigation/stack";
-import Appointment from "../components/Appointment/Appointment";
+import Appointment from "../components/SectionAppointment/Appointment/Appointment";
 
 type PatientScreenRouteProp = RouteProp<RootStackParamList, 'Patient'>;
 type PatientScreenNavigationProp = StackNavigationProp<RootStackParamList,
