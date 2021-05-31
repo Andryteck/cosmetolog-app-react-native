@@ -1,7 +1,8 @@
 import {TouchableOpacity, View} from "react-native";
-import React, {useRef} from "react";
+import React from "react";
 import {Ionicons} from "@expo/vector-icons";
-import Swipeable from "react-native-gesture-handler/Swipeable";
+// @ts-ignore
+import Swipeable from 'react-native-swipeable-row';
 import {useNavigation} from "@react-navigation/native";
 import Appointment from "./Appointment/Appointment";
 import styled from "styled-components";

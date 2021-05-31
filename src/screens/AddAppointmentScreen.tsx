@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Keyboard, NativeSyntheticEvent, Text, TextInputChangeEventData, View} from 'react-native';
 import {Item, Input, Label} from 'native-base';
 import styled from 'styled-components';
@@ -24,10 +24,10 @@ export const AddAppointmentScreen = ({navigation, route}: any) => {
 
     const {_id} = route.params
 
-    const [values, setValues] = useState<any>({
+    const [values, setValues] = useState<IValues>({
         date: "",
-        preporation: "Дермарен",
-        price: 160,
+        preporation: "Дерм",
+        price: 170,
         procedure: "Губы",
         time: "",
         user: _id,
@@ -36,7 +36,36 @@ export const AddAppointmentScreen = ({navigation, route}: any) => {
         setDatePickerVisibility(!isDatePickerVisible)
         Keyboard.dismiss()
     }
-
+    useEffect(() => {
+        switch (values.preporation) {
+            case 'Дерм':
+                setValues({
+                    ...values,
+                    price: 170
+                })
+                break
+            case 'Рэдж':
+                setValues({
+                    ...values,
+                    price: 150
+                })
+                break
+            case 'Стил':
+                setValues({
+                    ...values,
+                    price: 210
+                })
+                break
+            case 'Ювик':
+                setValues({
+                    ...values,
+                    price: 230
+                })
+                break
+            default:
+              return
+        }
+    }, [values.preporation])
     const setFieldValue = (name: string, value: string) => {
         setValues({
             ...values,
@@ -87,7 +116,7 @@ export const AddAppointmentScreen = ({navigation, route}: any) => {
                     });
                 }
             }).finally(() => {
-                return setLoading(false)
+            return setLoading(false)
         });
     };
 
