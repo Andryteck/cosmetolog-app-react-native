@@ -7,7 +7,7 @@ import {
 } from '../../constants/actionTypes';
 
 
-const appointments = (state: any, {type, payload}: any) => {
+const appointments = (state: any, {type, payload}: {type: string, payload: any}) => {
     switch (type) {
         case GET_APPOINTMENTS_LOADING:
             return {

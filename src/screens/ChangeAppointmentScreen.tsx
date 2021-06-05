@@ -74,6 +74,7 @@ export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
     };
 
     const onSubmit = () => {
+        setLoading(true)
         const newValues: Appointment = {
             ...values,
             date: moment(commonDate).format('YYYY-MM-DD'),
@@ -92,7 +93,7 @@ export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
                         alert(`Ошибка! Поле "${fieldsName[fieldName]}" указано неверно.`);
                     });
                 }
-            });
+            }).finally(() => setLoading(false));
     };
 
     return (

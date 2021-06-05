@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
-import {NativeSyntheticEvent, Text, TextInputChangeEventData, View} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {Alert, NativeSyntheticEvent, Text, TextInputChangeEventData, View} from 'react-native';
 import {Item, Input, Label} from 'native-base';
 import styled from 'styled-components';
 import Button from '../components/Buttons/Button';
 import Container from "../components/Container/Container";
 import {patientAPI} from "../api/patients";
-import {useNavigation} from "@react-navigation/native";
+import {useFocusEffect, useNavigation} from "@react-navigation/native";
 
 type IForm = {
     _id: string,
@@ -26,7 +26,11 @@ export const AddPatientScreen = () => {
             [name]: text,
         });
     };
-
+    useFocusEffect(
+        useCallback(() => {
+            return () => setValues({} as IForm)
+        }, [])
+)
     const onSubmit = () => {
         setLoading(true)
         patientAPI
@@ -78,7 +82,7 @@ export const AddPatientScreen = () => {
             </Item>
             <ButtonView>
                 <Button onPress={onSubmit} color='#87CC6F' disabled={loading} loading={loading}>
-                   Добавить пациента
+                    Добавить пациента
                 </Button>
             </ButtonView>
         </Container>

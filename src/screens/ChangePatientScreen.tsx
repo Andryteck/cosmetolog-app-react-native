@@ -28,6 +28,7 @@ export const ChangePatientScreen = ({navigation, route}: any) => {
     };
 
     const onSubmit = () => {
+        setLoading(true)
         patientAPI
             .changePatient(item._id, values)
             .then(() => {
@@ -35,7 +36,7 @@ export const ChangePatientScreen = ({navigation, route}: any) => {
             })
             .catch((e: any) => {
                 alert('BAD');
-            });
+            }).finally(() => setLoading(false));
     };
 
     return (

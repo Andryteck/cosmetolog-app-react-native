@@ -62,6 +62,12 @@ export const AddAppointmentScreen = ({navigation, route}: any) => {
                     price: 230
                 })
                 break
+            case 'Коррекция':
+                setValues({
+                    ...values,
+                    price: 0
+                })
+                break
             default:
               return
         }

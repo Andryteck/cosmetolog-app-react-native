@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {FlatList, Alert, View, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {FlatList, Alert, View, TouchableOpacity, ActivityIndicator, NativeSyntheticEvent} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import styled from 'styled-components/native';
 // @ts-ignore
@@ -36,7 +36,7 @@ export const PatientsScreen: React.FC = () => {
             getPatients()(patientsDispatch)
         }, [route.params]);
 
-    const onSearch = (e: any) => {
+    const onSearch = (e: NativeSyntheticEvent<any>) => {
         setSearchValue(e.nativeEvent.text);
     };
 
@@ -73,7 +73,7 @@ export const PatientsScreen: React.FC = () => {
         <Container>
             <View style={{padding: 20}}>
                 <Item style={{paddingLeft: 15, borderRadius: 30}} regular>
-                    <Input onChange={onSearch} placeholder="Поиск..." style={{paddingBottom: 0}}/>
+                    <Input onChange={onSearch} placeholder="Поиск..." style={{paddingBottom: 15}}/>
                 </Item>
             </View>
 

@@ -13,7 +13,7 @@ export type TPatientsState = {
     }
 };
 
-const patients = (state: TPatientsState, {type, payload}: any) => {
+const patients = (state: TPatientsState, {type, payload}: {type: string, payload: any}) => {
     switch (type) {
         case GET_PATIENTS_LOADING:
             return {
