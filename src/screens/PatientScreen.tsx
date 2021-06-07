@@ -35,6 +35,8 @@ export const PatientScreen: React.FC<Props> = ({route, navigation}) => {
     // @ts-ignore
     const {user} = route.params;
     console.log(user)
+
+
     const showAppointments = () => {
         setIsLoading(true)
         patientAPI.showAppointments(user._id)
@@ -131,8 +133,9 @@ export const PatientScreen: React.FC<Props> = ({route, navigation}) => {
                         keyExtractor={(item: IAppointment) => item._id}
                         onRefresh={showAppointments}
                         refreshing={isLoading}
-                        renderItem={({item}) => <AppointmentCard item={item} showAppointments={showAppointments}
-                                                                 navigation={navigation}/>}
+                        renderItem={({item}: { item: IAppointment }) => <AppointmentCard item={item}
+                                                                                         showAppointments={showAppointments}
+                                                                                         navigation={navigation}/>}
                     />
                 </Container>
             </PatientAppointments>

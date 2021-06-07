@@ -7,7 +7,7 @@ const instance = axios.create({
 
 export const ratesApi = {
     getUSDRates() {
-        return instance.get<RatesType[]>('kursExchange?city=Щучин')
+        return instance.get<RatesType[]>('kursExchange?city=Минск')
     }
 }
 

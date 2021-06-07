@@ -6,10 +6,17 @@ import styled from "styled-components";
 import {appointmentAPI} from "../../api/appointments";
 import {ratesApi} from "../../api/rates";
 import {Picker} from "native-base";
+import {IAppointment} from "../../api/patients";
 
-export const AppointmentCard = ({item, showAppointments, navigation}: any) => {
+type TProps = {
+    item: IAppointment,
+    showAppointments: () => void,
+    navigation: any
+}
+
+export const AppointmentCard: React.FC<TProps> = ({item, showAppointments, navigation}) => {
     const [show, setIsShow] = useState<boolean>(false)
-    const [rate, setRate] = useState<number | undefined | null>(null)
+    const [rate, setRate] = useState<number | null>(null)
     const [disabled, setDisabled] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -48,9 +55,10 @@ export const AppointmentCard = ({item, showAppointments, navigation}: any) => {
     useEffect(() => {
         ratesApi.getUSDRates().then(({data}) => {
             const rate = data.map(i => i.USD_out)
-            setRate(+rate[0])
+            // @ts-ignore
+            setRate(+rate[0] * item.price)
         })
-    }, [])
+    }, [rate])
 
     const handlePick = (value: string) => {
         setTimeout(() => {

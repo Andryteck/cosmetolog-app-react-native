@@ -7,6 +7,14 @@ import Container from "../components/Container/Container";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {appointmentAPI} from "../api/appointments";
 import moment from "moment";
+import {useFieldsAutoComplete} from "../hooks/useFieldsAutoComplete"
+import {RouteProp, useNavigation, useRoute} from "@react-navigation/native";
+
+type ParamList = {
+    AddAppointment: {
+        _id: string;
+    };
+};
 
 export interface IValues {
     date: Date | string,
@@ -17,61 +25,20 @@ export interface IValues {
     user?: string,
 }
 
-export const AddAppointmentScreen = ({navigation, route}: any) => {
-    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+export const AddAppointmentScreen: React.FC = () => {
+    const navigation = useNavigation<any>()
+    const route = useRoute<RouteProp<ParamList, 'AddAppointment'>>()
+    const {_id} = route.params
+    const [isDatePickerVisible, setDatePickerVisibility] = useState<boolean>(false);
     const [commonDate, setCommonDate] = useState(new Date());
     const [loading, setLoading] = useState<boolean>(false);
+    const {values, setValues} = useFieldsAutoComplete({_id})
 
-    const {_id} = route.params
-
-    const [values, setValues] = useState<IValues>({
-        date: "",
-        preporation: "Дерм",
-        price: 170,
-        procedure: "Губы",
-        time: "",
-        user: _id,
-    });
     const openDatePicker = () => {
         setDatePickerVisibility(!isDatePickerVisible)
         Keyboard.dismiss()
     }
-    useEffect(() => {
-        switch (values.preporation) {
-            case 'Дерм':
-                setValues({
-                    ...values,
-                    price: 170
-                })
-                break
-            case 'Рэдж':
-                setValues({
-                    ...values,
-                    price: 150
-                })
-                break
-            case 'Стил':
-                setValues({
-                    ...values,
-                    price: 210
-                })
-                break
-            case 'Ювик':
-                setValues({
-                    ...values,
-                    price: 230
-                })
-                break
-            case 'Коррекция':
-                setValues({
-                    ...values,
-                    price: 0
-                })
-                break
-            default:
-              return
-        }
-    }, [values.preporation])
+
     const setFieldValue = (name: string, value: string) => {
         setValues({
             ...values,
@@ -88,8 +55,9 @@ export const AddAppointmentScreen = ({navigation, route}: any) => {
         setDatePickerVisibility(!isDatePickerVisible)
     };
 
-    const handleConfirm = (date: any) => {
+    const handleConfirm = (date: Date) => {
         console.warn("A date has been picked: ", date);
+        // @ts-ignore
         setCommonDate(new Date(Date.parse(date)))
         hideDatePicker();
     };

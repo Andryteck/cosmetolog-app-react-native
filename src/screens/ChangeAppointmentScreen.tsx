@@ -17,8 +17,9 @@ import {RootStackParamList} from "../types/navigate";
 import {RouteProp} from '@react-navigation/native';
 import {Appointment} from '../types/appointment';
 import {StackNavigationProp} from "@react-navigation/stack";
+import {useFieldsAutoComplete} from "../hooks/useFieldsAutoComplete";
 
-type ChangeAppointmentScreenRouteProp = RouteProp<RootStackParamList, 'ChangeAppointment'>;
+export type ChangeAppointmentScreenRouteProp = RouteProp<RootStackParamList, 'ChangeAppointment'>;
 type ChangeAppointmentScreenNavigationProp = StackNavigationProp<RootStackParamList,
     'ChangeAppointment'>;
 
@@ -31,14 +32,7 @@ export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [commonDate, setCommonDate] = useState(new Date(route?.params?.date + 'T' + route?.params?.time));
     const [loading, setLoading] = useState<boolean>(false);
-    const [values, setValues] = useState<Appointment>({
-        date: route?.params?.date,
-        preporation: route?.params?.preporation,
-        price: route?.params?.price.toString(),
-        procedure: route?.params?.procedure,
-        time: route?.params?.time,
-    });
-
+    const {values, setValues} = useFieldsAutoComplete({_id: '', route})
     const openDatePicker = () => {
         setDatePickerVisibility(!isDatePickerVisible)
         Keyboard.dismiss()
@@ -75,10 +69,11 @@ export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
 
     const onSubmit = () => {
         setLoading(true)
+        // @ts-ignore
         const newValues: Appointment = {
             ...values,
             date: moment(commonDate).format('YYYY-MM-DD'),
-            time: moment(commonDate).format('HH:mm')
+            time: moment(commonDate).format('HH:mm'),
         }
         appointmentAPI
             .changeAppointments(route?.params?._id, newValues)
@@ -120,7 +115,7 @@ export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
                     <Label>Цена</Label>
                     <Input
                         onChange={handleInputChange.bind(null, 'price')}
-                        value={values.price}
+                        value={values.price.toString()}
                         keyboardType="numeric"
                         style={{marginTop: 12}}
                     />

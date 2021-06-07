@@ -73,7 +73,7 @@ export const PatientsScreen: React.FC = () => {
         <Container>
             <View style={{padding: 20}}>
                 <Item style={{paddingLeft: 15, borderRadius: 30}} regular>
-                    <Input onChange={onSearch} placeholder="Поиск..." style={{paddingBottom: 15}}/>
+                    <Input onChange={onSearch} placeholder="Поиск..." style={{top: 0}}/>
                 </Item>
             </View>
 
