@@ -5,7 +5,17 @@ import {
     GET_PATIENTS_LOADING, GET_PATIENTS_SUCCESS
 
 } from '../../constants/actionTypes';
+import {IAppointment} from "../../api/patients";
+import {AppointmentsType} from "../../api/appointments";
 
+
+export type TAppointmentState = {
+    getAppointments: {
+        data: AppointmentsType[]
+        loading: boolean
+        error: boolean
+    }
+};
 
 const appointments = (state: any, {type, payload}: {type: string, payload: any}) => {
     switch (type) {

@@ -21,7 +21,7 @@ export const useFieldsAutoComplete = ({_id, route}: TProps) => {
             case 'Дерм':
                 setValues({
                     ...values,
-                    price: 170
+                    price: 180
                 })
                 break
             case 'Рэдж':

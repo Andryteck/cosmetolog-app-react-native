@@ -1,19 +1,21 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {TouchableOpacity} from "react-native";
 import {Ionicons} from '@expo/vector-icons';
 import {AppointmentsType} from "../../api/appointments";
-import {useNavigation} from "@react-navigation/native";
+import {useNavigation, useRoute} from "@react-navigation/native";
 interface IProps {
-
+    isCalendar: boolean
 }
-export const Users:React.FC<IProps> = () => {
+export const Users:React.FC<IProps> = ({isCalendar}) => {
     const navigation = useNavigation()
+    const route = useRoute()
+
     return (
         <>
             <TouchableOpacity
                 onPress={() => navigation.navigate('Patients')}
                 style={{marginRight: 20}}>
-                <Ionicons name="md-people" size={28} color="black"/>
+                <Ionicons name="md-people" size={28} color={isCalendar ? 'rgb(81, 21,212)' : 'black'}/>
             </TouchableOpacity>
         </>
     );

@@ -13,7 +13,7 @@ import React from "react";
 const AppNavigator = () => {
     const Stack = createStackNavigator<RootStackParamList>();
     return (
-    <Stack.Navigator initialRouteName={'Home'}>
+    <Stack.Navigator initialRouteName={'PatientsSchedule'}>
         <Stack.Screen
             name="Home"
             component={HomeScreen}
@@ -26,7 +26,8 @@ const AppNavigator = () => {
         <Stack.Screen name="Patients" component={PatientsScreen} options={{title: 'Пациенты', headerTintColor: '#2A86FF'  }} />
         <Stack.Screen name="ChangePatient" component={ChangePatientScreen} options={{title: 'Изменить пациента', headerTintColor: '#2A86FF'  }} />
         <Stack.Screen name="ChangeAppointment" component={ChangeAppointmentScreen} options={{title: 'Изменить прием', headerTintColor: '#2A86FF'  }} />
-        <Stack.Screen name="PatientsSchedule" component={PatientsScheduleScreen} options={{title: 'График приемов', headerTintColor: '#2A86FF'  }} />
+        <Stack.Screen name="PatientsSchedule" component={PatientsScheduleScreen} options={{title: 'График приемов', headerTintColor: 'rgb(81, 21,212)', headerStyle: {backgroundColor: 'rgb(229,229,234)'}, headerTitleStyle:{fontSize: 22 }}} />
+        {/*<Stack.Screen name="TestTwo" component={TestTwo} options={{title: 'График приемов', headerTintColor: 'black'  }} />*/}
     </Stack.Navigator>
     )
 }

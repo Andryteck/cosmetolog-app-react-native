@@ -1,12 +1,18 @@
 import {
-    GET_PATIENTS_LOADING ,
-GET_PATIENTS_SUCCESS ,
-GET_PATIENTS_FAIL,
+    GET_PATIENTS_LOADING,
+    GET_PATIENTS_SUCCESS,
+    GET_PATIENTS_FAIL, IActions,
 } from '../../../constants/actionTypes';
 import {Dispatch} from "react";
 import {IUser, patientAPI} from "../../../api/patients";
 
-export default () => (dispatch: Dispatch<any>) => {
+interface IGetPatients {
+    type: IActions['GET_PATIENTS_SUCCESS']
+    payload?: IUser[]
+    loading?: boolean
+}
+
+export default () => (dispatch: (arg: IGetPatients) => (IGetPatients)) => {
     dispatch({
         type: GET_PATIENTS_LOADING,
     });
