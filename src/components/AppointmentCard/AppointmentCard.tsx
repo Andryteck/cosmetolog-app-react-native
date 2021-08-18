@@ -80,13 +80,13 @@ export const AppointmentCard: React.FC<TProps> = ({item, showAppointments, navig
             {/*</MoreButton>*/}
 
             <Picker
-                mode="dialog"
-                style={{position: 'absolute', right: 0, width: 40, top: -5}}
-                iosIcon={<Ionicons name="md-more" size={24} style={{position: 'absolute'}}/>}
+                mode="dropdown"
+                style={{position: 'absolute', right: 0, width: undefined, top: -5 }}
+                iosIcon={<Ionicons name="md-more" size={24} style={{marginRight: 15}}/>}
                 selectedValue={undefined}
                 onValueChange={handlePick}
             >
-                <Picker.Item label="" value="11"/>
+
                 <Picker.Item label="Изменить" value="Изменить"/>
                 <Picker.Item label="Удалить" value="Удалить"/>
             </Picker>

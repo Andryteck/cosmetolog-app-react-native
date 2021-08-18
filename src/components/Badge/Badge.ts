@@ -3,45 +3,53 @@ import {Text, TextProps} from 'react-native';
 import {RefAttributes} from "react";
 
 export interface Props {
-  isActive?: boolean | undefined,
-  color?: string | undefined
+    isActive?: boolean | undefined,
+    color?: string | undefined
 }
 
-const getColor = ({ isActive, color }: Props) => {
-  const colors = {
-    green: {
-      background: 'rgba(132,210,105,0.21)',
-      color: '#61BB42',
-    },
-    active: {
-      background: '#2A86FF',
-      color: '#fff',
-    },
-    default: {
-      background: '#E9F5FF',
-      color: '#4294FF',
-    }
-  };
+const getColor = ({isActive, color}: Props) => {
+    const colors = {
+        green: {
+            background: 'rgba(132,210,105,0.21)',
+            color: '#61BB42',
+        },
+        active: {
+            background: '#2A86FF',
+            color: '#fff',
+        },
+        dashed: {
+            background: 'transparent',
+            color: 'black',
+        },
+        purple: {
+            background: 'rgb(129, 52,175)',
+            color: 'white',
+        },
+        default: {
+            background: '#E9F5FF',
+            color: '#4294FF',
+        }
+    };
 
-  if (isActive) {
-    return colors.active;
-  } else { // @ts-ignore
-    if (color && colors[color]) {
-      // @ts-ignore
-      return colors[color];
-    } else {
-      return colors.default;
+    if (isActive) {
+        return colors.active;
+    } else { // @ts-ignore
+        if (color && colors[color]) {
+            // @ts-ignore
+            return colors[color];
+        } else {
+            return colors.default;
+        }
     }
-  }
 };
 
 export default styled(Text)<Props>`
-background: ${(props: ThemedStyledProps<TextProps & RefAttributes<Text> & Props, any>) => getColor(props).background};
-color: ${(props: ThemedStyledProps<TextProps & RefAttributes<Text> & Props, any>) => getColor(props).color};
-font-weight: 600;
-font-size: 14px;
-width: 70px;
-height: 32px;
-text-align: center;
-line-height: 30px;
+  background: ${(props: ThemedStyledProps<TextProps & RefAttributes<Text> & Props, any>) => getColor(props).background};
+  color: ${(props: ThemedStyledProps<TextProps & RefAttributes<Text> & Props, any>) => getColor(props).color};
+  font-weight: 600;
+  font-size: 14px;
+  width: 70px;
+  height: 32px;
+  text-align: center;
+  line-height: 30px;
 `;

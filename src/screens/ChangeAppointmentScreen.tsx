@@ -78,7 +78,7 @@ export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
         appointmentAPI
             .changeAppointments(route?.params?._id, newValues)
             .then(() => {
-                navigation.navigate('Home', {lastUpdate: new Date()});
+                navigation.navigate('PatientsSchedule', {lastUpdate: new Date()});
             })
             .catch(e => {
                 if (e.response.data && e.response.data.message) {

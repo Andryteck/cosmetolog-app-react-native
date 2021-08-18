@@ -92,7 +92,7 @@ export const PatientScreen: React.FC<Props> = ({route, navigation}) => {
 
     useEffect(() => {
         showAppointments()
-    }, [user._id])
+    }, [user._id, navigation, route])
 
     return (
         <View style={{flex: 1, backgroundColor: 'white'}}>

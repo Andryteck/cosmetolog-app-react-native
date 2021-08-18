@@ -1,29 +1,38 @@
-import styled from "styled-components";
-import {TouchableOpacity, View} from "react-native";
+import styled, {ThemedStyledProps} from "styled-components";
+import {TextProps, TouchableOpacity, View} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
-import React from "react";
+import React, {RefAttributes} from "react";
+import {Props} from "../Badge/Badge";
 
 interface IProps {
-    onPress: () => void
+    onPress?: () => void
+    isViolet?: boolean
 }
 
-export const PlusButton = ({onPress}:IProps) => {
+export const PlusButton = ({onPress, isViolet}:IProps) => {
     return (
-    <PlusBtn onPress={onPress}>
+    <PlusBtn onPress={onPress} isViolet={isViolet}>
         <Ionicons name="ios-add" size={35} color="white"/>
     </PlusBtn>
     )
 }
 
-const PlusBtn = styled(TouchableOpacity)`
+const getColor = (isViolet: boolean) => {
+    if (isViolet) {
+        return 'rgb(81, 21,212)'
+    }
+    return '#2A86FF'
+}
+
+const PlusBtn = styled(TouchableOpacity)<IProps>`
   align-items: center;
   justify-content: center;
   border-radius: 50px;
   width: 64px;
   height: 64px;
-  background: #2A86FF;
+  background: ${(props: any) => getColor(props.isViolet)};
   position: absolute;
-  bottom: 25px;
+  bottom: ${(props: any) => props.isViolet ? -20 : 25};
   right: 25px;
   box-shadow: 0 0 8px #2a86ff;
 `;

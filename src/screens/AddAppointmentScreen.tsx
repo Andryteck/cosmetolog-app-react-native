@@ -79,7 +79,7 @@ export const AddAppointmentScreen: React.FC = () => {
         appointmentAPI
             .creatAppointment(newValues)
             .then(() => {
-                navigation.push('Home', {lastUpdate: new Date()});
+                navigation.push('PatientsSchedule', {lastUpdate: new Date()});
             })
             .catch(e => {
                 if (e.response.data && e.response.data.message) {
