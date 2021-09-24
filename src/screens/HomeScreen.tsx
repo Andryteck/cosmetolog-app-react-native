@@ -46,7 +46,8 @@ export const HomeScreen: React.FC<Props> = () => {
         setIsLoading(true)
         appointmentAPI.getAppointments()
             .then(data => {
-                setData(data.data.items)
+                // slice data when didn't emplement pagination
+                setData(data.data.items.slice(-data.data.items.length/2.8))
             })
             .finally(() => {
                 return setIsLoading(false)

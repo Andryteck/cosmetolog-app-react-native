@@ -8,7 +8,15 @@ export const appointmentsItems = [
         user: null,
     },
     {
+        time: '12:40',
+        user: null,
+    },
+    {
         time: '13:00',
+        user: null,
+    },
+    {
+        time: '13:20',
         user: null,
     },
     {
@@ -18,13 +26,23 @@ export const appointmentsItems = [
     {
         time: '14:00',
         user: null,
-    },{
+    }, {
         time: '14:30',
         user: null,
-    },{
+    },
+    {
+        time: '14:40',
+        user: null,
+    },
+    {
         time: '15:00',
         user: null,
-    },{
+    },
+    {
+        time: '15:20',
+        user: null,
+    },
+    {
         time: '15:30',
         user: null,
     },
@@ -37,7 +55,15 @@ export const appointmentsItems = [
         user: null,
     },
     {
+        time: '16:40',
+        user: null,
+    },
+    {
         time: '17:00',
+        user: null,
+    },
+    {
+        time: '17:20',
         user: null,
     },
     {
@@ -50,6 +76,10 @@ export const appointmentsItems = [
     },
     {
         time: '18:30',
+        user: null,
+    },
+    {
+        time: '18:40',
         user: null,
     },
     {
