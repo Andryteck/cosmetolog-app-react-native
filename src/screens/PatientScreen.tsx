@@ -147,7 +147,7 @@ export const PatientScreen: React.FC<Props> = ({route, navigation}) => {
 
 const Container = styled(View)`
   flex: 1;
-  padding: 20px 0 20px 20px;
+  padding: 20px 20px 20px 20px;
 `;
 
 const SwipeViewButton = styled(TouchableOpacity)`
@@ -165,6 +165,7 @@ const PatientLink = styled(Text)`
 
 const PatientDetails = styled(Container)`
   flex: 0.13;
+  padding: 20px 0 20px 20px;
 `;
 const PatientAppointments = styled(View)`
   flex: 1;

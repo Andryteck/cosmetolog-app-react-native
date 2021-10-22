@@ -42,6 +42,7 @@ export const PatientsScheduleScreen: React.FC = () => {
         const [value, setValue] = useState<IUserWithTime[]>(data)
         const [date, setDate] = useState<Moment>(moment())
         const [isUser, setIsUser] = useState<boolean>(false)
+        const [timeOfAppointment, setTimeOfAppointment] = useState<{time: string, user: IUser}[]>([])
         const navigation = useNavigation()
         const route = useRoute()
         React.useLayoutEffect(() => {
@@ -92,11 +93,25 @@ export const PatientsScheduleScreen: React.FC = () => {
 
             Alert.alert(
                 "",
-                `${name !==undefined || null ? name : 'Нет приема'}`,
+                `${name !== undefined || null ? name : 'Нет приема'}`,
             );
 
 
         }
+        const getTimeOfAppointment = () => {
+            const nonDefaultItemArray = value && value.slice(1).map(i => {
+                if (i.time !== appointmentsItems.find(item => item.time).time) {
+                    return {time: i.time, user: null}
+                }
+            })
+            const result = appointmentsItems.
+            concat(nonDefaultItemArray).
+            sort((prev, next) => moment(prev.time, 'HH:mm') - moment(next.time, 'HH:mm'))
+            setTimeOfAppointment(result)
+        }
+        useEffect(() => {
+            getTimeOfAppointment()
+        }, [value])
 // const getDataWitUsers = appointmentsItems.map(appointment => {
 //
 //    return value.map(item => {
@@ -120,7 +135,7 @@ export const PatientsScheduleScreen: React.FC = () => {
         const renderItem = () => (
             <>
                 {
-                    appointmentsItems.map((item) =>
+                    timeOfAppointment.map((item) =>
                         <TouchableOpacity
                             style={{
                                 borderTopRightRadius: 10,
