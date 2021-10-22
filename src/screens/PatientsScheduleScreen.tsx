@@ -7,7 +7,7 @@ import {
     SafeAreaView,
     Text,
     ScrollView,
-    RefreshControl, TouchableOpacity
+    RefreshControl, TouchableOpacity, Alert
 } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import Container from '../components/Container/Container';
@@ -18,15 +18,14 @@ import 'moment/locale/ru';
 import {useFocusEffect, useNavigation, useRoute} from "@react-navigation/native";
 import {IUser} from "../api/patients";
 import {GlobalContext} from "../context/Provider";
-import getPatients from "../context/actions/patients/getPatients";
 import getAppointments from "../context/actions/appointmens/getAppointments";
 import {Users} from "../components/Users/Users";
-import {Schedule} from "../components/Schedule/Schedule";
 import {Home} from "../components/Home/Home";
 import {PlusButton} from "../components/Buttons/PlusButton";
 import {appointmentsItems} from "../utils/appointmentsItems"
 
 interface IUserWithTime {
+    procedure: string;
     id: string,
     time: string,
     user: IUser | undefined
@@ -45,7 +44,6 @@ export const PatientsScheduleScreen: React.FC = () => {
         const [isUser, setIsUser] = useState<boolean>(false)
         const navigation = useNavigation()
         const route = useRoute()
-
         React.useLayoutEffect(() => {
             navigation.setOptions({
                 headerRight: () => (
@@ -57,11 +55,11 @@ export const PatientsScheduleScreen: React.FC = () => {
             });
         }, [navigation]);
 
-        useFocusEffect(
-            React.useCallback(() => {
-                getAppointments()(appointmentDispatch)
-            }, [])
-        );
+        // useFocusEffect(
+        //     React.useCallback(() => {
+        //         getAppointments()(appointmentDispatch)
+        //     }, [])
+        // );
 
         // @ts-ignore
         useEffect(() => getAppointments()(appointmentDispatch), [])
@@ -70,20 +68,34 @@ export const PatientsScheduleScreen: React.FC = () => {
             showTimeWithUsers(moment())
         }, [data])
         const showTimeWithUsers = (date: Moment) => {
-            console.log('data', data)
             setDate(date)
-            setValue([{id: '0', time: '0', user: undefined}])
+            setValue([{id: '0', time: '0', user: undefined, procedure: ''}])
             data.forEach((i: any) => {
                 i.data.forEach((i: any) => {
                     if (date.format('YYYY-MM-DD') === i.date) {
                         setValue(value => [...value, {
                             id: i._id,
                             time: i.time,
-                            user: i.user
+                            user: i.user,
+                            procedure: i.procedure
                         }])
                     }
                 })
             })
+        }
+        const showCustomAlert = (item: any) => {
+            const name = value?.slice(1).find(i => {
+                if (i.time === item.time) {
+                    return i
+                }
+            })?.procedure
+
+            Alert.alert(
+                "",
+                `${name !==undefined || null ? name : 'Нет приема'}`,
+            );
+
+
         }
 // const getDataWitUsers = appointmentsItems.map(appointment => {
 //
@@ -127,7 +139,8 @@ export const PatientsScheduleScreen: React.FC = () => {
                                         return i
                                     }
                                 })?.user
-                            }) : null}
+                            }) : navigation.navigate('Patients')}
+                            onLongPress={() => showCustomAlert(item)}
                             disabled={false}>
                             <Badge color={value.find(i => i.time === item.time) ? 'purple' : 'dashed'}>{item.time}</Badge>
                         </TouchableOpacity>)

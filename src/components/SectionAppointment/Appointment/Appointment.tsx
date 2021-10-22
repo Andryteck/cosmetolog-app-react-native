@@ -58,11 +58,11 @@ const Appointment = ({item, navigate, index, fetchPatients, show}: IProps) => {
                 }}
             >
                 <Letter style={{color: avatarColors.color}}>
-                    {item.user.fullName[0].toUpperCase()}
+                    {item?.user?.fullName[0].toUpperCase()}
                 </Letter>
             </Avatar>
             <View style={{flex: 1}}>
-                <FullName>{item.user.fullName}</FullName>
+                <FullName>{item?.user?.fullName}</FullName>
                 <GrayText>{item.procedure}</GrayText>
                 {show && <Item style={{marginLeft: 0, height: 40}}>
                     <Input

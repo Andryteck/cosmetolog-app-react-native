@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useMemo} from 'react';
 import {FlatList, Alert, View, TouchableOpacity, ActivityIndicator, NativeSyntheticEvent} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import styled from 'styled-components/native';
