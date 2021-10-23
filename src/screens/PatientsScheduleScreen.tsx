@@ -23,6 +23,7 @@ import {Users} from "../components/Users/Users";
 import {Home} from "../components/Home/Home";
 import {PlusButton} from "../components/Buttons/PlusButton";
 import {appointmentsItems} from "../utils/appointmentsItems"
+import * as _ from 'lodash';
 
 interface IUserWithTime {
     procedure: string;
@@ -42,7 +43,7 @@ export const PatientsScheduleScreen: React.FC = () => {
         const [value, setValue] = useState<IUserWithTime[]>(data)
         const [date, setDate] = useState<Moment>(moment())
         const [isUser, setIsUser] = useState<boolean>(false)
-        const [timeOfAppointment, setTimeOfAppointment] = useState<{time: string, user: IUser}[]>([])
+        const [timeOfAppointment, setTimeOfAppointment] = useState<{time: string, user: IUser | null}[]>([])
         const navigation = useNavigation()
         const route = useRoute()
         React.useLayoutEffect(() => {
@@ -103,11 +104,12 @@ export const PatientsScheduleScreen: React.FC = () => {
                 if (i.time !== appointmentsItems.find(item => item.time).time) {
                     return {time: i.time, user: null}
                 }
-            })
-            const result = appointmentsItems.
-            concat(nonDefaultItemArray).
+            }).filter(i => i !== undefined)
+
+            const result = [...appointmentsItems, ...nonDefaultItemArray].
+            filter(i => i !== undefined).
             sort((prev, next) => moment(prev.time, 'HH:mm') - moment(next.time, 'HH:mm'))
-            setTimeOfAppointment(result)
+            setTimeOfAppointment(_.uniqBy(result, 'time'))
         }
         useEffect(() => {
             getTimeOfAppointment()
@@ -131,12 +133,13 @@ export const PatientsScheduleScreen: React.FC = () => {
 //
 // })
 //
-        console.log('value', value)
+
         const renderItem = () => (
             <>
                 {
-                    timeOfAppointment.map((item) =>
+                    timeOfAppointment.map((item, index) => (
                         <TouchableOpacity
+                            key={index}
                             style={{
                                 borderTopRightRadius: 10,
                                 borderTopLeftRadius: 10,
@@ -157,8 +160,9 @@ export const PatientsScheduleScreen: React.FC = () => {
                             }) : navigation.navigate('Patients')}
                             onLongPress={() => showCustomAlert(item)}
                             disabled={false}>
-                            <Badge color={value.find(i => i.time === item.time) ? 'purple' : 'dashed'}>{item.time}</Badge>
-                        </TouchableOpacity>)
+                            {/*{console.log('item', item)}*/}
+                            <Badge color={value && value.find(i => i.time === item.time) ? 'purple' : 'dashed'}>{item.time}</Badge>
+                        </TouchableOpacity>))
                 }
             </>
         )
