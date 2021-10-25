@@ -171,6 +171,8 @@ export const PatientsScheduleScreen: React.FC = () => {
             <SafeAreaView style={{flex: 1, backgroundColor: 'rgb(229,229,234)'}}>
                 <View style={styles.container}>
                     <CalendarStrip
+                        selectedDate={date}
+                        scrollToOnSetSelectedDate={true}
                         scrollable
                         calendarHeaderStyle={{fontSize: 20}}
                         style={{flex: 1, paddingTop: 20, paddingBottom: 10}}
