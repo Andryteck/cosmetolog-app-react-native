@@ -13,7 +13,7 @@ export const Home:React.FC<IProps> = () => {
             <TouchableOpacity
                 onPress={() => navigation.navigate('Home')}
                 style={{marginLeft: 20}}>
-                <Ionicons name="md-list-box" size={28} color="rgb(81, 21,212)"/>
+                <Ionicons name="home" size={28} color="rgb(81, 21,212)"/>
             </TouchableOpacity>
         </>
     );

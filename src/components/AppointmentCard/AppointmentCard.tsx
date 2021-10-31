@@ -82,7 +82,7 @@ export const AppointmentCard: React.FC<TProps> = ({item, showAppointments, navig
             <Picker
                 mode="dropdown"
                 style={{position: 'absolute', right: 0, width: undefined, top: -5 }}
-                iosIcon={<Ionicons name="md-more" size={24} style={{marginRight: 15}}/>}
+                iosIcon={<Ionicons name="ellipsis-vertical-sharp" size={24} style={{marginRight: 15}}/>}
                 selectedValue={undefined}
                 onValueChange={handlePick}
             >

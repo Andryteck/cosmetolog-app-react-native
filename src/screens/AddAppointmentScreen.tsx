@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Keyboard, NativeSyntheticEvent, Text, TextInputChangeEventData, View} from 'react-native';
+import {Keyboard, NativeSyntheticEvent, Platform, Text, TextInputChangeEventData, View} from 'react-native';
 import {Item, Input, Label} from 'native-base';
 import styled from 'styled-components';
 import Button from '../components/Buttons/Button';
 import Container from "../components/Container/Container";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+// import DateTimePickerModal from "react-native-modal-datetime-picker";
+import DateTimePicker from '@react-native-community/datetimepicker';
 import {appointmentAPI} from "../api/appointments";
 import moment from "moment";
 import {useFieldsAutoComplete} from "../hooks/useFieldsAutoComplete"
@@ -33,9 +34,10 @@ export const AddAppointmentScreen: React.FC = () => {
     const [commonDate, setCommonDate] = useState(new Date());
     const [loading, setLoading] = useState<boolean>(false);
     const {values, setValues} = useFieldsAutoComplete({_id})
+    const [show, setShow] = useState(false);
 
     const openDatePicker = () => {
-        setDatePickerVisibility(!isDatePickerVisible)
+        setShow(!show)
         Keyboard.dismiss()
     }
 
@@ -52,14 +54,13 @@ export const AddAppointmentScreen: React.FC = () => {
     }
 
     const hideDatePicker = () => {
-        setDatePickerVisibility(!isDatePickerVisible)
+        setShow(!show)
     };
 
-    const handleConfirm = (date: Date) => {
-        console.warn("A date has been picked: ", date);
+    const handleConfirm = (event: any, date: Date) => {
+        console.log("A date has been picked: ", date);
         // @ts-ignore
         setCommonDate(new Date(Date.parse(date)))
-        hideDatePicker();
     };
     const fieldsName: IValues = {
         preporation: 'Препарат',
@@ -128,17 +129,21 @@ export const AddAppointmentScreen: React.FC = () => {
                     <Input value={moment(commonDate).format('YYYY-MM-DD-HH:mm')} onFocus={openDatePicker}/>
                 </Item>
             </>
-            <DateTimePickerModal
+            {show && (
+            <DateTimePicker
+                testID="dateTimePicker"
+                // @ts-ignore
                 mode={'datetime'}
-                date={commonDate}
-                isVisible={isDatePickerVisible}
-                onConfirm={handleConfirm}
-                onCancel={hideDatePicker}
-
+                value={commonDate}
+                // @ts-ignore
+                onChange={handleConfirm}
+                is24Hour={true}
+                display={'spinner'}
             />
+            )}
 
             <ButtonView>
-                <Button onPress={onSubmit} color='#87CC6F' loading={loading} disabled={loading}>
+                <Button onPress={show ? hideDatePicker : onSubmit} color='#87CC6F' loading={loading} disabled={loading}>
                     Добавить
                 </Button>
             </ButtonView>

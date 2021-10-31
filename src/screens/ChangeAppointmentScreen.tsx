@@ -9,7 +9,6 @@ import {Item, Input, Label} from 'native-base';
 import styled from 'styled-components';
 import Button from '../components/Buttons/Button';
 import Container from "../components/Container/Container";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {appointmentAPI} from "../api/appointments";
 import {IValues} from "./AddAppointmentScreen";
 import moment from 'moment';
@@ -18,6 +17,7 @@ import {RouteProp} from '@react-navigation/native';
 import {Appointment} from '../types/appointment';
 import {StackNavigationProp} from "@react-navigation/stack";
 import {useFieldsAutoComplete} from "../hooks/useFieldsAutoComplete";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 export type ChangeAppointmentScreenRouteProp = RouteProp<RootStackParamList, 'ChangeAppointment'>;
 type ChangeAppointmentScreenNavigationProp = StackNavigationProp<RootStackParamList,
@@ -33,8 +33,10 @@ export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
     const [commonDate, setCommonDate] = useState(new Date(route?.params?.date + 'T' + route?.params?.time));
     const [loading, setLoading] = useState<boolean>(false);
     const {values, setValues} = useFieldsAutoComplete({_id: '', route})
+    const [show, setShow] = useState(false);
+
     const openDatePicker = () => {
-        setDatePickerVisibility(!isDatePickerVisible)
+        setShow(!show)
         Keyboard.dismiss()
     }
 
@@ -51,14 +53,15 @@ export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
     }
 
     const hideDatePicker = () => {
-        setDatePickerVisibility(!isDatePickerVisible)
+        setShow(!show)
     };
 
-    const handleConfirm = (date: any) => {
-        console.warn("A date has been picked: ", date);
+    const handleConfirm = (event: any, date: Date) => {
+        console.log("A date has been picked: ", date);
+        // @ts-ignore
         setCommonDate(new Date(Date.parse(date)))
-        hideDatePicker();
     };
+
     const fieldsName: IValues = {
         preporation: 'Препарат',
         price: 'Цена',
@@ -90,6 +93,7 @@ export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
                 }
             }).finally(() => setLoading(false));
     };
+
 
     return (
         <ScrollView>
@@ -127,16 +131,20 @@ export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
                                onFocus={openDatePicker}/>
                     </Item>
                 </>
-                <DateTimePickerModal
-                    mode={'datetime'}
-                    date={commonDate}
-                    isVisible={isDatePickerVisible}
-                    onConfirm={handleConfirm}
-                    onCancel={hideDatePicker}
-
-                />
+                {show && (
+                    <DateTimePicker
+                        testID="dateTimePicker"
+                        // @ts-ignore
+                        mode={'datetime'}
+                        value={commonDate}
+                        // @ts-ignore
+                        onChange={handleConfirm}
+                        is24Hour={true}
+                        display={'spinner'}
+                    />
+                )}
                 <ButtonView>
-                    <Button onPress={onSubmit} color='#2A86FF' disabled={loading} loading={loading}>
+                    <Button onPress={show ? hideDatePicker : onSubmit} color='#2A86FF' disabled={loading} loading={loading}>
                         <Text>Сохранить</Text>
                     </Button>
                 </ButtonView>
