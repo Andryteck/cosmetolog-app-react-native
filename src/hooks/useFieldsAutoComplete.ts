@@ -9,8 +9,8 @@ type TProps = {
 export const useFieldsAutoComplete = ({_id, route}: TProps) => {
     const [values, setValues] = useState<IValues>({
         date: route ? route?.params?.date : "",
-        preporation: route ? route?.params?.preporation : "Дерм",
-        price: route ? route?.params?.price : 170,
+        preporation: route ? route?.params?.preporation : "Стил",
+        price: route ? route?.params?.price : 220,
         procedure: route ? route?.params?.procedure : "Губы",
         time: route ? route?.params?.time : "",
         user: _id || '',
@@ -33,7 +33,7 @@ export const useFieldsAutoComplete = ({_id, route}: TProps) => {
             case 'Стил':
                 setValues({
                     ...values,
-                    price: 220
+                    price: values.procedure !== 'Губы' ? 185 : 220
                 })
                 break
             case 'Ювик':

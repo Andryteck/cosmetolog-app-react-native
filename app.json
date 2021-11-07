@@ -6,9 +6,9 @@
     "orientation": "portrait",
     "icon": "./assets/sveta.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/sveta2.png",
       "resizeMode": "contain",
-      "backgroundColor": "#787878"
+      "backgroundColor": "#000000"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
