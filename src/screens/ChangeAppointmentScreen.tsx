@@ -57,7 +57,6 @@ export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
     };
 
     const handleConfirm = (event: any, date: Date) => {
-        console.log("A date has been picked: ", date);
         // @ts-ignore
         setCommonDate(new Date(Date.parse(date)))
     };
@@ -141,6 +140,7 @@ export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
                         onChange={handleConfirm}
                         is24Hour={true}
                         display={'spinner'}
+                        locale={'ru'}
                     />
                 )}
                 <ButtonView>

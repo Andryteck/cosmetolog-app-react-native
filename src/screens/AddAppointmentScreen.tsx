@@ -139,6 +139,7 @@ export const AddAppointmentScreen: React.FC = () => {
                 onChange={handleConfirm}
                 is24Hour={true}
                 display={'spinner'}
+                locale={'ru'}
             />
             )}
 
