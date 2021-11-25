@@ -6,6 +6,8 @@ import {AvailabilityPreparationsScreen} from "../screens/AvailabilityPreparation
 import {Users} from "../components/Users/Users";
 import {Ionicons} from "@expo/vector-icons";
 import {TouchableOpacity} from "react-native";
+import {Home} from "../components/Home/Home";
+import {Back} from "../components/Back/Back";
 
 const Tab = createBottomTabNavigator();
 
@@ -54,6 +56,9 @@ const AppBottomNavigator = () => {
                         options={{
                             title: 'Добавить пациента', headerTintColor: '#2A86FF',
                             // tabBarIcon: () => <Ionicons name="md-people" size={28}/>
+                            headerLeft: () => (
+                                <Back/>
+                            )
                         }}/>
         </Tab.Navigator>
     );

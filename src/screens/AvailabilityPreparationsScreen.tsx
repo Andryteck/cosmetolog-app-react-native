@@ -150,7 +150,7 @@ export const AvailabilityPreparationsScreen = () => {
 const styles = StyleSheet.create({
     addBtn: {
         width: '100%',
-        height: 30,
+        height: 35,
         backgroundColor: 'rgb(229,229,234)',
         marginTop: 20,
         alignItems: 'center',
