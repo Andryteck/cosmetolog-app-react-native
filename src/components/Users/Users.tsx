@@ -4,7 +4,7 @@ import {Ionicons} from '@expo/vector-icons';
 import {AppointmentsType} from "../../api/appointments";
 import {useNavigation, useRoute} from "@react-navigation/native";
 interface IProps {
-    isCalendar: boolean
+    isCalendar?: boolean
 }
 export const Users:React.FC<IProps> = ({isCalendar}) => {
     const navigation = useNavigation()

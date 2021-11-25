@@ -40,16 +40,15 @@ export const PatientsScheduleScreen: React.FC = () => {
                 getAppointments: {data, loading, error},
             },
         } = useContext(GlobalContext);
-        const [value, setValue] = useState<IUserWithTime[]>(data)
+        const [value, setValue] = useState<IUserWithTime[]>([])
         const [date, setDate] = useState<Moment>(moment())
-        const [isUser, setIsUser] = useState<boolean>(false)
         const [timeOfAppointment, setTimeOfAppointment] = useState<{time: string, user: IUser | null}[]>([])
         const navigation = useNavigation()
-        const route = useRoute()
+
         React.useLayoutEffect(() => {
             navigation.setOptions({
                 headerRight: () => (
-                    <Users isCalendar={true}/>
+                        <Users isCalendar={true}/>
                 ),
                 headerLeft: () => (
                     <Home/>
@@ -64,7 +63,7 @@ export const PatientsScheduleScreen: React.FC = () => {
         // );
 
         // @ts-ignore
-        useEffect(() => getAppointments()(appointmentDispatch), [])
+        useEffect(() => getAppointments()(appointmentDispatch), [appointmentDispatch])
 
         useEffect(() => {
             showTimeWithUsers(moment())
@@ -114,25 +113,6 @@ export const PatientsScheduleScreen: React.FC = () => {
         useEffect(() => {
             getTimeOfAppointment()
         }, [value])
-// const getDataWitUsers = appointmentsItems.map(appointment => {
-//
-//    return value.map(item => {
-//         if (appointment.time === item.time) {
-//             console.log('item', item)
-//             return {
-//                 ...item,
-//                 user: item.user,
-//                 id: item.id
-//             }
-//         } else {
-//             return {
-//                 time: item.time
-//             }
-//         }
-//     })
-//
-// })
-//
 
         const renderItem = () => (
             <>
@@ -166,14 +146,15 @@ export const PatientsScheduleScreen: React.FC = () => {
                 }
             </>
         )
-
+    console.log('date11', date)
         return (
             <SafeAreaView style={{flex: 1, backgroundColor: 'rgb(229,229,234)'}}>
                 <View style={styles.container}>
                     <CalendarStrip
                         selectedDate={date}
                         scrollToOnSetSelectedDate={true}
-                        scrollable
+                        // scrollable={value.length !== 1}
+                        // scrollable={true}
                         calendarHeaderStyle={{fontSize: 20}}
                         style={{flex: 1, paddingTop: 20, paddingBottom: 10}}
                         calendarColor={'rgb(81, 21,212)'}
@@ -232,7 +213,7 @@ export const PatientsScheduleScreen: React.FC = () => {
                             </>
                     }
 
-                    <PlusButton onPress={() => navigation.navigate('AddPatient')} isViolet={true}/>
+                    {/*<PlusButton onPress={() => navigation.navigate('AddPatient')} isViolet={true}/>*/}
                 </View>
             </SafeAreaView>
         );

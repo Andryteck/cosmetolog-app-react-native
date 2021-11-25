@@ -119,7 +119,7 @@ export const PatientsScreen: React.FC = () => {
                     )}
                 />
             </>
-            <PlusButton onPress={() => navigation.navigate('AddPatient')}/>
+            {/*<PlusButton onPress={() => navigation.navigate('AddPatient')}/>*/}
         </Container>
     );
 };

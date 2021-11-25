@@ -39,7 +39,8 @@ export const HomeScreen: React.FC<Props> = () => {
             headerLeft: () => (
                 <Schedule navigation={navigation}/>
             )
-        });
+        },
+        );
     }, [navigation]);
 
     const fetchAppointments = () => {
@@ -158,7 +159,7 @@ export const HomeScreen: React.FC<Props> = () => {
                 )}
                 contentContainerStyle={{ paddingBottom: 30 }}
             />
-            <PlusButton onPress={() => navigation.navigate('AddPatient')}/>
+            {/*<PlusButton onPress={() => navigation.navigate('AddPatient')}/>*/}
         </Container>
     );
 };

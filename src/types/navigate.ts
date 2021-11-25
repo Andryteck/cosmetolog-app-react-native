@@ -8,5 +8,6 @@ export type RootStackParamList = {
     AddAppointment: any,
     Patients: any,
     ChangePatient: any,
-    PatientsSchedule: any
+    PatientsSchedule: any,
+    AvailabilityPreparations: any
 };

@@ -40,14 +40,14 @@ export const AddPatientScreen = () => {
                     user: {
                         _id: data.data._id,
                         fullName: data.data.fullName,
-                        phone: data.data.phone,
+                        phone: data.data.phone.replace(/[^\d]/g, ''),
                         instagramUrl: data.data.instagramUrl
                     }
                 });
             })
             .catch((e: any) => {
                 console.log(e.message)
-                alert('BAD');
+                alert('Введите верный формат');
             }).finally(() => setLoading(false));
     };
 

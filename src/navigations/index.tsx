@@ -2,6 +2,7 @@ import React, {useContext} from "react";
 import {GlobalContext} from "../context/Provider";
 import {NavigationContainer} from "@react-navigation/native";
 import AppNavigator from "./AppNavigator";
+import AppBottomNavigator from "./AppBottomNavigator";
 
 const AppNavContainer = () => {
     // const {
@@ -11,7 +12,8 @@ const AppNavContainer = () => {
     return (
         <>
             <NavigationContainer>
-                <AppNavigator/>
+                {/*<AppNavigator/>*/}
+                <AppBottomNavigator/>
             </NavigationContainer>
         </>
     );
