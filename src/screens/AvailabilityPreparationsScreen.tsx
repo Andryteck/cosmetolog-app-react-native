@@ -7,9 +7,10 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Input, Item, Label} from "native-base";
-import {Users} from "../components/Users/Users";
-import {Schedule} from "../components/Schedule/Schedule";
-import {useNavigation} from "@react-navigation/native";
+// @ts-ignore
+import Swipeable from 'react-native-swipeable-row';
+import {Ionicons} from "@expo/vector-icons";
+import styled from "styled-components";
 
 type TData = {
     id: number,
@@ -75,6 +76,7 @@ export const AvailabilityPreparationsScreen = () => {
     const increaseData = (id: number) => {
         const filteredData = data && data.map(item => item.id === id ? {...item, value: item.value + 1} : item)
         setData(filteredData)
+        storeData(filteredData)
     }
 
     const decreaseData = (id: number) => {
@@ -83,7 +85,15 @@ export const AvailabilityPreparationsScreen = () => {
             value: item.value - 1
         } : item)
         setData(filteredData)
+        storeData(filteredData)
     }
+
+    const onDelete = (id: number) => {
+        const filteredData =  data && data.filter(item => item.id !== id)
+        setData(filteredData)
+        storeData(filteredData)
+    }
+
     console.log('data', data)
     useEffect(() => {
         getData().then(data => data && setData(data))
@@ -110,32 +120,44 @@ export const AvailabilityPreparationsScreen = () => {
                 <>
                     {
                         data && data.length ? data.map((item: any) => (
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}} key={item.id}>
-                                <View style={{marginTop: 20, flexDirection: 'row'}}>
-                                    <Text style={styles.text}>
-                                        {item.name}:
-                                    </Text>
-                                    <Text style={[styles.text, { marginLeft: 15}]}>
-                                        {item.value}
-                                    </Text>
+                            <Swipeable
+                                rightButtons={[
+                                    <SwipeViewButton style={{backgroundColor: '#B4C1CB'}}
+                                                     onPress={() => onDelete(item.id)}
+                                    >
+                                        <Ionicons name="ios-close" size={25} color="white"/>
+                                    </SwipeViewButton>,
+                                ]}
+                            >
+                                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height:45}} key={item.id}>
+                                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                        <Text style={styles.text}>
+                                            {item.name}:
+                                        </Text>
+                                        <Text style={[styles.text, {marginLeft: 15}]}>
+                                            {item.value}
+                                        </Text>
+                                    </View>
+                                    {
+                                        data?.length && (
+                                            <View style={{flexDirection: "row"}}>
+                                                <TouchableOpacity style={styles.btn}
+                                                                  onPress={() => increaseData(item.id)}>
+                                                    <Text>
+                                                        +
+                                                    </Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={styles.btn}
+                                                                  onPress={() => decreaseData(item.id)}>
+                                                    <Text>
+                                                        -
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        )
+                                    }
                                 </View>
-                                {
-                                    data?.length && (
-                                        <View style={{flexDirection: "row"}}>
-                                            <TouchableOpacity style={styles.btn} onPress={() => increaseData(item.id)}>
-                                                <Text>
-                                                    +
-                                                </Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity style={styles.btn} onPress={() => decreaseData(item.id)}>
-                                                <Text>
-                                                    -
-                                                </Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    )
-                                }
-                            </View>
+                            </Swipeable>
                         )) : null
                     }
                 </>
@@ -164,9 +186,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginLeft: 20,
-        marginTop: 20,
     },
     text: {
         fontSize: 18,
     }
 })
+
+const SwipeViewButton = styled(TouchableOpacity)`
+  width: 45px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 25px;
+`;
