@@ -33,13 +33,19 @@ export const useFieldsAutoComplete = ({_id, route}: TProps) => {
             case 'Стил':
                 setValues({
                     ...values,
-                    price: values.procedure !== 'Губы' ? 185 : 220
+                    price: values.procedure !== 'Губы' ? 185 : 225
                 })
                 break
             case 'Ювик':
                 setValues({
                     ...values,
                     price: 240
+                })
+                break
+            case 'Тео':
+                setValues({
+                    ...values,
+                    price: 260
                 })
                 break
             default:

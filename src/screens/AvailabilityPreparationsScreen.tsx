@@ -3,7 +3,7 @@ import {
     Keyboard, NativeSyntheticEvent, SafeAreaView,
     ScrollView,
     Text, TextInputChangeEventData, TouchableOpacity,
-    View, StyleSheet
+    View, StyleSheet, ActivityIndicator
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Input, Item, Label} from "native-base";
@@ -11,15 +11,19 @@ import {Input, Item, Label} from "native-base";
 import Swipeable from 'react-native-swipeable-row';
 import {Ionicons} from "@expo/vector-icons";
 import styled from "styled-components";
+import {firestore} from "../../App";
+import {doc, setDoc, getDoc, collection, getDocs, deleteDoc, addDoc} from "firebase/firestore";
+import _ from "lodash";
 
 type TData = {
-    id: number,
+    id: string,
     name: string,
     value: number
 }
 export const AvailabilityPreparationsScreen = () => {
     const [values, setValues] = useState('')
     const [data, setData] = useState<TData[] | null>([])
+    const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
     // const navigation = useNavigation()
 
@@ -31,13 +35,17 @@ export const AvailabilityPreparationsScreen = () => {
     //     });
     // }, [navigation]);
 
-    const storeData = async (value: Partial<{ ([key]: string): string }>) => {
+    const storeDataToStorage = async (value: Partial<{ ([key]: string): string }>) => {
         try {
             const jsonValue = JSON.stringify(value)
             await AsyncStorage.setItem('@storage_Key', jsonValue)
         } catch (e) {
             // saving error
         }
+    }
+
+    const storeData = () => {
+
     }
 
     const getData = async () => {
@@ -48,6 +56,24 @@ export const AvailabilityPreparationsScreen = () => {
             // error reading value
         }
     }
+
+    async function addConsumable(item, id: string) {
+        if (item) {
+            await setDoc(doc(firestore, "Consumables", id), item);
+        }
+
+    }
+
+    async function changeConsumable(item, id: string) {
+        if (item && id) {
+            await setDoc(doc(firestore, "Consumables", id), item);
+        }
+    }
+
+    async function deleteData(id: string) {
+        await deleteDoc(doc(firestore, "Consumables", id));
+    }
+
     const clearAll = async () => {
         try {
             await AsyncStorage.clear()
@@ -55,6 +81,7 @@ export const AvailabilityPreparationsScreen = () => {
             // clear error
         }
     }
+
     // clearAll()
     const onChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
         if (error !== null) {
@@ -63,41 +90,64 @@ export const AvailabilityPreparationsScreen = () => {
         const {text} = e.nativeEvent;
         setValues(text)
     }
+
     const addNewField = () => {
+        const newId = new Date().getMilliseconds().toString()
         if (values.trim() !== '') {
-            setData([...data, {name: values, id: new Date().getMilliseconds(), value: 0}])
-            storeData([...data, {name: values, id: new Date().getMilliseconds(), value: 0}])
+            setData([...data, {name: values, value: 0, id: newId}])
+            // storeData([...data, {name: values, id: new Date().getMilliseconds(), value: 0}])
+            addConsumable({name: values, value: 0}, newId)
             setValues('')
         } else {
             setError(' Нужно ввести название препарата или расходника')
         }
     }
 
-    const increaseData = (id: number) => {
-        const filteredData = data && data.map(item => item.id === id ? {...item, value: item.value + 1} : item)
+    const increaseData = (id: string) => {
+        const filteredData = data && data.map(item => {
+            const newValue = {...item, value: item.value + 1}
+            if (item.id === id) {
+                changeConsumable(_.omit(newValue, ['id']), id)
+                return newValue
+            } else return item
+        })
         setData(filteredData)
-        storeData(filteredData)
+        // storeDataToStorage(filteredData)
     }
 
-    const decreaseData = (id: number) => {
-        const filteredData = data && data.map(item => item.id === id && item.value !== 0 ? {
-            ...item,
-            value: item.value - 1
-        } : item)
+    const decreaseData = (id: string) => {
+        const filteredData = data && data.map(item => {
+            const newValue = {...item, value: item.value - 1}
+            if (item.id === id && item.value !== 0) {
+                changeConsumable(_.omit(newValue, ['id']), id)
+                return newValue
+            } else return item
+        })
         setData(filteredData)
-        storeData(filteredData)
     }
 
-    const onDelete = (id: number) => {
-        const filteredData =  data && data.filter(item => item.id !== id)
+    const onDelete = (id: string) => {
+        const filteredData = data && data.filter(item => item.id !== id)
         setData(filteredData)
-        storeData(filteredData)
+        deleteData(id)
     }
 
-    console.log('data', data)
     useEffect(() => {
-        getData().then(data => data && setData(data))
+        async function getData() {
+            setLoading(true)
+            const querySnapshot = await getDocs(collection(firestore, "Consumables"));
+            querySnapshot.forEach((doc) => {
+                let data = doc.data()
+                let id = doc.id;
+                setData((prev) => [...prev, {...data, id: id}])
+                setLoading(false)
+            });
+        }
+        getData()
+
     }, [])
+
+
     return (
         <ScrollView style={{padding: 25}}>
             <View style={{}}>
@@ -119,8 +169,15 @@ export const AvailabilityPreparationsScreen = () => {
             <View>
                 <>
                     {
+                    loading ?
+                    <>
+                        <ActivityIndicator size={'large'}/>
+                    </>
+                    :
                         data && data.length ? data.map((item: any) => (
                             <Swipeable
+                                // TODO change id from db
+                                key={item.id}
                                 rightButtons={[
                                     <SwipeViewButton style={{backgroundColor: '#B4C1CB'}}
                                                      onPress={() => onDelete(item.id)}
@@ -129,7 +186,12 @@ export const AvailabilityPreparationsScreen = () => {
                                     </SwipeViewButton>,
                                 ]}
                             >
-                                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height:45}} key={item.id}>
+                                <View style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    height: 45
+                                }} key={item.id}>
                                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                         <Text style={styles.text}>
                                             {item.name}:
@@ -161,6 +223,11 @@ export const AvailabilityPreparationsScreen = () => {
                         )) : null
                     }
                 </>
+                {/*<>*/}
+                {/*    {*/}
+                {/*        test && test.map(i => <Text>{`${i.name} : ${i.value}`}</Text>)*/}
+                {/*    }*/}
+                {/*</>*/}
                 <>
                     {error && <Text>{error}</Text>}
                 </>

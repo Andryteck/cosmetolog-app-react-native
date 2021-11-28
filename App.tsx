@@ -8,18 +8,17 @@ import GlobalProvider from './src/context/Provider';
 
 
 
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getDatabase } from "firebase/database";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+
+// import { initializeApp } from "firebase/app";
+import * as firebase from 'firebase/app';
+import { getFirestore, setDoc, doc } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: "AIzaSyDay2jUwIKdB5kTWsjfgN7v82bSf6p2u2w",
     authDomain: "cosmetolog-app.firebaseapp.com",
-    databaseURL: "https://cosmetolog-app-default-rtdb.firebaseio.com",
+    // databaseURL: "https://cosmetolog-app-default-rtdb.firebaseio.com",
     projectId: "cosmetolog-app",
     storageBucket: "cosmetolog-app.appspot.com",
     messagingSenderId: "646628137853",
@@ -28,9 +27,10 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app = firebase.initializeApp(firebaseConfig);
+export const firestore = getFirestore();
 
-// Get a reference to the database service
+
 // const database = getDatabase(app);
 // console.log('database', database)
 function App() {
