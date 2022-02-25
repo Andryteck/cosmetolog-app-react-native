@@ -2,7 +2,6 @@ import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {
     View,
     StyleSheet,
-    FlatList,
     ActivityIndicator,
     SafeAreaView,
     Text,
@@ -10,18 +9,16 @@ import {
     RefreshControl, TouchableOpacity, Alert
 } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
-import Container from '../components/Container/Container';
 import Badge from '../components/Badge/Badge';
 import {locale} from '../utils/locale';
 import moment, {Moment} from 'moment';
 import 'moment/locale/ru';
-import {useFocusEffect, useNavigation, useRoute} from "@react-navigation/native";
+import {useNavigation} from "@react-navigation/native";
 import {IUser} from "../api/patients";
 import {GlobalContext} from "../context/Provider";
 import getAppointments from "../context/actions/appointmens/getAppointments";
 import {Users} from "../components/Users/Users";
 import {Home} from "../components/Home/Home";
-import {PlusButton} from "../components/Buttons/PlusButton";
 import {appointmentsItems} from "../utils/appointmentsItems"
 import * as _ from 'lodash';
 

@@ -1,15 +1,23 @@
 import React, {useEffect, useState} from 'react';
-import {Keyboard, NativeSyntheticEvent, Platform, Text, TextInputChangeEventData, View} from 'react-native';
+import {
+    Keyboard,
+    NativeSyntheticEvent,
+    Platform,
+    Text,
+    TextInputChangeEventData,
+    TouchableOpacity,
+    View
+} from 'react-native';
 import {Item, Input, Label} from 'native-base';
 import styled from 'styled-components';
 import Button from '../components/Buttons/Button';
 import Container from "../components/Container/Container";
-// import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {appointmentAPI} from "../api/appointments";
 import moment from "moment";
 import {useFieldsAutoComplete} from "../hooks/useFieldsAutoComplete"
 import {RouteProp, useNavigation, useRoute} from "@react-navigation/native";
+import Badge from "../components/Badge/Badge"
 
 type ParamList = {
     AddAppointment: {
@@ -30,7 +38,6 @@ export const AddAppointmentScreen: React.FC = () => {
     const navigation = useNavigation<any>()
     const route = useRoute<RouteProp<ParamList, 'AddAppointment'>>()
     const {_id} = route.params
-    const [isDatePickerVisible, setDatePickerVisibility] = useState<boolean>(false);
     const [commonDate, setCommonDate] = useState(new Date());
     const [loading, setLoading] = useState<boolean>(false);
     const {values, setValues} = useFieldsAutoComplete({_id})
@@ -97,6 +104,19 @@ export const AddAppointmentScreen: React.FC = () => {
 
     return (
         <Container>
+            <View style={{flexDirection: 'row', alignItems: 'center', marginVertical: 10}}>
+                <Text>Выбрать топ процедур:</Text>
+                <TouchableOpacity style={{marginLeft: 20, borderRadius: 10,  overflow: 'hidden', borderWidth: 0.5, borderColor: '#2A86FF'}} onPress={() => setFieldValue('procedure', 'Коррекция')}>
+                    <Badge color={'default'} style={{fontSize: 12}}>
+                        Коррекция
+                    </Badge>
+                </TouchableOpacity>
+                <TouchableOpacity style={{marginLeft: 20, borderRadius: 10,  overflow: 'hidden', borderWidth: 0.5, borderColor: '#2A86FF'}} onPress={() => setFieldValue('procedure', 'Ботокс')}>
+                    <Badge color={'default'} style={{fontSize: 12}}>
+                        Ботокс
+                    </Badge>
+                </TouchableOpacity>
+            </View>
             <Item style={{marginLeft: 0}} floatingLabel>
                 <Label>Процедура</Label>
                 <Input

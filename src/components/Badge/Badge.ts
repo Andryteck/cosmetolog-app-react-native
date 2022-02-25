@@ -48,7 +48,7 @@ export default styled(Text)<Props>`
   color: ${(props: ThemedStyledProps<TextProps & RefAttributes<Text> & Props, any>) => getColor(props).color};
   font-weight: 600;
   font-size: 14px;
-  width: 70px;
+  min-width: 70px;
   height: 32px;
   text-align: center;
   line-height: 30px;
