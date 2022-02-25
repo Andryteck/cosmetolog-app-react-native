@@ -9,18 +9,20 @@ import {
     RefreshControl, TouchableOpacity, Alert
 } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
-import Badge from '../components/Badge/Badge';
-import {locale} from '../utils/locale';
+import Badge from '../../components/Badge/Badge';
+import {locale} from '../../utils/locale';
 import moment, {Moment} from 'moment';
 import 'moment/locale/ru';
 import {useNavigation} from "@react-navigation/native";
-import {IUser} from "../api/patients";
-import {GlobalContext} from "../context/Provider";
-import getAppointments from "../context/actions/appointmens/getAppointments";
-import {Users} from "../components/Users/Users";
-import {Home} from "../components/Home/Home";
-import {appointmentsItems} from "../utils/appointmentsItems"
+import {IUser} from "../../api/patients";
+import {GlobalContext} from "../../context/Provider";
+import getAppointments from "../../context/actions/appointmens/getAppointments";
+import {Users} from "../../components/Users/Users";
+import {Home} from "../../components/Home/Home";
+import {appointmentsItems} from "../../utils/appointmentsItems"
 import * as _ from 'lodash';
+import Calendar from './components/Calendar'
+import {COLORS} from "../../constants";
 
 interface IUserWithTime {
     procedure: string;
@@ -39,13 +41,13 @@ export const PatientsScheduleScreen: React.FC = () => {
         } = useContext(GlobalContext);
         const [value, setValue] = useState<IUserWithTime[]>([])
         const [date, setDate] = useState<Moment>(moment())
-        const [timeOfAppointment, setTimeOfAppointment] = useState<{time: string, user: IUser | null}[]>([])
+        const [timeOfAppointment, setTimeOfAppointment] = useState<{ time: string, user: IUser | null }[]>([])
         const navigation = useNavigation()
 
         React.useLayoutEffect(() => {
             navigation.setOptions({
                 headerRight: () => (
-                        <Users isCalendar={true}/>
+                    <Users isCalendar={true}/>
                 ),
                 headerLeft: () => (
                     <Home/>
@@ -102,9 +104,7 @@ export const PatientsScheduleScreen: React.FC = () => {
                 }
             }).filter(i => i !== undefined)
 
-            const result = [...appointmentsItems, ...nonDefaultItemArray].
-            filter(i => i !== undefined).
-            sort((prev, next) => moment(prev.time, 'HH:mm') - moment(next.time, 'HH:mm'))
+            const result = [...appointmentsItems, ...nonDefaultItemArray].filter(i => i !== undefined).sort((prev, next) => moment(prev.time, 'HH:mm') - moment(next.time, 'HH:mm'))
             setTimeOfAppointment(_.uniqBy(result, 'time'))
         }
         useEffect(() => {
@@ -138,46 +138,39 @@ export const PatientsScheduleScreen: React.FC = () => {
                             onLongPress={() => showCustomAlert(item)}
                             disabled={false}>
                             {/*{console.log('item', item)}*/}
-                            <Badge color={value && value.find(i => i.time === item.time) ? 'purple' : 'dashed'}>{item.time}</Badge>
+                            <Badge
+                                color={value && value.find(i => i.time === item.time) ? 'purple' : 'dashed'}>{item.time}</Badge>
                         </TouchableOpacity>))
                 }
             </>
         )
-    console.log('date11', date)
+
         return (
-            <SafeAreaView style={{flex: 1, backgroundColor: 'rgb(229,229,234)'}}>
+            <SafeAreaView style={styles.root}>
                 <View style={styles.container}>
-                    <CalendarStrip
-                        selectedDate={date}
-                        scrollToOnSetSelectedDate={true}
-                        // scrollable={value.length !== 1}
-                        // scrollable={true}
-                        calendarHeaderStyle={{fontSize: 20}}
-                        style={{flex: 1, paddingTop: 20, paddingBottom: 10}}
-                        calendarColor={'rgb(81, 21,212)'}
-                        iconContainer={{flex: 0.1}}
-                        dateNumberStyle={{fontSize: 18}}
-                        dateNameStyle={{color: 'white', fontSize: 8,}}
-                        onDateSelected={showTimeWithUsers}
-                        locale={locale}
-                        markedDates={[
-                            {
-                                date: date,
-                                dots: [{key: 0, color: 'black', selectedDotColor: 'black'}],
-                            },
-                        ]}
-                    />
+                    <Calendar />
+                    {/*<CalendarStrip*/}
+                    {/*    selectedDate={date}*/}
+                    {/*    scrollToOnSetSelectedDate={true}*/}
+                    {/*    // scrollable={value.length !== 1}*/}
+                    {/*    // scrollable={true}*/}
+                    {/*    calendarHeaderStyle={{fontSize: 20}}*/}
+                    {/*    style={{flex: 1, paddingTop: 20, paddingBottom: 10}}*/}
+                    {/*    calendarColor={'rgb(81, 21,212)'}*/}
+                    {/*    iconContainer={{flex: 0.1}}*/}
+                    {/*    dateNumberStyle={{fontSize: 18}}*/}
+                    {/*    dateNameStyle={{color: 'white', fontSize: 8,}}*/}
+                    {/*    onDateSelected={showTimeWithUsers}*/}
+                    {/*    locale={locale}*/}
+                    {/*    markedDates={[*/}
+                    {/*        {*/}
+                    {/*            date: date,*/}
+                    {/*            dots: [{key: 0, color: 'black', selectedDotColor: 'black'}],*/}
+                    {/*        },*/}
+                    {/*    ]}*/}
+                    {/*/>*/}
                 </View>
                 <View style={styles.contentContainer}>
-                    {/*<FlatList*/}
-                    {/*    scrollEnabled={false}*/}
-                    {/*    showsHorizontalScrollIndicator={false}*/}
-                    {/*    horizontal={true}*/}
-                    {/*    data={value.slice(1)}*/}
-                    {/*    keyExtractor={(item) => item.id}*/}
-                    {/*    renderItem={({item}) => <Badge isActive={true} style={{marginLeft: 20}}*/}
-                    {/*                                   onPress={() => navigation.navigate('Patient', {user: item.user})}>{item.time}</Badge>}*/}
-                    {/*/>*/}
                     {
                         loading ?
                             <>
@@ -185,21 +178,14 @@ export const PatientsScheduleScreen: React.FC = () => {
                             </>
                             :
                             <>
-                                <View style={styles.textContainer}>
-                                    <Text style={styles.text}>{value.slice(1).length ? 'Приемы' : `Приемов нет`}</Text>
-                                </View>
+                                {/*<View style={styles.textContainer}>*/}
+                                {/*    <Text style={styles.text}>{value.slice(1).length ? 'Приемы' : `Приемов нет`}</Text>*/}
+                                {/*</View>*/}
                                 <ScrollView refreshControl={<RefreshControl
                                     tintColor={'gray'}
                                     refreshing={loading}
                                     onRefresh={() => getAppointments()(appointmentDispatch)}
                                 />}>
-                                    {/*<View style={styles.content}>*/}
-                                    {/*    {*/}
-                                    {/*        value.slice(1).map((item) => <Badge key={item.id} isActive={true}*/}
-                                    {/*                                            style={styles.item}*/}
-                                    {/*                                            onPress={() => navigation.navigate('Patient', {user: item.user})}>{item.time}</Badge>*/}
-                                    {/*        )}*/}
-                                    {/*</View>*/}
 
                                     <View style={styles.content}>
                                         {
@@ -212,14 +198,22 @@ export const PatientsScheduleScreen: React.FC = () => {
 
                     {/*<PlusButton onPress={() => navigation.navigate('AddPatient')} isViolet={true}/>*/}
                 </View>
+
+
+
+
             </SafeAreaView>
         );
     }
 ;
 
 const styles = StyleSheet.create({
+    root: {
+        flex: 1,
+        backgroundColor: COLORS.Dark2,
+    },
     container: {
-        flex: 0.7,
+        flex: 0.4,
     },
     contentContainer: {
         paddingVertical: 15,
