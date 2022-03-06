@@ -6,41 +6,37 @@ import {dh} from "../../../utils/sizes";
 import {COLORS, FONTS} from "../../../constants";
 
 
-const DayItem = ({ date, selectedDate, onPress }) => {
+const DayItem = ({ date, selectedDate, onPress, setSelectedDay }) => {
   const today = moment().format('YYYY-MM-DD');
   const currentDate = moment(today).isSame(date, 'day');
-  const isFutureDate = moment(date).isAfter(today, 'day');
   const selected = moment(selectedDate).isSame(date, 'day');
   const day = moment(date).format('ddd').toUpperCase();
   const number = moment(date).format('DD');
 
   const handleDayPress = useCallback(() => {
-    const month = -moment().diff(date, 'months');
-    onPress(moment(date).format('YYYY-MM-DD'), month);
-  }, [date, onPress]);
+    setSelectedDay(date)
+    onPress(selectedDate);
+  }, [date, onPress, selectedDate]);
 
   return (
     <View style={styles.dayContainerStyle}>
       <View style={styles.dayContainer}>
-        <Text style={[styles.dayTitle, isFutureDate && styles.titleDisabled]}>
+        <Text style={styles.dayTitle}>
           {day}
         </Text>
       </View>
       <TouchableOpacity
-        disabled={isFutureDate}
         onPress={handleDayPress}
         style={[
           styles.numberContainer,
           currentDate && styles.numberContainerCurrent,
           selected && styles.numberContainerSelected,
-          isFutureDate && styles.numberContainerDisabled,
         ]}>
         <Text
           style={[
             styles.numberTitle,
             currentDate && styles.numberTitleCurrent,
             selected && styles.numberTitleSelected,
-            isFutureDate && styles.titleDisabled,
           ]}>
           {number}
         </Text>

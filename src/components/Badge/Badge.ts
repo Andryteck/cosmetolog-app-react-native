@@ -1,6 +1,7 @@
 import styled, {ThemedStyledProps} from 'styled-components';
 import {Text, TextProps} from 'react-native';
 import {RefAttributes} from "react";
+import {COLORS} from "../../constants";
 
 export interface Props {
     isActive?: boolean | undefined,
@@ -19,11 +20,11 @@ const getColor = ({isActive, color}: Props) => {
         },
         dashed: {
             background: 'transparent',
-            color: 'black',
+            color: COLORS.White_50,
         },
-        purple: {
-            background: 'rgb(129, 52,175)',
-            color: 'white',
+        darkGreen: {
+            background:  COLORS.Green1,
+            color: COLORS.White,
         },
         default: {
             background: '#E9F5FF',

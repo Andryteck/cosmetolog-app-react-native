@@ -3,47 +3,24 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 import CalendarStrip from 'react-native-calendar-strip';
 
-// import { selectGroupedNotesByDate } from 'store/user';
-
-// import { MentalNoteTile, IconTouchable } from 'components';
-
 import DayItem from '../components/DayItem';
 import {dh, dhp, dwp} from "../../../utils/sizes";
 import IconTouchable from "../../../components/IconTouchable";
 import {COLORS, FONTS} from "../../../constants";
 
-const Calendar = () => {
-  const today = moment().format('YYYY-MM-DD');
-  const [selectedDay, setSelectedDay] = useState(today);
-  const [nextWeekIsAvailable, setNextWeekIsAvailable] = useState(false);
+const Calendar = ({selectedDate,showTimeWithUsers}) => {
+  const [selectedDay, setSelectedDay] = useState(selectedDate);
   const calenderRef = useRef(null);
-  const groupedNotes = {}
-
-  const getMentalNotesByDate = () => {
-    return groupedNotes[selectedDay] || [];
-  };
 
   const dayComponent = ({ date, selectedDate }) => {
     return (
       <DayItem
         date={date}
         selectedDate={selectedDate}
-        onPress={handleDayPress}
+        onPress={showTimeWithUsers}
+        setSelectedDay={setSelectedDay}
       />
     );
-  };
-
-  const handleDayPress = (day, month) => {
-    const isEmpty = !groupedNotes[day]?.length;
-    setSelectedDay(day);
-  };
-
-  const handleWeekChange = (start, end) => {
-    if (moment(end).isSameOrAfter(today, 'day')) {
-      setNextWeekIsAvailable(false);
-    } else {
-      setNextWeekIsAvailable(true);
-    }
   };
 
   const handleGetPreviousWeek = () => {
@@ -51,9 +28,7 @@ const Calendar = () => {
   };
 
   const handleGetNextWeek = () => {
-    if (nextWeekIsAvailable) {
       calenderRef.current.getNextWeek();
-    }
   };
 
   return (
@@ -65,7 +40,6 @@ const Calendar = () => {
         calendarHeaderContainerStyle={styles.headerContainerStyle}
         selectedDate={selectedDay}
         dayComponent={dayComponent}
-        onWeekChanged={handleWeekChange}
         leftSelector={
           <TouchableOpacity
             style={styles.iconLeftWr}
@@ -87,7 +61,6 @@ const Calendar = () => {
               name="arrowForward"
               size="xs"
               style={styles.iconRight}
-              iconColor={nextWeekIsAvailable ? COLORS.White : COLORS.White_20}
             />
           </TouchableOpacity>
         }
@@ -99,14 +72,14 @@ const Calendar = () => {
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1,
+    flex: 0.3,
     marginTop: dhp(35),
     backgroundColor: COLORS.Dark2,
     paddingHorizontal: dwp(16),
   },
   mainContainer: {
     width: '100%',
-    height: dh(145),
+    height: dh(160),
   },
   headerContainerStyle: {
     height: dh(35),

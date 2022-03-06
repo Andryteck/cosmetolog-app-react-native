@@ -51,6 +51,13 @@ export const useFieldsAutoComplete = ({_id, route}: TProps) => {
                     preporation: 'Дерм',
                 })
                 break
+            case 'Обучение':
+                setValues({
+                    ...values,
+                    price: 1100,
+                    preporation: 'Дерм',
+                })
+                break
             default :
                 setValues({
                     ...values,
