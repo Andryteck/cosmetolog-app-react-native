@@ -8,8 +8,10 @@ import {dh, dhp, dwp} from "../../../utils/sizes";
 import IconTouchable from "../../../components/IconTouchable";
 import {COLORS, FONTS} from "../../../constants";
 
-const Calendar = ({selectedDate,showTimeWithUsers}) => {
-  const [selectedDay, setSelectedDay] = useState(selectedDate);
+// TODO make correct day display when i make reload data
+const Calendar = ({showTimeWithUsers}) => {
+  const today = moment().format('YYYY-MM-DD');
+  const [selectedDay, setSelectedDay] = useState(today);
   const calenderRef = useRef(null);
 
   const dayComponent = ({ date, selectedDate }) => {
@@ -17,10 +19,14 @@ const Calendar = ({selectedDate,showTimeWithUsers}) => {
       <DayItem
         date={date}
         selectedDate={selectedDate}
-        onPress={showTimeWithUsers}
-        setSelectedDay={setSelectedDay}
+        onPress={handleDayPress}
       />
     );
+  };
+
+  const handleDayPress = (day, month) => {
+    showTimeWithUsers(day)
+    setSelectedDay(day);
   };
 
   const handleGetPreviousWeek = () => {
@@ -65,7 +71,6 @@ const Calendar = ({selectedDate,showTimeWithUsers}) => {
           </TouchableOpacity>
         }
       />
-      {/*<MentalNoteTile notes={getMentalNotesByDate()} disabled />*/}
     </View>
   );
 };

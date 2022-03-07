@@ -7,11 +7,10 @@ import AppNavContainer from "./src/navigations";
 import GlobalProvider from './src/context/Provider';
 
 
-
-
 // import { initializeApp } from "firebase/app";
 import * as firebase from 'firebase/app';
-import { getFirestore, setDoc, doc } from 'firebase/firestore';
+import {getFirestore, setDoc, doc} from 'firebase/firestore';
+import {OSB, OSR, PNB, PNR, PNSB} from "./src/constants/fonts";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -34,11 +33,11 @@ export const firestore = getFirestore();
 // const database = getDatabase(app);
 // console.log('database', database)
 function App() {
-    return (
-        <GlobalProvider>
-            <AppNavContainer/>
-        </GlobalProvider>
-    );
+        return (
+            <GlobalProvider>
+                <AppNavContainer/>
+            </GlobalProvider>
+        )
 }
 
 

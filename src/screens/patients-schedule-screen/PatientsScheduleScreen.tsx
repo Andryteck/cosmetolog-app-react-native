@@ -42,10 +42,8 @@ export const PatientsScheduleScreen: React.FC = () => {
             },
         } = useContext(GlobalContext);
         const [value, setValue] = useState<IUserWithTime[]>([])
-        const [date, setDate] = useState<Moment>(moment())
         const [timeOfAppointment, setTimeOfAppointment] = useState<{ time: string, user: IUser | null }[]>([])
         const navigation = useNavigation()
-
         React.useLayoutEffect(() => {
             navigation.setOptions({
                 headerRight: () => (
@@ -64,18 +62,19 @@ export const PatientsScheduleScreen: React.FC = () => {
         // );
 
         // @ts-ignore
-        useEffect(() => getAppointments()(appointmentDispatch), [appointmentDispatch])
+        useEffect(() => getAppointments()(appointmentDispatch), [])
 
         useEffect(() => {
-            showTimeWithUsers(moment())
+            if (data) {
+                showTimeWithUsers(moment().format('YYYY-MM-DD'))
+            }
         }, [data])
 
-        const showTimeWithUsers = (date: Moment) => {
-            setDate(date)
+        const showTimeWithUsers = useCallback((date: Moment) => {
             setValue([{id: '0', time: '0', user: undefined, procedure: ''}])
             data.forEach((i: any) => {
                 i.data.forEach((i: any) => {
-                    if (date.format('YYYY-MM-DD') === i.date) {
+                    if (date === i.date) {
                         setValue(value => [...value, {
                             id: i._id,
                             time: i.time,
@@ -85,9 +84,9 @@ export const PatientsScheduleScreen: React.FC = () => {
                     }
                 })
             })
-        }
+        }, [setValue, data])
 
-        const showCustomAlert = (item: any) => {
+        const showCustomAlert = useCallback((item: any) => {
             const name = value?.slice(1).find(i => {
                 if (i.time === item.time) {
                     return i
@@ -98,22 +97,23 @@ export const PatientsScheduleScreen: React.FC = () => {
                 "",
                 `${name !== undefined || null ? name : 'Нет приема'}`,
             );
+        }, [value])
 
-
-        }
-        const getTimeOfAppointment = () => {
+        const getTimeOfAppointment = useCallback(() => {
             const nonDefaultItemArray = value && value.slice(1).map(i => {
-                if (i.time !== appointmentsItems.find(item => item.time).time) {
+                if (i.time !== appointmentsItems.find(item => item.time)!.time) {
                     return {time: i.time, user: null}
                 }
             }).filter(i => i !== undefined)
 
             const result = [...appointmentsItems, ...nonDefaultItemArray].filter(i => i !== undefined).sort((prev, next) => moment(prev.time, 'HH:mm') - moment(next.time, 'HH:mm'))
-            setTimeOfAppointment(_.uniqBy(result, 'time'))
-        }
+            setTimeOfAppointment(_.uniqBy(result, 'time') as any)
+        }, [value, setTimeOfAppointment])
 
         useEffect(() => {
-            getTimeOfAppointment()
+            if (value) {
+                getTimeOfAppointment()
+            }
         }, [value])
 
         const renderItem = () => (
@@ -141,27 +141,7 @@ export const PatientsScheduleScreen: React.FC = () => {
 
         return (
             <SafeAreaView style={styles.root}>
-                <Calendar selectedDate={date} showTimeWithUsers={showTimeWithUsers}/>
-                {/*<CalendarStrip*/}
-                {/*    selectedDate={date}*/}
-                {/*    scrollToOnSetSelectedDate={true}*/}
-                {/*    // scrollable={value.length !== 1}*/}
-                {/*    // scrollable={true}*/}
-                {/*    calendarHeaderStyle={{fontSize: 20}}*/}
-                {/*    style={{flex: 1, paddingTop: 20, paddingBottom: 10}}*/}
-                {/*    calendarColor={'rgb(81, 21,212)'}*/}
-                {/*    iconContainer={{flex: 0.1}}*/}
-                {/*    dateNumberStyle={{fontSize: 18}}*/}
-                {/*    dateNameStyle={{color: 'white', fontSize: 8,}}*/}
-                {/*    onDateSelected={showTimeWithUsers}*/}
-                {/*    locale={locale}*/}
-                {/*    markedDates={[*/}
-                {/*        {*/}
-                {/*            date: date,*/}
-                {/*            dots: [{key: 0, color: 'black', selectedDotColor: 'black'}],*/}
-                {/*        },*/}
-                {/*    ]}*/}
-                {/*/>*/}
+                <Calendar showTimeWithUsers={showTimeWithUsers}/>
                 <ScrollView
                     style={styles.contentContainer}
                     showsVerticalScrollIndicator={false}
@@ -181,14 +161,14 @@ export const PatientsScheduleScreen: React.FC = () => {
                                 {/*<View style={styles.textContainer}>*/}
                                 {/*    <Text style={styles.text}>{value.slice(1).length ? 'Приемы' : `Приемов нет`}</Text>*/}
                                 {/*</View>*/}
-                                    <View style={styles.content}>
-                                        {
-                                            renderItem()
-                                        }
-                                    </View>
-                                    <View style={styles.logo}>
-                                        <Logo width={300} height={300} />
-                                    </View>
+                                <View style={styles.content}>
+                                    {
+                                        renderItem()
+                                    }
+                                </View>
+                                <View style={styles.logo}>
+                                    <Logo width={300} height={300}/>
+                                </View>
                             </>
                     }
                 </ScrollView>

@@ -6,7 +6,7 @@ import {dh} from "../../../utils/sizes";
 import {COLORS, FONTS} from "../../../constants";
 
 
-const DayItem = ({ date, selectedDate, onPress, setSelectedDay }) => {
+const DayItem = ({ date, selectedDate, onPress }) => {
   const today = moment().format('YYYY-MM-DD');
   const currentDate = moment(today).isSame(date, 'day');
   const selected = moment(selectedDate).isSame(date, 'day');
@@ -14,9 +14,9 @@ const DayItem = ({ date, selectedDate, onPress, setSelectedDay }) => {
   const number = moment(date).format('DD');
 
   const handleDayPress = useCallback(() => {
-    setSelectedDay(date)
-    onPress(selectedDate);
-  }, [date, onPress, selectedDate]);
+    const month = -moment().diff(date, 'months');
+    onPress(moment(date).format('YYYY-MM-DD'), month);
+  }, [date, onPress]);
 
   return (
     <View style={styles.dayContainerStyle}>
