@@ -55,12 +55,6 @@ export const PatientsScheduleScreen: React.FC = () => {
             });
         }, [navigation]);
 
-        // useFocusEffect(
-        //     React.useCallback(() => {
-        //         getAppointments()(appointmentDispatch)
-        //     }, [])
-        // );
-
         // @ts-ignore
         useEffect(() => getAppointments()(appointmentDispatch), [])
 

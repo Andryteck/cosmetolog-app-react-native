@@ -18,6 +18,7 @@ import {Appointment} from '../types/appointment';
 import {StackNavigationProp} from "@react-navigation/stack";
 import {useFieldsAutoComplete} from "../hooks/useFieldsAutoComplete";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import {COLORS} from "../constants";
 
 export type ChangeAppointmentScreenRouteProp = RouteProp<RootStackParamList, 'ChangeAppointment'>;
 type ChangeAppointmentScreenNavigationProp = StackNavigationProp<RootStackParamList,
@@ -144,7 +145,7 @@ export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
                     />
                 )}
                 <ButtonView>
-                    <Button onPress={show ? hideDatePicker : onSubmit} color='#2A86FF' disabled={loading} loading={loading}>
+                    <Button onPress={show ? hideDatePicker : onSubmit} color={COLORS.Green1} disabled={loading} loading={loading}>
                         <Text>Сохранить</Text>
                     </Button>
                 </ButtonView>

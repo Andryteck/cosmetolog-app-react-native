@@ -16,7 +16,7 @@ export const Users:React.FC<IProps> = ({isCalendar}) => {
             <TouchableOpacity
                 onPress={() => navigation.navigate('Patients')}
                 style={{marginRight: 20}}>
-                <Ionicons name="md-people" size={28} color={isCalendar ? COLORS.White : 'black'}/>
+                <Ionicons name="md-people" size={28} color={COLORS.White}/>
             </TouchableOpacity>
         </>
     );

@@ -27,14 +27,6 @@ export const AvailabilityPreparationsScreen = () => {
     const [error, setError] = useState<string | null>(null)
     // const navigation = useNavigation()
 
-    // React.useLayoutEffect(() => {
-    //     navigation.setOptions({
-    //         headerRight: () => (
-    //             <Users/>
-    //         ),
-    //     });
-    // }, [navigation]);
-
     const storeDataToStorage = async (value: Partial<{ ([key]: string): string }>) => {
         try {
             const jsonValue = JSON.stringify(value)

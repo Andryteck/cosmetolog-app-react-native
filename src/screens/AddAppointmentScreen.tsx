@@ -18,6 +18,7 @@ import moment from "moment";
 import {useFieldsAutoComplete} from "../hooks/useFieldsAutoComplete"
 import {RouteProp, useNavigation, useRoute} from "@react-navigation/native";
 import Badge from "../components/Badge/Badge"
+import {COLORS} from "../constants";
 
 type ParamList = {
     AddAppointment: {
@@ -164,7 +165,7 @@ export const AddAppointmentScreen: React.FC = () => {
             )}
 
             <ButtonView>
-                <Button onPress={show ? hideDatePicker : onSubmit} color='#87CC6F' loading={loading} disabled={loading}>
+                <Button onPress={show ? hideDatePicker : onSubmit} color={COLORS.Green1} loading={loading} disabled={loading}>
                     Добавить
                 </Button>
             </ButtonView>

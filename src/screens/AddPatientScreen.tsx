@@ -6,6 +6,7 @@ import Button from '../components/Buttons/Button';
 import Container from "../components/Container/Container";
 import {patientAPI} from "../api/patients";
 import {useFocusEffect, useNavigation} from "@react-navigation/native";
+import {COLORS} from "../constants";
 
 type IForm = {
     _id: string,
@@ -81,7 +82,7 @@ export const AddPatientScreen = () => {
                 />
             </Item>
             <ButtonView>
-                <Button onPress={onSubmit} color='#87CC6F' disabled={loading} loading={loading}>
+                <Button onPress={onSubmit} color={COLORS.Green1} disabled={loading} loading={loading}>
                     Добавить пациента
                 </Button>
             </ButtonView>
@@ -93,14 +94,4 @@ const ButtonView = styled(View)`
   flex: 1;
   margin-top: 30px;
 `;
-
-
-// AddPatientScreen.navigationOptions = {
-//     title: 'Добавить пациента',
-//     headerTintColor: '#2A86FF',
-//     headerStyle: {
-//         elevation: 0.8,
-//         shadowOpacity: 0.8,
-//     },
-// };
 

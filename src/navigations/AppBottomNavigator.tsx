@@ -6,7 +6,7 @@ import {AvailabilityPreparationsScreen} from "../screens/AvailabilityPreparation
 import {Ionicons} from "@expo/vector-icons";
 import {Home} from "../components/Home/Home";
 import {Back} from "../components/Back/Back";
-import {COLORS} from "../constants";
+import {COLORS, FONTS} from "../constants";
 import {useFonts} from "@use-expo/font";
 import {OSB, OSR, PNB, PNR, PNSB} from "../constants/fonts";
 import * as Font from "expo-font";
@@ -75,11 +75,16 @@ const AppBottomNavigator = () => {
                 />
                 <Tab.Screen name="AvailabilityPreparations" component={AvailabilityPreparationsScreen} options={{
                     title: 'Наличие расходников',
-                    headerTitleStyle: {fontSize: 22},
+                    headerTintColor: COLORS.White,
+                    headerStyle: {backgroundColor: COLORS.Green1},
+                    headerTitleStyle: {fontSize: 22, fontFamily: FONTS.PNR}
                 }}/>
                 <Tab.Screen name="AddPatient" component={AddPatientScreen}
                             options={{
                                 title: 'Добавить пациента',
+                                headerTintColor: COLORS.White,
+                                headerStyle: {backgroundColor: COLORS.Green1},
+                                headerTitleStyle: {fontSize: 22, fontFamily: FONTS.PNR},
                                 headerLeft: () => (
                                     <Back/>
                                 )

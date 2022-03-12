@@ -6,3 +6,4 @@ export { AddAppointmentScreen } from './AddAppointmentScreen';
 export {ChangePatientScreen} from "./ChangePatientScreen";
 export {ChangeAppointmentScreen} from "./ChangeAppointmentScreen";
 export {PatientsScheduleScreen} from "./patients-schedule-screen/PatientsScheduleScreen";
+export {AvailabilityPreparationsScreen} from "./AvailabilityPreparationsScreen";
