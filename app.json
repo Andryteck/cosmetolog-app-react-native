@@ -22,7 +22,7 @@
       ]
     },
     "splash": {
-      "image": "./assets/sveta2.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
