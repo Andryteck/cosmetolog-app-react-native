@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {IValues} from "../screens/AddAppointmentScreen";
+import {IValues} from "../screens/add-appointment-screen/components/AddAppointmentScreen";
 import {ChangeAppointmentScreenRouteProp} from "../screens/ChangeAppointmentScreen";
 import {getPriceValue} from "../utils/getPriceValue";
 

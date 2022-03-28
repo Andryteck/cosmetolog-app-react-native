@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import Button from '../components/Buttons/Button';
 import Container from "../components/Container/Container";
 import {appointmentAPI} from "../api/appointments";
-import {IValues} from "./AddAppointmentScreen";
+import {IValues} from "./add-appointment-screen/components/AddAppointmentScreen";
 import moment from 'moment';
 import {RootStackParamList} from "../types/navigate";
 import {RouteProp} from '@react-navigation/native';

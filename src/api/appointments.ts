@@ -1,6 +1,6 @@
 import axios from '../core/axios';
 import {IAppointment} from "./patients";
-import {IValues} from "../screens/AddAppointmentScreen";
+import {IValues} from "../screens/add-appointment-screen/components/AddAppointmentScreen";
 // @ts-ignore
 import envs from '../config/env';
 
