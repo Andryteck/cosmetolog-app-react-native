@@ -1,8 +1,8 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
     Keyboard,
     NativeSyntheticEvent,
-    Platform, ScrollView,
+    ScrollView,
     Text,
     TextInputChangeEventData,
     TouchableOpacity,
@@ -170,8 +170,8 @@ export const AddAppointmentScreen: React.FC = () => {
                                 <Label>Дата и Время</Label>
                                 <Input value={moment(date).format('YYYY-MM-DD-HH:mm')} onFocus={openDatePicker}/>
                             </Item>
-                            <IconTouchable name='add' iconColor={COLORS.Green1}
-                                           style={{position: 'absolute', top: 18, right: 15}}/>
+                            {/*<IconTouchable name='add' iconColor={COLORS.Green1}*/}
+                            {/*               style={{position: 'absolute', top: 18, right: 15}}/>*/}
                         </View>
                     }
                 </>

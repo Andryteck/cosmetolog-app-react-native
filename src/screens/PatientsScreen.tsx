@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useContext, useMemo} from 'react';
-import {FlatList, Alert, View, TouchableOpacity, ActivityIndicator, NativeSyntheticEvent} from 'react-native';
+import React, {useState, useEffect, useContext } from 'react';
+import {FlatList, Alert, View, TouchableOpacity, NativeSyntheticEvent} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import styled from 'styled-components/native';
 // @ts-ignore
@@ -7,7 +7,6 @@ import Swipeable from 'react-native-swipeable-row';
 import {Item, Input} from 'native-base';
 import {patientAPI} from "../api/patients";
 import Appointment from "../components/SectionAppointment/Appointment/Appointment";
-import {PlusButton} from "../components/Buttons/PlusButton";
 import phoneFormat from "../utils/phoneFormat";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import {GlobalContext} from "../context/Provider";
@@ -21,7 +20,7 @@ export const PatientsScreen: React.FC = () => {
     const {
         patientsDispatch,
         patientsState: {
-            getPatients: {data, loading, error},
+            getPatients: {data, loading},
         },
     } = useContext(GlobalContext);
 
@@ -73,7 +72,7 @@ export const PatientsScreen: React.FC = () => {
         <Container>
             <View style={{padding: 20}}>
                 <Item style={{paddingLeft: 15, borderRadius: 30}} regular>
-                    <Input onChange={onSearch} placeholder="Поиск..." style={{top: 0}}/>
+                    <Input onChange={onSearch} placeholder="Поиск..." autoCorrect={false} style={{top: 0}}/>
                 </Item>
             </View>
 
