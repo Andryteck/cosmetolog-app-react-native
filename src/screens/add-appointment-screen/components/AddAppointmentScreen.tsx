@@ -19,7 +19,6 @@ import {useFieldsAutoComplete} from "../../../hooks/useFieldsAutoComplete"
 import {RouteProp, useNavigation, useRoute} from "@react-navigation/native";
 import Badge from "../../../components/Badge/Badge"
 import {COLORS} from "../../../constants";
-import IconTouchable from "../../../components/IconTouchable";
 
 type ParamList = {
     AddAppointment: {
@@ -44,11 +43,6 @@ export const AddAppointmentScreen: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const {values, setValues} = useFieldsAutoComplete({_id})
     const [show, setShow] = useState(false);
-    const [input, setInput] = useState<Record<'name', string>[]>([]);
-
-    const addInput = useCallback(() => {
-        setInput([...input, {name: ''}])
-    }, [input, setInput])
 
     const openDatePicker = () => {
         setShow(!show)
@@ -186,6 +180,7 @@ export const AddAppointmentScreen: React.FC = () => {
                         is24Hour={true}
                         display={'spinner'}
                         locale={'ru'}
+                        textColor={COLORS.Black}
                     />
                 )}
 

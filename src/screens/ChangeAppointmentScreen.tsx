@@ -142,6 +142,7 @@ export const ChangeAppointmentScreen = ({navigation, route}: Props) => {
                         is24Hour={true}
                         display={'spinner'}
                         locale={'ru'}
+                        textColor={COLORS.Black}
                     />
                 )}
                 <ButtonView>
