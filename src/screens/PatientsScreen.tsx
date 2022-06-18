@@ -82,6 +82,9 @@ export const PatientsScreen: React.FC = () => {
                         item =>
                             item.fullName
                                 .toLowerCase()
+                                .indexOf(searchValue.toLowerCase()) >= 0 ||
+                            item.phone
+                                .toLowerCase()
                                 .indexOf(searchValue.toLowerCase()) >= 0
                     )}
                     keyExtractor={item => item._id}

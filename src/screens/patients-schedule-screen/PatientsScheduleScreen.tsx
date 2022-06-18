@@ -6,11 +6,9 @@ import {
     SafeAreaView,
     Text,
     ScrollView,
-    RefreshControl, TouchableOpacity, Alert, Image
+    RefreshControl, TouchableOpacity, Alert, Image, TouchableWithoutFeedback
 } from 'react-native';
-import CalendarStrip from 'react-native-calendar-strip';
 import Badge from '../../components/Badge/Badge';
-import {locale} from '../../utils/locale';
 import moment, {Moment} from 'moment';
 import 'moment/locale/ru';
 import {useNavigation} from "@react-navigation/native";
@@ -42,7 +40,7 @@ export const PatientsScheduleScreen: React.FC = () => {
             },
         } = useContext(GlobalContext);
         const [value, setValue] = useState<IUserWithTime[]>([])
-        const [timeOfAppointment, setTimeOfAppointment] = useState<{ time: string, user: IUser | null }[]>([])
+        const [timeOfAppointment, setTimeOfAppointment] = useState<{ time: string }[]>([])
         const navigation = useNavigation()
         React.useLayoutEffect(() => {
             navigation.setOptions({
@@ -110,6 +108,17 @@ export const PatientsScheduleScreen: React.FC = () => {
             }
         }, [value])
 
+        const getBadgeColor = (item: { time: string }) => {
+            if (value && value.some(i => i.time === item.time)) {
+                // if (value && value.some(i => i.user === 'Коррекция')) {
+                //     return 'lightGreen'
+                // }
+                return 'darkGreen'
+            } else {
+                return 'dashed'
+            }
+        }
+
         const renderItem = () => (
             <>
                 {
@@ -127,7 +136,7 @@ export const PatientsScheduleScreen: React.FC = () => {
                             onLongPress={() => showCustomAlert(item)}
                             disabled={false}>
                             <Badge
-                                color={value && value.find(i => i.time === item.time) ? 'darkGreen' : 'dashed'}>{item.time}</Badge>
+                                color={getBadgeColor(item)}>{item.time}</Badge>
                         </TouchableOpacity>))
                 }
             </>
@@ -152,14 +161,25 @@ export const PatientsScheduleScreen: React.FC = () => {
                             </>
                             :
                             <>
-                                {/*<View style={styles.textContainer}>*/}
-                                {/*    <Text style={styles.text}>{value.slice(1).length ? 'Приемы' : `Приемов нет`}</Text>*/}
-                                {/*</View>*/}
                                 <View style={styles.content}>
                                     {
                                         renderItem()
                                     }
                                 </View>
+                                {/*<View style={{minWidth: 100, flexDirection: 'row', marginTop: 15}}>*/}
+                                {/*    <View style={styles.row}>*/}
+                                {/*        <View style={[styles.time, {marginHorizontal: 0, marginVertical: 0}]}>*/}
+                                {/*            <Badge color={'darkGreen'}/>*/}
+                                {/*        </View>*/}
+                                {/*        <Text style={styles.badgeText}>- Прием</Text>*/}
+                                {/*    </View>*/}
+                                {/*    <View style={[styles.row, {marginLeft: 10}]}>*/}
+                                {/*        <View style={[styles.time, {marginHorizontal: 0, marginVertical: 0}]}>*/}
+                                {/*            <Badge color={'lightGreen'}/>*/}
+                                {/*        </View>*/}
+                                {/*        <Text style={styles.badgeText}>- Коррекция</Text>*/}
+                                {/*    </View>*/}
+                                {/*</View>*/}
                                 <View style={styles.logo}>
                                     <Logo width={300} height={300}/>
                                 </View>
@@ -215,5 +235,22 @@ const styles = StyleSheet.create({
         borderColor: COLORS.Green1,
         marginHorizontal: 7.5,
         marginVertical: 7.5,
+    },
+    badge: {
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
+        overflow: 'hidden',
+        borderWidth: 0.5,
+        borderColor: COLORS.Green1,
+    },
+    badgeText: {
+        marginLeft: 10,
+        color: COLORS.White,
+    },
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
 });

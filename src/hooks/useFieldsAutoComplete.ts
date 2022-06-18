@@ -28,6 +28,13 @@ export const useFieldsAutoComplete = ({_id, route}: TProps) => {
             case 'Контурка':
                 setValues({
                     ...values,
+                    price: 420
+                })
+                break
+            case 'Подбородок':
+            case 'Носогубка':
+                setValues({
+                    ...values,
                     price: 150
                 })
                 break
@@ -40,14 +47,14 @@ export const useFieldsAutoComplete = ({_id, route}: TProps) => {
             case 'Ботокс':
                 setValues({
                     ...values,
-                    price: 100,
-                    preporation: 'Подвал от брауде',
+                    price: 120,
+                    preporation: 'Подвал из Китая',
                 })
                 break
             case 'Модель':
                 setValues({
                     ...values,
-                    price: 95,
+                    price: 100,
                     preporation: 'Дерм',
                 })
                 break
