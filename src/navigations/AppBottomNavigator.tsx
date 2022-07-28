@@ -7,7 +7,6 @@ import {Ionicons} from "@expo/vector-icons";
 import {Home} from "../components/Home/Home";
 import {Back} from "../components/Back/Back";
 import {COLORS, FONTS} from "../constants";
-import {useFonts} from "@use-expo/font";
 import {OSB, OSR, PNB, PNR, PNSB} from "../constants/fonts";
 import * as Font from "expo-font";
 import Apploading from "expo-app-loading";
@@ -30,13 +29,12 @@ const AppBottomNavigator = () => {
         return (
             <Apploading
                 startAsync={getFonts}
-                onFinish={() => {
-                    setFontsLoaded(true);
-                }}
+                onFinish={() => setFontsLoaded(true)}
                 onError={console.warn}
             />
         )
-    } else {
+    }
+
         return (
             <Tab.Navigator tabBarOptions={{
                 labelStyle: {
@@ -91,7 +89,6 @@ const AppBottomNavigator = () => {
                             }}/>
             </Tab.Navigator>
         );
-    }
 }
 
 export default AppBottomNavigator;

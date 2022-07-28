@@ -11,6 +11,7 @@ import {
 } from "../screens";
 import React from "react";
 import {COLORS, FONTS} from "../constants";
+import {PatientScheduleContainer} from "../screens/patients-schedule-screen_/patientsScheduleScreen.container";
 
 const AppNavigator = () => {
     const Stack = createStackNavigator<RootStackParamList>();
@@ -62,7 +63,7 @@ const AppNavigator = () => {
                 headerStyle: {backgroundColor: COLORS.Green1},
                 headerTitleStyle: {fontSize: 22, fontFamily: FONTS.PNR},
             }}/>
-            <Stack.Screen name="PatientsSchedule" component={PatientsScheduleScreen} options={{
+            <Stack.Screen name="PatientsSchedule" component={PatientScheduleContainer} options={{
                 title: 'График приемов',
                 headerTintColor: COLORS.White,
                 headerStyle: {backgroundColor: COLORS.Green1},

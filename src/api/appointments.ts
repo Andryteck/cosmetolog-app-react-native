@@ -25,6 +25,9 @@ export const appointmentAPI = {
     changeAppointments(id: string, data: Partial<IAppointment>) {
         return instance.patch<any>(`appointments/${id}`, data)
     },
+    getScheduledAppointment(date: string) {
+        return instance.get<any>(`schedule/${date}`)
+    }
 }
 
 interface ResponseType {

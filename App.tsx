@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import {LogBox} from 'react-native'
+import { observer } from 'mobx-react-lite';
 
 LogBox.ignoreAllLogs(true)
 import AppNavContainer from "./src/navigations";
@@ -32,13 +33,13 @@ export const firestore = getFirestore();
 
 // const database = getDatabase(app);
 // console.log('database', database)
-function App() {
+const App = observer(() => {
         return (
             <GlobalProvider>
                 <AppNavContainer/>
             </GlobalProvider>
         )
-}
+})
 
 
 export default App;
