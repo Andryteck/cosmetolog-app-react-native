@@ -3,14 +3,14 @@ export const getPriceValue = (preporation: string) => {
     case 'Дерм':
       return 210
     case 'Рэдж':
-      return 155
+      return 160
     case 'Стил':
-      return 240
+      return 250
     case 'Ювик':
       return 270
     case 'Тео':
       return 250
     default:
-      return 240
+      return 250
   }
 }

@@ -1,24 +1,22 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
-    View,
-    Text,
-    Linking,
-    FlatList, TouchableOpacity, Alert, ScrollView,
+  View,
+  Text,
+  Linking,
+  FlatList, TouchableOpacity, Alert,
 } from 'react-native';
 import styled from 'styled-components';
 // @ts-ignore
 import Swipeable from 'react-native-swipeable-row';
 import GrayText from '../components/GrayText/GrayText';
 import ButtonCall from '../components/Buttons/ButtonCall';
-import {Foundation, Ionicons} from '@expo/vector-icons';
-import {IAppointment, patientAPI} from "../api/patients";
-import {PlusButton} from "../components/Buttons/PlusButton";
-import phoneFormat from "../utils/phoneFormat";
-import {AppointmentCard} from '../components/AppointmentCard/AppointmentCard';
-import {RouteProp} from "@react-navigation/native";
-import {RootStackParamList} from "../types/navigate";
-import {StackNavigationProp} from "@react-navigation/stack";
-import Appointment from "../components/SectionAppointment/Appointment/Appointment";
+import { Foundation, Ionicons } from '@expo/vector-icons';
+import { IAppointment, patientAPI } from '../api/patients';
+import { PlusButton } from '../components/Buttons/PlusButton';
+import { AppointmentCard } from '../components/AppointmentCard/AppointmentCard';
+import { RouteProp } from '@react-navigation/native';
+import { RootStackParamList } from '../types/navigate';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 type PatientScreenRouteProp = RouteProp<RootStackParamList, 'Patient'>;
 type PatientScreenNavigationProp = StackNavigationProp<RootStackParamList,
@@ -29,119 +27,123 @@ type Props = {
     navigation: PatientScreenNavigationProp
 };
 
-export const PatientScreen: React.FC<Props> = ({route, navigation}) => {
-    const [appointments, setAppointments] = useState<IAppointment[]>([])
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-    // @ts-ignore
-    const {user} = route.params;
-    console.log(user)
-
-
-    const showAppointments = () => {
-        setIsLoading(true)
-        patientAPI.showAppointments(user._id)
-            .then(({data}) => {
-                //@ts-ignore
-                setAppointments(data.data.appointments.reverse())
-            }).finally(() => {
-            return setIsLoading(false)
-        })
-    }
-    const removePatient = (id: string) => {
-        Alert.alert(
-            'Удаление пациента',
-            'Вы действительно хотите удалить пациента?',
-            [
-                {
-                    text: 'Отмена',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel'
-                },
-                {
-                    text: 'Удалить',
-                    onPress: () => {
-                        setIsLoading(true);
-                        patientAPI
-                            .removePatient(id)
-                            .then(() => {
-                                navigation.navigate('Home')
-                            })
-                            .catch(() => {
-                                setIsLoading(false);
-                            });
-                    }
-                }
-            ],
-            {cancelable: false}
-        );
-    };
-    const handlePress = useCallback(async () => {
-        try {
-            const supported = await Linking.canOpenURL(user.instagramUrl);
-
-            if (supported) {
-                await Linking.openURL(user.instagramUrl);
-            } else {
-                Alert.alert('Введенная ссылка неверная', 'Проверьте ссылку');
-            }
-        } catch (e) {
-            Alert.alert('Инстаграмм не введен');
+export const PatientScreen: React.FC<Props> = ({ route, navigation }) => {
+  const [appointments, setAppointments] = useState<IAppointment[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  // @ts-ignore
+  const { user } = route.params;
+  console.log(user.instagramUrl)
+  const showAppointments = () => {
+    setIsLoading(true)
+    patientAPI.showAppointments(user._id)
+      .then(({ data }) => {
+        //@ts-ignore
+        setAppointments(data.data.appointments.reverse())
+      }).finally(() => {
+        return setIsLoading(false)
+      })
+  }
+  const removePatient = (id: string) => {
+    Alert.alert(
+      'Удаление пациента',
+      'Вы действительно хотите удалить пациента?',
+      [
+        {
+          text: 'Отмена',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel'
+        },
+        {
+          text: 'Удалить',
+          onPress: () => {
+            setIsLoading(true);
+            patientAPI
+              .removePatient(id)
+              .then(() => {
+                navigation.navigate('Home')
+              })
+              .catch(() => {
+                setIsLoading(false);
+              });
+          }
         }
-
-    }, [user.instagramUrl]);
-
-    useEffect(() => {
-        showAppointments()
-    }, [user._id, navigation, route])
-
-    return (
-        <View style={{flex: 1, backgroundColor: 'white'}}>
-            <PatientDetails>
-                <Swipeable
-                    rightButtons={[
-                        <SwipeViewButton style={{backgroundColor: '#B4C1CB'}}
-                                         onPress={() => navigation.navigate('ChangePatient', {item: user})}
-                        >
-                            <Ionicons name="md-create" size={28} color="white"/>
-                        </SwipeViewButton>,
-                        // <SwipeViewButton
-                        //     onPress={removePatient.bind(null, user._id)}
-                        //     style={{backgroundColor: '#F85A5A'}}
-                        // >
-                        //     <Ionicons name="ios-close" size={48} color="white"/>
-                        // </SwipeViewButton>
-                    ]}>
-                    <PatientFullName>{user.fullName}</PatientFullName>
-                    <GrayText>{phoneFormat(user.phone)}</GrayText>
-                    <PatientButtonsWrapper>
-                        <ButtonCall onPress={() => {
-                            Linking.openURL(`tel:${user.phone}`)
-                        }}>
-                            <Foundation name="telephone" size={24} color="white"/>
-                        </ButtonCall>
-                    </PatientButtonsWrapper>
-                    <TouchableOpacity onPress={handlePress} style={{marginTop: 10}}>
-                        <PatientLink>Cсылка на инстаграм</PatientLink>
-                    </TouchableOpacity>
-                </Swipeable>
-            </PatientDetails>
-
-            <PatientAppointments>
-                <Container>
-                    <FlatList
-                        data={appointments}
-                        keyExtractor={(item: IAppointment) => item._id}
-                        onRefresh={showAppointments}
-                        refreshing={isLoading}
-                        renderItem={({item}: { item: IAppointment }) => <AppointmentCard item={item}
-                                                                                         showAppointments={showAppointments}
-                                                                                         navigation={navigation}/>}
-                    />
-                </Container>
-            </PatientAppointments>
-            <PlusButton onPress={() => navigation.navigate('AddAppointment', user)}/>
-        </View>
+      ],
+      { cancelable: false }
     );
+  };
+
+  const handlePress = useCallback(async () => {
+    try {
+      const supported = await Linking.canOpenURL(user.instagramUrl);
+
+      if (supported) {
+        await Linking.openURL(user.instagramUrl);
+      } else {
+        Alert.alert('Введенная ссылка неверная', 'Проверьте ссылку');
+      }
+    } catch (e) {
+      Alert.alert('Инстаграмм не введен');
+    }
+
+  }, [user.instagramUrl]);
+
+  useEffect(() => {
+    showAppointments()
+  }, [user._id, navigation, route])
+
+  return (
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
+      <PatientDetails>
+        <Swipeable
+          rightButtons={[
+            <SwipeViewButton
+              style={{ backgroundColor: '#B4C1CB' }}
+              onPress={() => navigation.navigate('ChangePatient', { item: user })}
+            >
+              <Ionicons
+                name="md-create"
+                size={28}
+                color="white"/>
+            </SwipeViewButton>
+          ]}>
+          <PatientFullName>{user.fullName}</PatientFullName>
+          <GrayText>{user.phone}</GrayText>
+          <PatientButtonsWrapper>
+            <ButtonCall
+              onPress={() => {
+                Linking.openURL(`tel:${user.phone}`)
+              }}>
+              <Foundation
+                name="telephone"
+                size={24}
+                color="white"/>
+            </ButtonCall>
+          </PatientButtonsWrapper>
+          <TouchableOpacity
+            onPress={handlePress}
+            style={{ marginTop: 10 }}>
+            <PatientLink>Cсылка на инстаграм</PatientLink>
+          </TouchableOpacity>
+        </Swipeable>
+      </PatientDetails>
+
+      <PatientAppointments>
+        <Container>
+          <FlatList
+            data={appointments}
+            keyExtractor={(item: IAppointment) => item._id}
+            onRefresh={showAppointments}
+            refreshing={isLoading}
+            renderItem={({ item }: { item: IAppointment }) => <AppointmentCard
+              item={item}
+              showAppointments={showAppointments}
+              navigation={navigation}/>}
+          />
+        </Container>
+      </PatientAppointments>
+      <PlusButton onPress={() => navigation.navigate('AddAppointment', user)}/>
+    </View>
+  );
 };
 
 

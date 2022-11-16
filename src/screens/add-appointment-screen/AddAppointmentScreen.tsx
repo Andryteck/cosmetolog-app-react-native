@@ -1,39 +1,45 @@
 import React, { useState } from 'react';
 import {
   Keyboard,
+  NativeSyntheticEvent,
   ScrollView, StyleSheet,
-  Text,
+  TextInputChangeEventData,
   View
 } from 'react-native';
 import { Input, Stack } from 'native-base';
 import styled from 'styled-components';
-import Button from '../components/Buttons/Button';
-import Container from '../components/Container/Container';
-import { appointmentAPI } from '../api/appointments';
-import { IValues } from './add-appointment-screen/AddAppointmentScreen';
-import moment from 'moment';
-import { RootStackParamList } from '../types/navigate';
-import { RouteProp } from '@react-navigation/native';
-import { Appointment } from '../types/appointment';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { useFieldsAutoComplete } from '../hooks/useFieldsAutoComplete';
+import Button from '../../components/Buttons/Button';
+import Container from '../../components/Container/Container';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { COLORS } from '../constants';
-import { CustomSelect } from '../components/select/Select';
+import { appointmentAPI } from '../../api/appointments';
+import moment from 'moment';
+import { useFieldsAutoComplete } from '../../hooks/useFieldsAutoComplete'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { COLORS } from '../../constants';
+import { CustomSelect } from '../../components/select/Select';
 
-export type ChangeAppointmentScreenRouteProp = RouteProp<RootStackParamList, 'ChangeAppointment'>;
-type ChangeAppointmentScreenNavigationProp = StackNavigationProp<RootStackParamList,
-    'ChangeAppointment'>;
-
-type Props = {
-    route: ChangeAppointmentScreenRouteProp;
-    navigation: ChangeAppointmentScreenNavigationProp
+type ParamList = {
+    AddAppointment: {
+        _id: string;
+    };
 };
 
-export const ChangeAppointmentScreen = ({ navigation, route }: Props) => {
-  const [commonDate, setCommonDate] = useState(new Date(route?.params?.date + 'T' + route?.params?.time));
+export interface IValues {
+    date: Date | string,
+    preporation: string,
+    price: number | string,
+    procedure: string,
+    time: string | null,
+    user?: string,
+}
+
+export const AddAppointmentScreen: React.FC = () => {
+  const navigation = useNavigation<any>()
+  const route = useRoute<RouteProp<ParamList, 'AddAppointment'>>()
+  const { _id } = route.params
+  const [date, setDate] = useState(new Date());
   const [loading, setLoading] = useState<boolean>(false);
-  const { values, setValues } = useFieldsAutoComplete({ _id: '', route })
+  const { values, setValues } = useFieldsAutoComplete({ _id })
   const [show, setShow] = useState(false);
 
   const openDatePicker = () => {
@@ -48,7 +54,7 @@ export const ChangeAppointmentScreen = ({ navigation, route }: Props) => {
     });
   };
 
-  const handleInputChange = (name: string, e: any) => {
+  const handleInputChange = (name: string, e: NativeSyntheticEvent<TextInputChangeEventData>) => {
     const text = e.nativeEvent.text;
     setFieldValue(name, text);
   }
@@ -58,10 +64,10 @@ export const ChangeAppointmentScreen = ({ navigation, route }: Props) => {
   };
 
   const handleConfirm = (event: any, date: Date) => {
+    console.log('A date has been picked: ', date);
     // @ts-ignore
-    setCommonDate(new Date(Date.parse(date)))
+    setDate(new Date(Date.parse(date)))
   };
-
   const fieldsName: IValues = {
     preporation: 'Препарат',
     price: 'Цена',
@@ -72,16 +78,15 @@ export const ChangeAppointmentScreen = ({ navigation, route }: Props) => {
 
   const onSubmit = () => {
     setLoading(true)
-    // @ts-ignore
-    const newValues: Appointment = {
+    const newValues = {
       ...values,
-      date: moment(commonDate).format('YYYY-MM-DD'),
-      time: moment(commonDate).format('HH:mm'),
+      date: moment(date).format('YYYY-MM-DD'),
+      time: moment(date).format('HH:mm')
     }
     appointmentAPI
-      .changeAppointments(route?.params?._id, newValues)
+      .creatAppointment(newValues)
       .then(() => {
-        navigation.navigate('PatientsSchedule', { lastUpdate: new Date() });
+        navigation.push('PatientsSchedule', { lastUpdate: new Date() });
       })
       .catch(e => {
         if (e.response.data && e.response.data.message) {
@@ -91,12 +96,13 @@ export const ChangeAppointmentScreen = ({ navigation, route }: Props) => {
             alert(`Ошибка! Поле "${fieldsName[fieldName]}" указано неверно.`);
           });
         }
-      }).finally(() => setLoading(false));
+      }).finally(() => {
+        return setLoading(false)
+      });
   };
 
-
   return (
-    <ScrollView>
+    <ScrollView style={styles.container}>
       <Container>
         <CustomSelect setFieldValue={setFieldValue}/>
         <Stack
@@ -121,19 +127,22 @@ export const ChangeAppointmentScreen = ({ navigation, route }: Props) => {
           />
         </Stack>
         <>
-          <View style={{ marginTop: 20 }}>
-            <Input
-              style={styles.input}
-              value={moment(commonDate).format('YYYY-MM-DD-HH:mm')}
-              onFocus={openDatePicker}/>
-          </View>
+          {
+            <View style={{ marginTop: 20 }}>
+              <Input
+                value={moment(date).format('YYYY-MM-DD-HH:mm')}
+                onFocus={openDatePicker}
+                style={styles.input}
+              />
+            </View>
+          }
         </>
         {show && (
           <DateTimePicker
             testID="dateTimePicker"
             // @ts-ignore
             mode={'datetime'}
-            value={commonDate}
+            value={date}
             // @ts-ignore
             onChange={handleConfirm}
             is24Hour={true}
@@ -142,18 +151,19 @@ export const ChangeAppointmentScreen = ({ navigation, route }: Props) => {
             textColor={COLORS.Black}
           />
         )}
+
         <ButtonView>
           <Button
             onPress={show ? hideDatePicker : onSubmit}
             color={COLORS.Green1}
-            disabled={loading}
-            loading={loading}>
-            <Text>Сохранить</Text>
+            loading={loading}
+            disabled={loading}>
+                        Добавить
           </Button>
         </ButtonView>
       </Container>
     </ScrollView>
-  );
+  )
 };
 
 const ButtonView = styled(View)`
@@ -163,9 +173,13 @@ const ButtonView = styled(View)`
 `;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1 ,
+  },
   input: {
     height: 60,
     fontSize: 18,
   }
 })
+
 
