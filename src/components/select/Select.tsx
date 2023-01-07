@@ -34,23 +34,32 @@ export const CustomSelect: React.FC<Props> = ({ setFieldValue }) => {
         label={Procedures.Chin}
         value={Procedures.Chin} />
       <Select.Item
+        label={Procedures.Remove}
+        value={Procedures.Remove} />
+      <Select.Item
         label={Procedures.NasalFold}
         value={Procedures.NasalFold} />
-      <Select.Item
-        label={Procedures.Model}
-        value={Procedures.Model} />
       <Select.Item
         label={Procedures.NasolacrimalSulcus}
         value={Procedures.NasolacrimalSulcus} />
       <Select.Item
+        label={Procedures.Contour}
+        value={Procedures.Contour} />
+      <Select.Item
         label={Procedures.Cheekbone}
         value={Procedures.Cheekbone} />
       <Select.Item
-        label={Procedures.Bio}
-        value={Procedures.Bio} />
-      <Select.Item
         label={Procedures.BotoxFullFace}
         value={Procedures.BotoxFullFace} />
+      <Select.Item
+        label={Procedures.Education}
+        value={Procedures.Education} />
+      <Select.Item
+        label={Procedures.Model}
+        value={Procedures.Model} />
+      <Select.Item
+        label={Procedures.Bio}
+        value={Procedures.Bio} />
     </Select>
   );
 };

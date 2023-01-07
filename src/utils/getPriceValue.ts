@@ -1,16 +1,16 @@
 export const getPriceValue = (preporation: string) => {
   switch (preporation) {
     case 'Дерм':
-      return 210
+      return 220
     case 'Рэдж':
-      return 160
+      return 170
     case 'Стил':
-      return 250
+      return 260
     case 'Ювик':
-      return 270
+      return 280
     case 'Тео':
-      return 250
+      return 270
     default:
-      return 250
+      return 260
   }
 }

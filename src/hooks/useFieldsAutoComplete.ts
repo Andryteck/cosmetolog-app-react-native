@@ -16,6 +16,7 @@ export enum Procedures {
   NasolacrimalSulcus = 'Носослезка',
   Cheekbone = 'Скулы',
   Bio = 'Био',
+  Remove = 'Удаление',
   Correction = 'Коррекция',
   BotoxByZone = 'Ботокс одна/две зоны',
   BotoxFullFace = 'Ботокс full face',
@@ -27,7 +28,7 @@ export const useFieldsAutoComplete = ({ _id, route }: TProps) => {
   const [values, setValues] = useState<IValues>({
     date: route ? route?.params?.date : '',
     preporation: route ? route?.params?.preporation : 'Стил',
-    price: route ? route?.params?.price : 250,
+    price: route ? route?.params?.price : 260,
     procedure: route ? route?.params?.procedure : 'Губы',
     time: route ? route?.params?.time : '',
     user: _id || '',
@@ -38,21 +39,21 @@ export const useFieldsAutoComplete = ({ _id, route }: TProps) => {
       case Procedures.Lips:
         setValues({
           ...values,
-          preporation: 'Стил',
+          preporation: values.preporation,
           price: getPriceValue(values.preporation),
         })
         break
       case Procedures.Contour:
         setValues({
           ...values,
-          price: 435
+          price: 450
         })
         break
       case Procedures.Chin:
       case Procedures.NasalFold:
         setValues({
           ...values,
-          price: 160
+          price: 170
         })
         break
       case Procedures.Correction:
@@ -72,49 +73,49 @@ export const useFieldsAutoComplete = ({ _id, route }: TProps) => {
       case Procedures.BotoxFullFace:
         setValues({
           ...values,
-          price: 130,
+          price: 600,
           preporation: 'Подвал из Китая',
         })
         break
       case Procedures.NasolacrimalSulcus:
         setValues({
           ...values,
-          price: 210,
+          price: 220,
           preporation: 'Тео',
         })
         break
       case Procedures.Model:
         setValues({
           ...values,
-          price: 100,
+          price: 110,
           preporation: 'Дерм',
         })
         break
       case Procedures.Education:
         setValues({
           ...values,
-          price: 1200,
+          price: 1400,
           preporation: 'Дерм',
         })
         break
       case Procedures.Cheekbone:
         setValues({
           ...values,
-          price: 310,
+          price: 320,
           preporation: 'Рэдж',
         })
         break
       case Procedures.Bio:
         setValues({
           ...values,
-          price: 90,
+          price: 100,
           preporation: 'Хуарон',
         })
         break
       default :
         setValues({
           ...values,
-          price: 250
+          price: 260
         })
         break
     }
