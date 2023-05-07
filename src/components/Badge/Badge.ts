@@ -26,6 +26,10 @@ const getColor = ({isActive, color}: Props) => {
             background:  COLORS.Green1,
             color: COLORS.White,
         },
+        lightGreen: {
+            background:  COLORS.Green3,
+            color: COLORS.White,
+        },
         default: {
             background: '#E9F5FF',
             color: '#4294FF',

@@ -20,11 +20,16 @@ const Icon = ({ name, size, color, style, highlight }) => {
           { shadowColor: colorHighlighted },
           style,
         ]}>
-        <Svg viewBox={`0 0 ${w} ${h}`} style={{ width: size, height: size }}>
+        <Svg
+          viewBox={`0 0 ${w} ${h}`}
+          style={{ width: size, height: size }}>
           {path && path.length
             ? path.map((item, i) => (
-                <Path fill={color || item.color} d={item.d} key={i} />
-              ))
+              <Path
+                fill={color || item.color}
+                d={item.d}
+                key={i} />
+            ))
             : null}
         </Svg>
       </Androw>

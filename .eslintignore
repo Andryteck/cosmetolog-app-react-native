@@ -1,0 +1,7 @@
+packages
+node_modules
+android
+__tests__
+assets
+ios
+.idea

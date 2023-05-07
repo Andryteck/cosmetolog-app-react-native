@@ -1,4 +1,4 @@
-import React, { memo, useState, useRef } from 'react';
+import React, {memo, useState, useRef, useEffect} from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 import CalendarStrip from 'react-native-calendar-strip';
@@ -9,7 +9,7 @@ import IconTouchable from "../../../components/IconTouchable";
 import {COLORS, FONTS} from "../../../constants";
 
 // TODO make correct day display when i make reload data
-const Calendar = ({showTimeWithUsers}) => {
+const Calendar = ({handleDayPress, selectedDate}) => {
   const today = moment().format('YYYY-MM-DD');
   const [selectedDay, setSelectedDay] = useState(today);
   const calenderRef = useRef(null);
@@ -24,11 +24,6 @@ const Calendar = ({showTimeWithUsers}) => {
     );
   };
 
-  const handleDayPress = (day, month) => {
-    showTimeWithUsers(day)
-    setSelectedDay(day);
-  };
-
   const handleGetPreviousWeek = () => {
     calenderRef.current.getPreviousWeek();
   };
@@ -36,6 +31,13 @@ const Calendar = ({showTimeWithUsers}) => {
   const handleGetNextWeek = () => {
       calenderRef.current.getNextWeek();
   };
+
+  useEffect(() => {
+    setSelectedDay(selectedDate);
+    return () => {
+        setSelectedDay(today);
+    }
+  }, [selectedDate]);
 
   return (
     <View style={styles.root}>
