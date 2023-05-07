@@ -14,7 +14,7 @@ type IForm = {
     phone: string,
     instagramUrl: string
 }
-// изменить автофокус на реальный ивент
+// изменить автофокус на реальный ивент +375292102662
 export const AddPatientScreen = () => {
   const navigation = useNavigation()
   const [values, setValues] = useState<IForm>({} as IForm);
@@ -22,9 +22,10 @@ export const AddPatientScreen = () => {
 
   const handleChange = (name: string, e: NativeSyntheticEvent<TextInputChangeEventData>) => {
     const text = e.nativeEvent.text;
+    const onlyDigits = text.match(/[\+]?\d{12}|\(\d{3}\)\s?-\d{6}/);
     setValues({
       ...values,
-      [name]: text,
+      [name]: onlyDigits !== null ? onlyDigits[0]: text,
     });
   };
 

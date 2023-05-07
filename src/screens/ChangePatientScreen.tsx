@@ -20,9 +20,10 @@ export const ChangePatientScreen = ({ navigation, route }: any) => {
 
   const handleChange = (name: string, e: any) => {
     const text = e.nativeEvent.text;
+    const onlyDigits = text.match(/[\+]?\d{12}|\(\d{3}\)\s?-\d{6}/);
     setValues({
       ...values,
-      [name]: text,
+      [name]: onlyDigits !== null ? onlyDigits[0]: text,
     });
   };
 
