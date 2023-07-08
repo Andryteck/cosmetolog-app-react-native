@@ -35,7 +35,6 @@ export const PatientScheduleComponent = observer(({
   goPatient,
   selectedDate,
 }: PatientScheduleProp): JSX.Element => {
-  console.log('appointmentsWithTime', appointmentsWithTime)
   const getBadgeColor = (item: IAppointment) => {
     if (item.user) {
       if (item.procedure === 'Коррекция' || item.procedure === 'Консультация') {

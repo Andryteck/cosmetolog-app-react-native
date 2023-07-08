@@ -1,27 +1,31 @@
-import styled, {ThemedStyledProps} from "styled-components";
-import {TextProps, TouchableOpacity, View} from "react-native";
-import {Ionicons} from "@expo/vector-icons";
-import React, {RefAttributes} from "react";
-import {Props} from "../Badge/Badge";
+import styled, { ThemedStyledProps } from 'styled-components';
+import { TextProps, TouchableOpacity, View } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import React, { RefAttributes } from 'react';
 
 interface IProps {
     onPress?: () => void
     isViolet?: boolean
 }
 
-export const PlusButton = ({onPress, isViolet}:IProps) => {
-    return (
-    <PlusBtn onPress={onPress} isViolet={isViolet}>
-        <Ionicons name="ios-add" size={35} color="white"/>
+export const PlusButton = ({ onPress, isViolet }:IProps) => {
+  return (
+    <PlusBtn
+      onPress={onPress}
+      isViolet={isViolet}>
+      <Ionicons
+        name="ios-add"
+        size={35}
+        color="white"/>
     </PlusBtn>
-    )
+  )
 }
 
 const getColor = (isViolet: boolean) => {
-    if (isViolet) {
-        return 'rgb(81, 21,212)'
-    }
-    return '#2A86FF'
+  if (isViolet) {
+    return 'rgb(81, 21,212)'
+  }
+  return '#2A86FF'
 }
 
 const PlusBtn = styled(TouchableOpacity)<IProps>`
